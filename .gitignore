@@ -1,3 +1,5 @@
+*nbprivate
+*private
 # Object files
 *.o
 
@@ -15,3 +17,5 @@
 *.exe
 *.out
 *.app
+/server/server/build/
+/server/server/dist/
