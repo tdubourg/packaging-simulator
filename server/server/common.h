@@ -8,21 +8,16 @@
 #ifndef COMMON_H
 #define	COMMON_H
 
-#include <sys/sem.h>
+#include <pthread.h>
+#include <semaphore.h>
 
-enum semaphores
-{
-    semCtrlBox,
-    semCtrlPallet,
-    semCtrlImp,
-    semSyncBoxIm,
-    semSyncImpPalette,
-    semSocket,
-    semStock
-};
-#define NB_SEM 8
-int Sems;
-const int SEMS_START[NB_SEM] = {1, 1, 1, 1, 1, 1, 1, 1};
+extern sem_t SemCtrlBox;
+extern sem_t SemCtrlPallet;
+extern sem_t SemCtrlImp;
+extern sem_t SemSyncBoxIm;
+extern sem_t SemSyncImpPalette;
+extern sem_t SemSocket;
+extern sem_t SemStock;
 
 #endif	/* COMMON_H */
 
