@@ -22,10 +22,14 @@ extern sem_t SemStock;
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <mqueue.h>
-mqd_t MboxCommunication;
-mqd_t MboxControl;
-mqd_t MboxLogs;
-mqd_t MboxPalletStore;
+extern mqd_t MboxCommunication;
+extern mqd_t MboxControl;
+extern mqd_t MboxLogs;
+extern mqd_t MboxPalletStore;
+
+extern int STOCKS;
+extern int PARTS_BY_BOX;
+extern int MAX_REFUSED_PARTS_BY_BOX;
 
 #endif	/* COMMON_H */
 
