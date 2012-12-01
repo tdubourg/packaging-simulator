@@ -1,4 +1,5 @@
-#include "semaphre.h"
+#include "semaphore.h"
+#include "stdio.h"
 
 #include "common.h"
 #include "partsPackager.h"
@@ -28,6 +29,7 @@ static bool simu_refusal() {
 
 void partsPackager(void*a) {
 	extern int PARTS_BY_BOX;
+	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t* semSyncBoxImp;
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	
@@ -35,7 +37,7 @@ void partsPackager(void*a) {
 	//**** INIT
 	
 #ifdef DBG
-	printf("%d\n", (int)get_pid());
+	printf("%d\n", (int)getpid());
 #endif
 
 	//**** MAIN LOOP
@@ -72,5 +74,5 @@ void partsPackager(void*a) {
 }
 
 
-	/**** END / CLEANING 
+	//**** END / CLEANING 
 }
