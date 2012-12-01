@@ -8,15 +8,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <semaphore.h>
-sem_t semCtrlBox;
+#include "common.h"
 /*
  * 
  */
-int main(int argc, char** argv) {
+int main(int argc, char** argv)
+{
+    int i;
+    Sems = semget ( IPC_PRIVATE, NB_SEM, 0700 );
+    for (i = 0; i < NB_SEM; ++i)
+        semctl ( Sems, i, SETVAL, SEMS_START[i] );
 
-    sem_init(&semCtrlBox, 0, 1);
-    printf("Hello, world\n");
     return (EXIT_SUCCESS);
 }
 
