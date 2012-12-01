@@ -1,5 +1,5 @@
 
+
 void newpart(void* a) {
-	
-	
+
 }
