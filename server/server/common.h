@@ -8,21 +8,28 @@
 #ifndef COMMON_H
 #define	COMMON_H
 
-#include <sys/sem.h>
+#include <pthread.h>
+#include <semaphore.h>
 
-enum semaphores
-{
-    semCtrlBox,
-    semCtrlPallet,
-    semCtrlImp,
-    semSyncBoxIm,
-    semSyncImpPalette,
-    semSocket,
-    semStock
-};
-#define NB_SEM 8
-int Sems;
-const int SEMS_START[NB_SEM] = {1, 1, 1, 1, 1, 1, 1, 1};
+extern sem_t SemCtrlBox;
+extern sem_t SemCtrlPallet;
+extern sem_t SemCtrlImp;
+extern sem_t SemSyncBoxIm;
+extern sem_t SemSyncImpPalette;
+extern sem_t SemSocket;
+extern sem_t SemStock;
+
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <mqueue.h>
+extern mqd_t MboxCommunication;
+extern mqd_t MboxControl;
+extern mqd_t MboxLogs;
+extern mqd_t MboxPalletStore;
+
+extern int STOCKS;
+extern int PARTS_BY_BOX;
+extern int MAX_REFUSED_PARTS_BY_BOX;
 
 typedef unsigned char bool;
 #define TRUE 1
