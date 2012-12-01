@@ -24,5 +24,9 @@ enum semaphores
 int Sems;
 const int SEMS_START[NB_SEM] = {1, 1, 1, 1, 1, 1, 1, 1};
 
+typedef unsigned char bool;
+#define TRUE 1
+#define FALSE 0
+
 #endif	/* COMMON_H */
 
