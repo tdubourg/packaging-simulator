@@ -19,5 +19,13 @@ extern sem_t SemSyncImpPalette;
 extern sem_t SemSocket;
 extern sem_t SemStock;
 
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <mqueue.h>
+mqd_t MboxCommunication;
+mqd_t MboxControl;
+mqd_t MboxLogs;
+mqd_t MboxPalletStore;
+
 #endif	/* COMMON_H */
 

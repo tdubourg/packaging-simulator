@@ -7,9 +7,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-
-#include <pthread.h>
-#include <semaphore.h>
 #include "common.h"
 
 sem_t SemCtrlBox;
@@ -32,7 +29,17 @@ int main(int argc, char** argv)
     sem_init(&SemSyncImpPalette, 0, 1);
     sem_init(&SemSocket, 0, 1);
     sem_init(&SemStock, 0, 1);
-
+    MboxCommunication = mq_open("MboxCommunication", O_RDWR);
+    MboxControl = mq_open("MboxControl", O_RDWR);
+    MboxLogs = mq_open("MboxLogs", O_RDWR);
+    MboxPalletStore = mq_open("MboxPalletStore", O_RDWR);
+    
+    // Wait
+    
+    mq_close(MboxCommunication);
+    mq_close(MboxControl);
+    mq_close(MboxLogs);
+    mq_close(MboxPalletStore);
     return (EXIT_SUCCESS);
 }
 
