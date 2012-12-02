@@ -80,6 +80,17 @@ int main(int argc, char** argv)
     mq_close(MboxControl);
     mq_close(MboxLogs);
     mq_close(MboxPalletStore);
+
+    // Deleting sems
+    sem_destroy(&SemStock);
+    sem_destroy(&SemSocket);
+    sem_destroy(&SemSyncImpPalette);
+    sem_destroy(&SemSyncBoxIm);
+    sem_destroy(&SemCtrlImp);
+    sem_destroy(&SemCtrlPallet);
+    sem_destroy(&SemCtrlBox);
+    
+
     return (EXIT_SUCCESS);
 }
 
