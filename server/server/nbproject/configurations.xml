@@ -4,6 +4,14 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>common.h</itemPath>
+      <itemPath>doBox.h</itemPath>
+      <itemPath>doCommunication.h</itemPath>
+      <itemPath>doControl.h</itemPath>
+      <itemPath>doLog.h</itemPath>
+      <itemPath>doPalette.h</itemPath>
+      <itemPath>doPrint.h</itemPath>
+      <itemPath>doWarehouse.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -16,6 +24,13 @@
         <itemPath>simu/newpart.c</itemPath>
         <itemPath>simu/newpart.h</itemPath>
       </logicalFolder>
+      <itemPath>doBox.c</itemPath>
+      <itemPath>doCommunication.c</itemPath>
+      <itemPath>doControl.c</itemPath>
+      <itemPath>doLog.c</itemPath>
+      <itemPath>doPalette.c</itemPath>
+      <itemPath>doPrint.c</itemPath>
+      <itemPath>doWarehouse.c</itemPath>
       <itemPath>main.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -29,7 +44,6 @@
                    kind="IMPORTANT_FILES_FOLDER">
       <itemPath>Makefile</itemPath>
     </logicalFolder>
-    <itemPath>common.h</itemPath>
   </logicalFolder>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

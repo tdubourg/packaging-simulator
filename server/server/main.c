@@ -26,11 +26,21 @@ int STOCKS;
 int PARTS_BY_BOX;
 int MAX_REFUSED_PARTS_BY_BOX;
 
+#include "doBox.h"
+#include "doCommunication.h"
+#include "doControl.h"
+#include "doLog.h"
+#include "doPalette.h"
+#include "doPrint.h"
+#include "doWarehouse.h"
+
 /*
  * 
  */
 int main(int argc, char** argv)
 {
+    pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
+    
     STOCKS = 0;
     PARTS_BY_BOX = 0;
     MAX_REFUSED_PARTS_BY_BOX = 0;
@@ -48,7 +58,23 @@ int main(int argc, char** argv)
     MboxLogs = mq_open("MboxLogs", O_RDWR);
     MboxPalletStore = mq_open("MboxPalletStore", O_RDWR);
     
+    pthread_create(&tLog, NULL, doLog, NULL);
+    pthread_create(&tControl, NULL, doControl, NULL);
+    pthread_create(&tWarehouse, NULL, doWarehouse, NULL);
+    pthread_create(&tPalette, NULL, doPalette, NULL);
+    pthread_create(&tPrint, NULL, doPrint, NULL);
+    pthread_create(&tBox, NULL, doBox, NULL);
+    pthread_create(&tCommunication, NULL, doCommunication, NULL);
+    
     // Wait
+    
+    pthread_join(tCommunication, NULL);
+    pthread_join(tBox, NULL);
+    pthread_join(tPrint, NULL);
+    pthread_join(tPalette, NULL);
+    pthread_join(tWarehouse, NULL);
+    pthread_join(tControl, NULL);
+    pthread_join(tLog, NULL);
     
     mq_close(MboxCommunication);
     mq_close(MboxControl);
