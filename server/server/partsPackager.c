@@ -42,7 +42,7 @@ void partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-		//**** SYNC/ERROR SEMAPHORE CHECK
+		sem_wait(SemCtrlBox);
 
 		bool refused = TRUE;
 #ifdef SIMU_MODE
@@ -56,8 +56,7 @@ void partsPackager(void*a) {
 		if (!currentBoxPartsNumber) //* Is the box full?
 		{
 			refusedPartsCount = 0; //* Reset refused parts by box counter
-			//**** "READY TO GO TO PRINTER" SEMAPHORE CHECK
-			sem_wait(semSyncBoxImp);
+			sem_wait(SemSyncBoxImp);
 		}
 		//* At the end of the loop, we are basically just waiting for a new part
 		//* This part will come as a signal (supposed to be an IT)
