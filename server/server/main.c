@@ -40,6 +40,7 @@ int main(int argc, char** argv)
 extern sem_t SemNewPart;
 sem_init(&SemNewPart, 0, 1);
 #endif
+	// Open message queues
     mboxCommunication = mq_open(MBOXCOMMUNICATION, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
     mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
     mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
@@ -55,6 +56,7 @@ sem_init(&SemNewPart, 0, 1);
     
     // Wait
     
+	// Wait for end of threads
     pthread_join(tCommunication, NULL);
     pthread_join(tBox, NULL);
     pthread_join(tPrint, NULL);
