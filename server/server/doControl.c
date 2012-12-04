@@ -16,10 +16,10 @@ void *doControl(void *p)
                 switch (msg[2])
                 {
                     case 'C':
-                        sem_trywait(SemCtrlImp);
+                        sem_trywait(&SemCtrlImp);
                         break;
                     case 'A':
-                        sem_trywait(SemCtrlPallet);
+                        sem_trywait(&SemCtrlPallet);
                         break;
                 }
                 break;
@@ -27,10 +27,10 @@ void *doControl(void *p)
                 switch (msg[2])
                 {
                     case 'C':
-                        sem_post(SemCtrlImp);
+                        sem_post(&SemCtrlImp);
                         break;
                     case 'A':
-                        sem_post(SemCtrlPallet);
+                        sem_post(&SemCtrlPallet);
                         break;
                 }
                 break;

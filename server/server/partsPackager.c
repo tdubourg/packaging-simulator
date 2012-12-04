@@ -5,8 +5,6 @@
 #include "partsPackager.h"
 
 //* @TODO : Move that to another place, later
-#define DBG
-#define SIMU_MODE
 
 #ifdef SIMU_MODE
 #include "time.h"
@@ -31,6 +29,7 @@ void* partsPackager(void*a) {
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
+	extern sem_t SemNewPart;
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	
 	int currentBoxPartsNumber = 0;
@@ -43,7 +42,7 @@ void* partsPackager(void*a) {
 	//**** MAIN LOOP
 	for (;;) {
 		sem_wait(&SemCtrlBox);
-
+		sem_wait(&SemNewPart);
 		bool refused = TRUE;
 #ifdef SIMU_MODE
 		refused = simu_refusal();
@@ -71,8 +70,6 @@ void* partsPackager(void*a) {
 			mq_send(MboxControl, "Error refused parts rate", 24, 2);
 		}
 	}
-
-	pause();
 }
 
 
