@@ -21,29 +21,38 @@ void *doControl(void *p)
             case 'E':
                 switch (msg[1])
                 {
-					// Parts packager
-                    case 'C':
-                        sem_trywait(&SemCtrlImp); // Block print
-                        break;
 					// Print
                     case 'A':
-                        sem_trywait(&SemCtrlPallet); // Bloc palette maker
+                        sem_trywait(&SemCtrlBox); // Bloc parts packager
+                        break;
+					// Palette maker
+                    case 'P':
+                        sem_trywait(&SemCtrlImp); // Block print
+                        break;
+					// Warehouse
+                    case 'W':
+                        sem_trywait(&SemCtrlPallet); // Block palette maker
                         break;
                 }
                 break;
-			// Solving case
+			// Solving errors
             case 'S':
                 switch (msg[1])
                 {
-					// Parts packager
-                    case 'C':
-						sem_trywait(&SemCtrlImp); // Ensure print is blocked
-                        sem_post(&SemCtrlImp); // Re-run print
-                        break;
 					// Print
                     case 'A':
-						sem_trywait(&SemCtrlPallet); // Ensure palette maker is blocked
-                        sem_post(&SemCtrlPallet); // Re-run palette maker
+                        sem_trywait(&SemCtrlBox); // Ensure parts packager is blocked
+						sem_post(&SemCtrlBox); // Re-launch parts packager
+                        break;
+					// Palette maker
+                    case 'P':
+                        sem_trywait(&SemCtrlImp); // Ensure print is blocked
+						sem_post(&SemCtrlImp); // Re-launch print
+                        break;
+					// Warehouse
+                    case 'W':
+                        sem_trywait(&SemCtrlPallet); // Ensure palette maker is blocked
+						sem_post(&SemCtrlPallet); // Re-launch palette maker
                         break;
                 }
                 break;
