@@ -68,6 +68,7 @@ void* partsPackager(void*a) {
 		if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 		{
 			//* @TODO Error case: parts refused rate reached for the current box
+			mq_send(MboxControl, "Error refused parts rate", 24, 2);
 		}
 	}
 
