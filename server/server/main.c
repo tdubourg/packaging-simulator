@@ -33,6 +33,7 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 #include "doPalette.h"
 #include "doPrint.h"
 #include "doWarehouse.h"
+#include "simu/newpart.c"
 
 /*
  * 
@@ -48,7 +49,12 @@ int main(int argc, char** argv)
     sem_init(&SemSyncImpPalette, 0, 1);
     sem_init(&SemSocket, 0, 1);
     sem_init(&SemStock, 0, 1);
-    
+
+#ifdef SIMU_MODE
+extern sem_t SemNewPart;
+sem_init(&SemNewPart, 0, 1);
+#endif
+
     MboxCommunication = mq_open("MboxCommunication", O_RDWR);
     MboxControl = mq_open("MboxControl", O_RDWR);
     MboxLogs = mq_open("MboxLogs", O_RDWR);
