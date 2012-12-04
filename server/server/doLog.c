@@ -7,7 +7,7 @@ void *doLog(void *p) {
     unsigned int sender;
     int bytes_read;
 
-    MboxLogs = mq_open("/MboxLogs", O_RDWR );
+    MboxLogs = mq_open(MBOX_LOG_NAME, O_RDWR );
     
     for (;;) {
         

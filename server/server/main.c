@@ -49,10 +49,10 @@ int main(int argc, char** argv)
     sem_init(&SemSocket, 0, 1);
     sem_init(&SemStock, 0, 1);
     
-    MboxCommunication = mq_open("/MboxCommunication", O_RDWR);
-    MboxControl = mq_open("/MboxControl", O_RDWR);
-    MboxLogs = mq_open("/MboxLogs", O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
-    MboxPalletStore = mq_open("/MboxPalletStore", O_RDWR);
+    MboxCommunication = mq_open(MBOX_COM_NAME, O_RDWR);
+    MboxControl = mq_open(MBOX_CTRL_NAME, O_RDWR);
+    MboxLogs = mq_open(MBOX_LOG_NAME, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
+    MboxPalletStore = mq_open(MBOX_PALLET_STORE_NAME, O_RDWR);
     //mq_open(MAIN_QNAME, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
     
     pthread_create(&tLog, NULL, doLog, NULL);
