@@ -14,7 +14,7 @@
 extern sem_t SemCtrlBox;
 extern sem_t SemCtrlPallet;
 extern sem_t SemCtrlImp;
-extern sem_t SemSyncBoxIm;
+extern sem_t SemSyncBoxImp;
 extern sem_t SemSyncImpPalette;
 extern sem_t SemSocket;
 extern sem_t SemStock;

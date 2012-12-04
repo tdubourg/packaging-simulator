@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-	void partsPackager(void*);
+	void *partsPackager(void*);
 
 
 #ifdef	__cplusplus
