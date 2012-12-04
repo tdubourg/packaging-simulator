@@ -6,6 +6,8 @@
 
 void *doLog(void *p) {
 
+    //TODO : define message priority and message format to send to communication Thread.
+    
     char buffer[MAX_MSG_LEN + 1];
     unsigned int sender;
     int bytes_read;
@@ -16,6 +18,8 @@ void *doLog(void *p) {
 
     //opening mbox
     mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
+    
+    mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
     while (keepRunning) {
         bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);
@@ -27,13 +31,9 @@ void *doLog(void *p) {
             printf("[LogThread] Data: %s %d\n", buffer, bytes_read);
             //debug
 
-
-
-
+            // retrieving curent time to insert it into formated logs.
             time(&temps);
             date = *localtime(&temps);
-
-
 
             //TODO : keep file and close it once thread end is handled
             FILE *f = fopen(LOG_FILE_NAME, "a+");
@@ -48,7 +48,10 @@ void *doLog(void *p) {
                     buffer);
             fclose(f);
 
-
+            //sending the log message to communication thread using the dedicated message queue.
+            mq_send(mboxCom,buffer,bytes_read,1);
+            
+            // clearing buffer
             memset(buffer, 0, bytes_read + 1);
         }
     }

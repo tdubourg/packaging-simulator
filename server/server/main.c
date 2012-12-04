@@ -46,8 +46,6 @@ int main(int argc, char** argv) {
     mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
     mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 
-    mq_send(mboxLogs,"salut",6,1);
-    mq_send(mboxLogs,"",6,1);
     //wait
     
     pthread_create(&tLog, NULL, doLog, NULL);
