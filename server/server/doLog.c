@@ -1,5 +1,6 @@
 #include "doLog.h"
 #include "common.h"
+#include <stdio.h>
 
 void *doLog(void *p) {
     
@@ -7,11 +8,11 @@ void *doLog(void *p) {
     unsigned int sender;
     int bytes_read;
 
-    MboxLogs = mq_open("/MboxLogs", O_RDWR );
+    mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
     
     for (;;) {
         
-        bytes_read = mq_receive(MboxLogs, buffer, MAX_MSG_LEN, NULL);
+        bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);
         printf("%d",bytes_read);
         if (bytes_read == -1) {
             perror("[MainThread] Failed to recieve");
