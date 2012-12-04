@@ -34,6 +34,7 @@ extern int MAX_REFUSED_PARTS_BY_BOX;
 typedef unsigned char bool;
 #define TRUE 1
 #define FALSE 0
+#define MAX_MSG_LEN 8192
 
 #endif	/* COMMON_H */
 

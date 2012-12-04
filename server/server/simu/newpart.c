@@ -17,7 +17,7 @@ void newpart(void* a) {
 	}
 }
 
-int main(int argc, char const *argv[])
+/*int main(int argc, char const *argv[])
 {
 	int pid = -1;
 	if (argc > 1)
@@ -27,4 +27,4 @@ int main(int argc, char const *argv[])
 
 	newpart((-1 != pid) ? &pid : NULL);
 	return 0;
-}
+}*/
