@@ -30,7 +30,7 @@ static bool simu_refusal() {
 void* partsPackager(void*a) {
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
-	extern sem_t* semSyncBoxImp;
+	extern sem_t SemSyncBoxImp;
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	
 	int currentBoxPartsNumber = 0;
@@ -57,7 +57,7 @@ void* partsPackager(void*a) {
 		{
 			refusedPartsCount = 0; //* Reset refused parts by box counter
 			//**** "READY TO GO TO PRINTER" SEMAPHORE CHECK
-			sem_wait(semSyncBoxImp);
+			sem_wait(&SemSyncBoxImp);
 		}
 		//* At the end of the loop, we are basically just waiting for a new part
 		//* This part will come as a signal (supposed to be an IT)

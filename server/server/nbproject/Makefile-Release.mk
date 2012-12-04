@@ -35,15 +35,14 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/1738881925/partsPackager.o \
 	${OBJECTDIR}/doWarehouse.o \
-	${OBJECTDIR}/simu/newpart.o \
 	${OBJECTDIR}/doLog.o \
 	${OBJECTDIR}/doPrint.o \
 	${OBJECTDIR}/doPalette.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/doControl.o \
-	${OBJECTDIR}/doCommunication.o
+	${OBJECTDIR}/doCommunication.o \
+	${OBJECTDIR}/partsPackager.o
 
 
 # C Compiler Flags
@@ -70,20 +69,10 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/_ext/1738881925/partsPackager.o: ../../../../../../Dropbox/Documents/TP-IF/4IF/ciai/code/server/server/partsPackager.c 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1738881925
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1738881925/partsPackager.o ../../../../../../Dropbox/Documents/TP-IF/4IF/ciai/code/server/server/partsPackager.c
-
 ${OBJECTDIR}/doWarehouse.o: doWarehouse.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/doWarehouse.o doWarehouse.c
-
-${OBJECTDIR}/simu/newpart.o: simu/newpart.c 
-	${MKDIR} -p ${OBJECTDIR}/simu
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/simu/newpart.o simu/newpart.c
 
 ${OBJECTDIR}/doLog.o: doLog.c 
 	${MKDIR} -p ${OBJECTDIR}
@@ -114,6 +103,11 @@ ${OBJECTDIR}/doCommunication.o: doCommunication.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/doCommunication.o doCommunication.c
+
+${OBJECTDIR}/partsPackager.o: partsPackager.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/partsPackager.o partsPackager.c
 
 # Subprojects
 .build-subprojects:

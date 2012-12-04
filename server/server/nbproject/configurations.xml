@@ -14,7 +14,7 @@
       <itemPath>doPalette.h</itemPath>
       <itemPath>doPrint.h</itemPath>
       <itemPath>doWarehouse.h</itemPath>
-      <itemPath>../../../../../../Dropbox/Documents/TP-IF/4IF/ciai/code/server/server/partsPackager.h</itemPath>
+      <itemPath>partsPackager.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -33,7 +33,7 @@
       <itemPath>doPrint.c</itemPath>
       <itemPath>doWarehouse.c</itemPath>
       <itemPath>main.c</itemPath>
-      <itemPath>../../../../../../Dropbox/Documents/TP-IF/4IF/ciai/code/server/server/partsPackager.c</itemPath>
+      <itemPath>partsPackager.c</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -86,6 +86,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="simu/newpart.c" ex="true" tool="0" flavor2="0">
+      </item>
+      <item path="simu/newpart.h" ex="true" tool="3" flavor2="0">
+      </item>
     </conf>
   </confs>
 </configurationDescriptor>
