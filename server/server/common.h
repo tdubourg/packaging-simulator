@@ -39,5 +39,10 @@ typedef unsigned char bool;
 #define FALSE 0
 #define MAX_MSG_LEN 8192
 
+#define DBG
+#define SIMU_MODE
+
+
+
 #endif	/* COMMON_H */
 
