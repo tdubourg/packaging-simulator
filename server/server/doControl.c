@@ -5,10 +5,11 @@
 void *doControl(void *p)
 {
     char msg[256];
+	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
     
     for (;;)
     {
-        mq_receive(MboxControl, msg, 255, NULL);
+        mq_receive(&mboxControl, msg, 255, NULL);
         
         switch (msg[0])
         {
