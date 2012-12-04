@@ -1,6 +1,7 @@
 #include "doLog.h"
 #include "common.h"
 #include <stdio.h>
+#include <unistd.h>
 
 void *doLog(void *p) {
     
@@ -9,15 +10,16 @@ void *doLog(void *p) {
     int bytes_read;
     bool keepRunning = TRUE;
 
+
     //opening mbox
-    mqd_t MboxLogs = mq_open(MBOX_LOG_NAME, O_RDWR );
+     mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
     
     //opening file
     FILE *f = fopen(LOG_FILE_NAME, "wb");
     
     while(keepRunning) {
         
-        bytes_read = mq_receive(MboxLogs, buffer, MAX_MSG_LEN, NULL);
+        bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);
         printf("%d",bytes_read);
         if (bytes_read == -1) {
             perror("[MainThread] Failed to recieve");
@@ -26,7 +28,10 @@ void *doLog(void *p) {
         else {
             printf("[MainThread] Data: %s \n", buffer);
             
+            //writting in logg file
             fwrite(buffer, bytes_read, 1, f);
+            
+            memset(buffer, 0, MAX_MSG_LEN); 
             
         }
     }

@@ -2,11 +2,11 @@
 #include "common.h"
 
 void *doControl(void *p) {
-    
+
     char msg[256];
 
     //opening mbox
-    mqd_t MboxControl = mq_open(MBOX_CTRL_NAME, O_RDWR);
+    mqd_t MboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
     for (;;) {
 
@@ -15,6 +15,7 @@ void *doControl(void *p) {
         switch (msg[0]) {
             case 'E':
                 switch (msg[2]) {
+
                     case 'C':
                         sem_trywait(&SemCtrlImp);
                         break;
@@ -24,7 +25,9 @@ void *doControl(void *p) {
                 }
                 break;
             case 'S':
+
                 switch (msg[2]) {
+
                     case 'C':
                         sem_post(&SemCtrlImp);
                         break;
@@ -32,8 +35,6 @@ void *doControl(void *p) {
                         sem_post(&SemCtrlPallet);
                         break;
                 }
-                break;
-            case 'C':
                 break;
         }
     }

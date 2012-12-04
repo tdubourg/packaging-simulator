@@ -1,10 +1,3 @@
-/* 
- * File:   main.c
- * Author: black
- *
- * Created on November 30, 2012, 11:32 AM
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "common.h"
@@ -16,11 +9,6 @@ sem_t SemSyncBoxImp;
 sem_t SemSyncImpPalette;
 sem_t SemSocket;
 sem_t SemStock;
-
-mqd_t MboxCommunication;
-mqd_t MboxControl;
-mqd_t MboxLogs;
-mqd_t MboxPalletStore;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 42;
@@ -35,13 +23,10 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 #include "doWarehouse.h"
 #include "simu/newpart.c"
 
-/*
- * 
- */
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
-    
+    mqd_t mboxCommunication, mboxControl, mboxLogs, mboxPalletStore;
+
     sem_init(&SemCtrlBox, 0, 1);
     sem_init(&SemCtrlPallet, 0, 1);
     sem_init(&SemCtrlImp, 0, 1);
@@ -52,15 +37,16 @@ int main(int argc, char** argv)
 
 
 #ifdef SIMU_MODE
-extern sem_t SemNewPart;
-sem_init(&SemNewPart, 0, 1);
+    extern sem_t SemNewPart;
+    sem_init(&SemNewPart, 0, 1);
 #endif
+    mboxCommunication = mq_open(MBOXCOMMUNICATION, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
+    mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
+    mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
+    mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 
-    mqd_t MboxCommunication = mq_open(MBOX_COM_NAME, O_RDWR);
-    mqd_t MboxControl = mq_open(MBOX_CTRL_NAME, O_RDWR);
-    mqd_t MboxLogs = mq_open(MBOX_LOG_NAME, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
-    mqd_t MboxPalletStore = mq_open(MBOX_PALLET_STORE_NAME, O_RDWR);
-
+    //mq_send(mboxLogs,"salut",6,1);
+    //wait
     
     pthread_create(&tLog, NULL, doLog, NULL);
     pthread_create(&tControl, NULL, doControl, NULL);
@@ -69,7 +55,7 @@ sem_init(&SemNewPart, 0, 1);
     pthread_create(&tPrint, NULL, doPrint, NULL);
     pthread_create(&tBox, NULL, partsPackager, NULL);
     pthread_create(&tCommunication, NULL, doCommunication, NULL);
-    
+
     // Wait
     
     pthread_join(tCommunication, NULL);
@@ -79,11 +65,12 @@ sem_init(&SemNewPart, 0, 1);
     pthread_join(tWarehouse, NULL);
     pthread_join(tControl, NULL);
     pthread_join(tLog, NULL);
-    
-    mq_close(MboxCommunication);
-    mq_close(MboxControl);
-    mq_close(MboxLogs);
-    mq_close(MboxPalletStore);
+
+    // Deleting message queue
+    mq_close(mboxCommunication);
+    mq_close(mboxControl);
+    mq_close(mboxLogs);
+    mq_close(mboxPalletStore);
 
     // Deleting sems
     sem_destroy(&SemStock);
@@ -93,7 +80,7 @@ sem_init(&SemNewPart, 0, 1);
     sem_destroy(&SemCtrlImp);
     sem_destroy(&SemCtrlPallet);
     sem_destroy(&SemCtrlBox);
-    
+
 
     return (EXIT_SUCCESS);
 }
