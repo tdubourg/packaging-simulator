@@ -42,7 +42,7 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-		sem_wait(SemCtrlBox);
+		sem_wait(&SemCtrlBox);
 
 		bool refused = TRUE;
 #ifdef SIMU_MODE

@@ -22,9 +22,9 @@ mqd_t MboxControl;
 mqd_t MboxLogs;
 mqd_t MboxPalletStore;
 
-int STOCKS;
-int PARTS_BY_BOX;
-int MAX_REFUSED_PARTS_BY_BOX;
+int STOCKS = 0;
+int PARTS_BY_BOX = 42;
+int MAX_REFUSED_PARTS_BY_BOX = 42;
 
 #include "partsPackager.h"
 #include "doCommunication.h"
@@ -41,10 +41,6 @@ int main(int argc, char** argv)
 {
     pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
     
-    STOCKS = 0;
-    PARTS_BY_BOX = 0;
-    MAX_REFUSED_PARTS_BY_BOX = 0;
-    
     sem_init(&SemCtrlBox, 0, 1);
     sem_init(&SemCtrlPallet, 0, 1);
     sem_init(&SemCtrlImp, 0, 1);
@@ -53,10 +49,11 @@ int main(int argc, char** argv)
     sem_init(&SemSocket, 0, 1);
     sem_init(&SemStock, 0, 1);
     
-    MboxCommunication = mq_open("MboxCommunication", O_RDWR);
-    MboxControl = mq_open("MboxControl", O_RDWR);
-    MboxLogs = mq_open("MboxLogs", O_RDWR);
-    MboxPalletStore = mq_open("MboxPalletStore", O_RDWR);
+    MboxCommunication = mq_open("/MboxCommunication", O_RDWR);
+    MboxControl = mq_open("/MboxControl", O_RDWR);
+    MboxLogs = mq_open("/MboxLogs", O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
+    MboxPalletStore = mq_open("/MboxPalletStore", O_RDWR);
+    //mq_open(MAIN_QNAME, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
     
     pthread_create(&tLog, NULL, doLog, NULL);
     pthread_create(&tControl, NULL, doControl, NULL);

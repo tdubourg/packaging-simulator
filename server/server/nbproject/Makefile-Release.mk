@@ -1,3 +1,4 @@
+
 #
 # Generated Makefile - do not edit!
 #
@@ -37,12 +38,13 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/doWarehouse.o \
 	${OBJECTDIR}/doLog.o \
+	${OBJECTDIR}/simu/newpart.o \
+	${OBJECTDIR}/doBox.o \
 	${OBJECTDIR}/doPrint.o \
 	${OBJECTDIR}/doPalette.o \
 	${OBJECTDIR}/main.o \
 	${OBJECTDIR}/doControl.o \
-	${OBJECTDIR}/doCommunication.o \
-	${OBJECTDIR}/partsPackager.o
+	${OBJECTDIR}/doCommunication.o
 
 
 # C Compiler Flags
@@ -79,6 +81,16 @@ ${OBJECTDIR}/doLog.o: doLog.c
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/doLog.o doLog.c
 
+${OBJECTDIR}/simu/newpart.o: simu/newpart.c 
+	${MKDIR} -p ${OBJECTDIR}/simu
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/simu/newpart.o simu/newpart.c
+
+${OBJECTDIR}/doBox.o: doBox.c 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/doBox.o doBox.c
+
 ${OBJECTDIR}/doPrint.o: doPrint.c 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
@@ -103,11 +115,6 @@ ${OBJECTDIR}/doCommunication.o: doCommunication.c
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/doCommunication.o doCommunication.c
-
-${OBJECTDIR}/partsPackager.o: partsPackager.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} $@.d
-	$(COMPILE.c) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/partsPackager.o partsPackager.c
 
 # Subprojects
 .build-subprojects:
