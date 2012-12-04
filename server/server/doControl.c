@@ -4,17 +4,17 @@
 
 void *doControl(void *p)
 {
-    char msg[256];
+    char msg[MAX_MSG_LEN+1];
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
     
     for (;;)
     {
-        mq_receive(&mboxControl, msg, 255, NULL);
+        mq_receive(&mboxControl, msg, MAX_MSG_LEN, NULL);
         
         switch (msg[0])
         {
             case 'E':
-                switch (msg[2])
+                switch (msg[1])
                 {
                     case 'C':
                         sem_trywait(&SemCtrlImp);
@@ -25,7 +25,7 @@ void *doControl(void *p)
                 }
                 break;
             case 'S':
-                switch (msg[2])
+                switch (msg[1])
                 {
                     case 'C':
                         sem_post(&SemCtrlImp);
@@ -34,8 +34,6 @@ void *doControl(void *p)
                         sem_post(&SemCtrlPallet);
                         break;
                 }
-                break;
-            case 'C':
                 break;
         }
     }
