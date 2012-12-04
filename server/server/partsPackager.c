@@ -27,7 +27,7 @@ static bool simu_refusal() {
 
 #endif
 
-void partsPackager(void*a) {
+void* partsPackager(void*a) {
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t* semSyncBoxImp;

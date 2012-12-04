@@ -12,7 +12,7 @@
 sem_t SemCtrlBox;
 sem_t SemCtrlPallet;
 sem_t SemCtrlImp;
-sem_t SemSyncBoxIm;
+sem_t SemSyncBoxImp;
 sem_t SemSyncImpPalette;
 sem_t SemSocket;
 sem_t SemStock;
@@ -26,7 +26,7 @@ int STOCKS;
 int PARTS_BY_BOX;
 int MAX_REFUSED_PARTS_BY_BOX;
 
-#include "doBox.h"
+#include "partsPackager.h"
 #include "doCommunication.h"
 #include "doControl.h"
 #include "doLog.h"
@@ -48,7 +48,7 @@ int main(int argc, char** argv)
     sem_init(&SemCtrlBox, 0, 1);
     sem_init(&SemCtrlPallet, 0, 1);
     sem_init(&SemCtrlImp, 0, 1);
-    sem_init(&SemSyncBoxIm, 0, 1);
+    sem_init(&SemSyncBoxImp, 0, 1);
     sem_init(&SemSyncImpPalette, 0, 1);
     sem_init(&SemSocket, 0, 1);
     sem_init(&SemStock, 0, 1);
@@ -63,7 +63,7 @@ int main(int argc, char** argv)
     pthread_create(&tWarehouse, NULL, doWarehouse, NULL);
     pthread_create(&tPalette, NULL, doPalette, NULL);
     pthread_create(&tPrint, NULL, doPrint, NULL);
-    pthread_create(&tBox, NULL, doBox, NULL);
+    pthread_create(&tBox, NULL, partsPackager, NULL);
     pthread_create(&tCommunication, NULL, doCommunication, NULL);
     
     // Wait
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
     sem_destroy(&SemStock);
     sem_destroy(&SemSocket);
     sem_destroy(&SemSyncImpPalette);
-    sem_destroy(&SemSyncBoxIm);
+    sem_destroy(&SemSyncBoxImp);
     sem_destroy(&SemCtrlImp);
     sem_destroy(&SemCtrlPallet);
     sem_destroy(&SemCtrlBox);
