@@ -55,10 +55,11 @@ extern sem_t SemNewPart;
 sem_init(&SemNewPart, 0, 1);
 #endif
 
-    MboxCommunication = mq_open("MboxCommunication", O_RDWR);
-    MboxControl = mq_open("MboxControl", O_RDWR);
-    MboxLogs = mq_open("MboxLogs", O_RDWR);
-    MboxPalletStore = mq_open("MboxPalletStore", O_RDWR);
+    MboxCommunication = mq_open("/MboxCommunication", O_RDWR);
+    MboxControl = mq_open("/MboxControl", O_RDWR);
+    MboxLogs = mq_open("/MboxLogs", O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
+    MboxPalletStore = mq_open("/MboxPalletStore", O_RDWR);
+    //mq_open(MAIN_QNAME, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
     
     pthread_create(&tLog, NULL, doLog, NULL);
     pthread_create(&tControl, NULL, doControl, NULL);
