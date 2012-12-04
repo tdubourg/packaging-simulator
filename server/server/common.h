@@ -39,10 +39,12 @@ typedef unsigned char bool;
 #define DBG
 #define SIMU_MODE
 
-#define ERR_PACKAGER "EC"
-#define ERR_PRINT "EP"
-#define SOLVE_PACKAGER "SC"
-#define SOLVE_PRINT "SP"
+#define ERR_PALETTE "EP"
+#define ERR_PRINT "EA"
+#define ERR_WAREHOUSE "EW"
+#define SOLVE_PALETTE "SP"
+#define SOLVE_PRINT "SA"
+#define SOLVE_WAREHOUSE "SW"
 
 #endif	/* COMMON_H */
 
