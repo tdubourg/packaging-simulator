@@ -1,7 +1,9 @@
 #include "doControl.h"
 #include "common.h"
 
-
+#ifdef DBG
+#include "time.h"
+#endif
 /*
  * Control thread
  */
@@ -13,8 +15,10 @@ void *doControl(void *p)
     for (;;)
     {
 		// Wait for a command
+        usleep(600*1000);
         mq_receive(&mboxControl, msg, MAX_MSG_LEN, NULL);
-        
+        DBG("doControl", "Main", "Received a message");
+        DBG("doControl", "Main", msg);
         switch (msg[0])
         {
 			// Error case
