@@ -16,7 +16,7 @@ pthread_cond_t boxCond = PTHREAD_COND_INITIALIZER;
 bool boxLockBool;
 
 int STOCKS = 0;
-int PARTS_BY_BOX = 7;
+int PARTS_BY_BOX = 42;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
 
 #include "partsPackager.h"
@@ -27,6 +27,10 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 #include "doPrint.h"
 #include "doWarehouse.h"
 #include "simu/newpart.c"
+
+#ifdef DBG
+#include "time.h"
+#endif
 
 int main(int argc, char** argv) {
     pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
@@ -39,9 +43,9 @@ int main(int argc, char** argv) {
 
     // Temporary stuff, to be renamed
     //--------------
-    boxLockBool = TRUE;
+    
     pthread_mutex_lock(&boxLock);
-    boxLockBool = 1;
+    boxLockBool = TRUE;
     pthread_cond_signal(&boxCond);
     pthread_mutex_unlock(&boxLock);
     //--------------
@@ -57,7 +61,7 @@ int main(int argc, char** argv) {
 
 #ifdef SIMU_MODE
     extern sem_t SemNewPart;
-    sem_init(&SemNewPart, 0, 1);
+    sem_init(&SemNewPart, 0, 0);
 #endif
 	// Open message queues
     mboxCommunication = mq_open(MBOXCOMMUNICATION, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
@@ -79,6 +83,13 @@ int main(int argc, char** argv) {
 #endif
 
     // Wait
+    //@TODO : Remove those lines that are used for testing purposes
+    // usleep(15 * 1000 * 1000);
+    // DBG("main", "Main", "======= NOW LOCKING THE partsPackager task =======");
+    // pthread_mutex_lock(&boxLock);
+    // boxLockBool = FALSE;
+    // pthread_cond_signal(&boxCond);
+    // pthread_mutex_unlock(&boxLock);
     
 	// Wait for end of threads
     pthread_join(tCommunication, NULL);

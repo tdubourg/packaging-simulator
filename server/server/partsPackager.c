@@ -47,13 +47,13 @@ void* partsPackager(void*a) {
 	//**** MAIN LOOP
 	for (;;) {
 		// sem_wait(&SemCtrlBox);
-		pthread_mutex_lock(&boxLock);
+		pthread_mutex_unlock(&boxLock);
 		while(!boxLockBool) { /* We're paused */
 			pthread_cond_wait(&boxCond, &boxLock); /* Wait for play signal */
-	}
-	pthread_mutex_unlock(&boxLock);
-	sem_wait(&SemNewPart);
-	bool refused = TRUE;
+		}
+		pthread_mutex_unlock(&boxLock);
+		sem_wait(&SemNewPart);
+		bool refused = TRUE;
 #ifdef SIMU_MODE
 	refused = simu_refusal();
 #endif
@@ -62,6 +62,10 @@ void* partsPackager(void*a) {
 		DBG("partsPackager", "Main", "New accepted part.");
 		//* There's a new part to put in that freaking box:
 		currentBoxPartsNumber = (currentBoxPartsNumber + 1) % PARTS_BY_BOX;
+		DBG("partsPackager", "Main", "currentBoxPartsNumber=");
+#ifdef DBG
+		printf("%d\n", currentBoxPartsNumber);
+#endif
 
 		if (!currentBoxPartsNumber) //* Is the box full?
 		{
