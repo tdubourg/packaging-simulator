@@ -15,12 +15,12 @@ void *doLog(void *p) {
     time_t temps;
     struct tm date;
 
-
     //opening mbox
     mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
     
     mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
+    
     while (keepRunning) {
         bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);
         //printf("%d", bytes_read);
@@ -37,6 +37,7 @@ void *doLog(void *p) {
 
             //TODO : keep file and close it once thread end is handled
             FILE *f = fopen(LOG_FILE_NAME, "a+");
+            
             //writting in logg file
             fprintf(f, "[%02d/%02d/%d|%02d:%02d:%02d] %s\n",
                     date.tm_mday + 1,
@@ -46,6 +47,7 @@ void *doLog(void *p) {
                     date.tm_min,
                     date.tm_sec,
                     buffer);
+            
             fclose(f);
 
             //sending the log message to communication thread using the dedicated message queue.
