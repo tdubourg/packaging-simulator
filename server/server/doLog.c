@@ -22,7 +22,7 @@ void *doLog(void *p) {
 
     
     while (keepRunning) {
-        bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);
+        bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);//@TODO add comment/documentation for this line
         //printf("%d", bytes_read);
         if (bytes_read == -1) {
             perror("[LogThread] Failed to recieve");
@@ -51,10 +51,10 @@ void *doLog(void *p) {
             fclose(f);
 
             //sending the log message to communication thread using the dedicated message queue.
-            mq_send(mboxCom,buffer,bytes_read,1);
+            mq_send(mboxCom,buffer,bytes_read,1);//@TODO add comment/documentation for this line, especially the use of bytes_read in a *_send() call
             
             // clearing buffer
-            memset(buffer, 0, bytes_read + 1);
+            memset(buffer, 0, bytes_read + 1);//@TODO comment this line
         }
     }
 
