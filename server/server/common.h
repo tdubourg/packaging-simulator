@@ -49,5 +49,14 @@ typedef unsigned char bool;
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
 
+// Debug stuff : console-logging macro ! better with a macro : will be deleted upon compilation
+#ifdef DBG
+#define DBG(A, B, C) printf("%s::%s(): %s");
+#else
+#define DBG(A, B, C)  
+#endif
+
+
+
 #endif	/* COMMON_H */
 
