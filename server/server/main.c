@@ -6,6 +6,7 @@ sem_t SemCtrlBox;
 sem_t SemCtrlPallet;
 sem_t SemCtrlImp;
 sem_t SemSyncBoxImp;
+sem_t SemPushBoxImp;
 sem_t SemSyncImpPalette;
 sem_t SemSocket;
 sem_t SemStock;
@@ -15,7 +16,7 @@ pthread_cond_t boxCond = PTHREAD_COND_INITIALIZER;
 bool boxLockBool;
 
 int STOCKS = 0;
-int PARTS_BY_BOX = 42;
+int PARTS_BY_BOX = 7;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
 
 #include "partsPackager.h"
@@ -48,6 +49,7 @@ int main(int argc, char** argv) {
     sem_init(&SemCtrlPallet, 0, 1);
     sem_init(&SemCtrlImp, 0, 1);
     sem_init(&SemSyncBoxImp, 0, 1);
+    sem_init(&SemPushBoxImp, 0, 0);
     sem_init(&SemSyncImpPalette, 0, 1);
     sem_init(&SemSocket, 0, 1);
     sem_init(&SemStock, 0, 1);
