@@ -67,7 +67,11 @@ void* partsPackager(void*a) {
 		if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 		{
 			//* @TODO Error case: parts refused rate reached for the current box
-			mq_send(MboxControl, "Error refused parts rate", 24, 2);
+                        // Opening message queue
+                        mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
+                        // Sending error message (priority 2)
+                        //* @TODO : replace message with correct format
+			int res=mq_send(mboxControl, "Error refused parts rate", MAX_MSG_LEN, 2);  
 		}
 	}
 }
