@@ -30,6 +30,9 @@ void* partsPackager(void*a) {
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemNewPart;
+	extern pthread_mutex_t boxLock;
+	extern pthread_cond_t boxCond;
+	extern bool boxLockBool;
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	
 	int currentBoxPartsNumber = 0;
@@ -41,14 +44,20 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-		sem_wait(&SemCtrlBox);
+		// sem_wait(&SemCtrlBox);
+		pthread_mutex_lock(&boxLock);
+		while(!boxLockBool) { /* We're paused */
+			pthread_cond_wait(&boxCond, &boxLock); /* Wait for play signal */
+		}
+		pthread_mutex_unlock(&boxLock);
 		sem_wait(&SemNewPart);
 		bool refused = TRUE;
 #ifdef SIMU_MODE
-		refused = simu_refusal();
+	refused = simu_refusal();
 #endif
 	if (!refused) //* Part is accepted
 	{
+		DBG("partsPackager", "Main", "New accepted part.");
 		//* There's a new part to put in that freaking box:
 		currentBoxPartsNumber = (currentBoxPartsNumber + 1) % PARTS_BY_BOX;
 
@@ -63,6 +72,7 @@ void* partsPackager(void*a) {
 		//* This part will come as a signal (supposed to be an IT)
 		//* Thus in order to wait for it, we just pause ourself:
 	} else {
+		DBG("partsPackager", "Main", "New REFUSED part.");
 		refusedPartsCount++;
 		if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 		{

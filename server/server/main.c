@@ -10,6 +10,10 @@ sem_t SemSyncImpPalette;
 sem_t SemSocket;
 sem_t SemStock;
 
+pthread_mutex_t boxLock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t boxCond = PTHREAD_COND_INITIALIZER;
+bool boxLockBool;
+
 int STOCKS = 0;
 int PARTS_BY_BOX = 42;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
@@ -26,8 +30,21 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 int main(int argc, char** argv) {
     pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
     mqd_t mboxCommunication, mboxControl, mboxLogs, mboxPalletStore;
+#ifdef SIMU_MODE
+    mqd_t tSimuNewPart;
+#endif
 
     sem_init(&SemCtrlBox, 0, 1);
+
+    // Temporary stuff, to be renamed
+    //--------------
+    boxLockBool = TRUE;
+    pthread_mutex_lock(&boxLock);
+    boxLockBool = 1;
+    pthread_cond_signal(&boxCond);
+    pthread_mutex_unlock(&boxLock);
+    //--------------
+
     sem_init(&SemCtrlPallet, 0, 1);
     sem_init(&SemCtrlImp, 0, 1);
     sem_init(&SemSyncBoxImp, 0, 1);
@@ -55,6 +72,9 @@ int main(int argc, char** argv) {
     pthread_create(&tPrint, NULL, doPrint, NULL);
     pthread_create(&tBox, NULL, partsPackager, NULL);
     pthread_create(&tCommunication, NULL, doCommunication, NULL);
+#ifdef SIMU_MODE
+    pthread_create(&tSimuNewPart, NULL, newpart, NULL);
+#endif
 
     // Wait
     
