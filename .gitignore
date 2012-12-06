@@ -19,3 +19,4 @@
 *.app
 /server/server/build/
 /server/server/dist/
+/ihm/client/build/

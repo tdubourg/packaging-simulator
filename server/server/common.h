@@ -22,10 +22,13 @@ extern sem_t SemStock;
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <mqueue.h>
-extern mqd_t MboxCommunication;
-extern mqd_t MboxControl;
-extern mqd_t MboxLogs;
-extern mqd_t MboxPalletStore;
+
+#define LOG_FILE_NAME "log.txt" 
+
+#define MBOXCOMMUNICATION "/MboxCommunication"
+#define MBOXCONTROL "/MboxControl"
+#define MBOXLOGS "/MboxLogs"
+#define MBOXPALLETSTORE "/MboxPalletStore"
 
 extern int STOCKS;
 extern int PARTS_BY_BOX;
@@ -39,7 +42,12 @@ typedef unsigned char bool;
 #define DBG
 #define SIMU_MODE
 
-
+#define ERR_PALETTE "EP"
+#define ERR_PRINT "EA"
+#define ERR_WAREHOUSE "EW"
+#define SOLVE_PALETTE "SP"
+#define SOLVE_PRINT "SA"
+#define SOLVE_WAREHOUSE "SW"
 
 #endif	/* COMMON_H */
 
