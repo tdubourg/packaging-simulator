@@ -24,11 +24,15 @@ public class ThreadLog extends Thread {
     public ThreadLog() {
         try {
             System.out.println("ici");
+<<<<<<< HEAD
             serverAddress = InetAddress.getByName("127.0.0.1");
+=======
+            serverAddress = InetAddress.getByName("192.168.0.1");
+>>>>>>> 5f37daf66067166835d0b4ae2c434c51483cd320
             System.out.println("plouf");
             serverPort = 30035;
             //creation socket
-            socketCommand = new Socket(serverAddress,serverPort);	
+            socketCommand = new Socket(serverAddress,serverPort);
             System.out.println("Connexion socket log");
             
         } catch (IOException ex) {
@@ -40,12 +44,15 @@ public class ThreadLog extends Thread {
     public void run() {
         //écoute sur socket
         BufferedReader in;
-        try {
-            in = new BufferedReader (new InputStreamReader (socketCommand.getInputStream()));
-            String message_distant = in.readLine();
-            System.out.println(message_distant);
-        } catch (IOException ex) {
-            Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+        while (true)
+        {
+            try {
+                in = new BufferedReader (new InputStreamReader (socketCommand.getInputStream()));
+                String message_distant = in.readLine();
+                System.out.println(message_distant);
+            } catch (IOException ex) {
+                Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

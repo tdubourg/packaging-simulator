@@ -19,7 +19,7 @@ static bool simu_refusal() {
 	}
 
 	//* 30% probability to fail, 70 to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
-	bool result = ((rand() % 100) < 70) ? TRUE : FALSE; //* hey, that's C, so this is bool emulation, to shout about useless "TRUE : FALSE"
+	bool result = ((rand() % 100) < 70) ? FALSE : TRUE; //* hey, that's C, so this is bool emulation, to shout about useless "TRUE : FALSE"
 	return result;
 }
 
@@ -86,9 +86,9 @@ void* partsPackager(void*a) {
 		{
 			//* @TODO Error case: parts refused rate reached for the current box
 
-                        // Sending error message (priority 2)
-                        //* @TODO : replace message with correct format
-			int res=mq_send(mboxControl, "Error refused parts rate", MAX_MSG_LEN, 2);
+						// Sending error message (priority 2)
+						//* @TODO : replace message with correct format
+			int res=mq_send(mboxControl, "E Error refused parts rate", MAX_MSG_LEN, 2);
 			refusedPartsCount = 0;
 			if (res)
 			{
