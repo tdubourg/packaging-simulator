@@ -21,19 +21,11 @@ public class ThreadLog extends Thread {
     Socket socketCommand;
     int serverPort;
     
-    public ThreadLog() {
-        try {
-            System.out.println("ici");
-            serverAddress = InetAddress.getByName("192.168.0.1");
-            System.out.println("plouf");
-            serverPort = 30035;
-            //creation socket
-            socketCommand = new Socket(serverAddress,serverPort);
-            System.out.println("Connexion socket log");
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public ThreadLog() throws IOException {
+		serverAddress = InetAddress.getLocalHost();
+		serverPort = 30035;
+		//creation socket
+		socketCommand = new Socket(serverAddress,serverPort);
     }
     
     @Override
