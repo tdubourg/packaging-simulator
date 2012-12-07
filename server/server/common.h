@@ -45,6 +45,8 @@ extern int BOXES_QUEUE;
 extern int MAX_BOXES_QUEUE;
 
 typedef unsigned char bool;
+
+
 #define TRUE 1
 #define FALSE 0
 #define MAX_MSG_LEN 8192
@@ -68,6 +70,8 @@ typedef unsigned char bool;
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
+
+#define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 
 // Debug stuff : console-logging macro ! better with a macro : will be deleted upon compilation
 

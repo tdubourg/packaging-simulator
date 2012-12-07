@@ -33,6 +33,8 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 int BOXES_QUEUE = 0;
 int MAX_BOXES_QUEUE = 10;
 
+bool needToStop = TRUE;
+
 #include "partsPackager.h"
 #include "doCommunication.h"
 #include "doControl.h"
@@ -100,6 +102,7 @@ int main(int argc, char** argv) {
 #ifdef SIMU_MODE
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);
 #endif
+
 
 	// Wait
 	//@TODO : Remove those lines that are used for testing purposes
