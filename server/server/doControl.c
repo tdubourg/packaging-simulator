@@ -9,6 +9,21 @@
  */
 void *doControl(void *p)
 {
+	extern pthread_mutex_t LockImp;
+	extern pthread_mutex_t LockPalette;
+	extern pthread_mutex_t LockValve;
+	extern pthread_mutex_t LockBox;
+	
+	extern pthread_cond_t CondValve;
+	extern pthread_cond_t CondBox;
+	extern pthread_cond_t CondPalette;
+	extern pthread_cond_t CondImp;
+	
+	extern bool LockBoxValue;
+	extern bool LockImpValue;
+	extern bool LockPaletteValue;
+	extern bool LockValveValue;
+
 	char msg[MAX_MSG_LEN+1];
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 	

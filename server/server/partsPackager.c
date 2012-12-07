@@ -10,6 +10,9 @@
 #include "time.h"
 
 static bool simu_refusal() {
+	extern pthread_mutex_t LockBox;
+	extern pthread_cond_t CondBox;
+	extern bool LockBoxValue;
 	static bool init = FALSE;
 
 	if (!init) {
@@ -32,9 +35,9 @@ void* partsPackager(void*a) {
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
 	extern sem_t SemNewPart;
-	extern pthread_mutex_t boxLock;
-	extern pthread_cond_t boxCond;
-	extern bool boxLockBool;
+	extern pthread_mutex_t LockBox;
+	extern pthread_cond_t CondBox;
+	extern bool LockBoxValue;
 	int refusedPartsCount = 0; //* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	int currentBoxPartsNumber = 0;
 	//**** INIT

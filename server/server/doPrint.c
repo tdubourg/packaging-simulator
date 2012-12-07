@@ -6,20 +6,16 @@
 void *doPrint(void *p) {
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
-    extern sem_t SemSyncImpPalette;
 	extern pthread_mutex_t paletteLock;
 	extern pthread_cond_t paletteCond;
-	extern bool paletteLockNumber;
-
-#ifdef DBG
-	printf("%d\n", (int)getpid());
-#endif
+	extern int BOXES_QUEUE;
+	extern int MAX_BOXES_QUEUE;
 
 	for(;;) {
 		sem_wait(&SemPushBoxImp);
 		
 		pthread_mutex_lock(&paletteLock);
-		while (BOXES_QUEUE>=MAX_BOXES_QUEUE) { /* We're paused */
+		while (BOXES_QUEUE >= MAX_BOXES_QUEUE) { /* We're paused */
 			pthread_cond_wait(&paletteCond, &paletteLock); /* Wait for play signal */
 		}
 		DBG("doPrint", "Main", "Printing");
