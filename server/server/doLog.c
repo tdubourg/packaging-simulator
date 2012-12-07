@@ -28,7 +28,7 @@ void *doLog(void *p) {
 			perror("[LogThread] Failed to recieve");
 			//return 0;
 		} else {
-			if (strcmp(buffer, STOP_MESSAGE_QUEUE)) {
+			if (strcmp(buffer, STOP_MESSAGE_QUEUE) == 0) {
 				printf("Receiving stop message");
 				keepRunning = FALSE;
 			} else {

@@ -54,12 +54,14 @@ void *doPush(void *p) {
 			error("ERROR on accept");
 
 		for (;;) {
+			
 			int bytes_read = mq_receive(mboxCom, logsBuffer, MAX_MSG_LEN, NULL);
 
 			if (bytes_read == -1) {
 				perror("[CommunicationThread] Failed to recieve from LogThread");
 			} else {
 				strcat(logsBuffer,"\r\n");
+				printf(logsBuffer);
 				bzero(buffer, 256);
 				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
 				if (n < 0) 
