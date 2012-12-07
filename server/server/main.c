@@ -58,6 +58,7 @@ int main(int argc, char** argv) {
 	pthread_mutex_unlock(&LockBox);
 	
 	pthread_mutex_lock(&LockPalette);
+	LockPaletteValue = TRUE;
 	pthread_cond_signal(&CondPalette);
 	pthread_mutex_unlock(&LockPalette);
 
