@@ -19,21 +19,13 @@ static bool simu_refusal() {
 	}
 
 	//* 30% probability to fail, 70 to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
-	bool result = ((rand() % 100) < 70) ? TRUE : FALSE; //* hey, that's C, so this is bool emulation, to shout about useless "TRUE : FALSE"
+	bool result = ((rand() % 100) < 70) ? FALSE : TRUE; //* hey, that's C, so this is bool emulation, to shout about useless "TRUE : FALSE"
 	return result;
 }
 
 #endif
 
 void* partsPackager(void*a) {
-	extern int PARTS_BY_BOX;
-	extern int MAX_REFUSED_PARTS_BY_BOX;
-	extern sem_t SemSyncBoxImp;
-	extern sem_t SemPushBoxImp;
-	extern sem_t SemNewPart;
-	extern pthread_mutex_t boxLock;
-	extern pthread_cond_t boxCond;
-	extern bool boxLockBool;
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	
 	int currentBoxPartsNumber = 0;
@@ -46,12 +38,11 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-		// sem_wait(&SemCtrlBox);
-		pthread_mutex_unlock(&boxLock);
-		while(!boxLockBool) { /* We're paused */
-			pthread_cond_wait(&boxCond, &boxLock); /* Wait for play signal */
+		pthread_mutex_lock(&LockBox);
+		while(!LockBoxValue) { /* We're paused */
+			pthread_cond_wait(&CondBox, &LockBox); /* Wait for play signal */
 		}
-		pthread_mutex_unlock(&boxLock);
+		pthread_mutex_unlock(&LockBox);
 		sem_wait(&SemNewPart);
 		bool refused = TRUE;
 #ifdef SIMU_MODE
@@ -86,9 +77,9 @@ void* partsPackager(void*a) {
 		{
 			//* @TODO Error case: parts refused rate reached for the current box
 
-                        // Sending error message (priority 2)
-                        //* @TODO : replace message with correct format
-			int res=mq_send(mboxControl, "Error refused parts rate", MAX_MSG_LEN, 2);
+						// Sending error message (priority 2)
+						//* @TODO : replace message with correct format
+			int res=mq_send(mboxControl, "E Error refused parts rate", MAX_MSG_LEN, 2);
 			refusedPartsCount = 0;
 			if (res)
 			{

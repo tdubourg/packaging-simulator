@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
+#include <string.h>
 
 void *doLog(void *p) {
 
@@ -21,8 +22,7 @@ void *doLog(void *p) {
 
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
-
-	while (keepRunning) {
+	for(;;) {
 		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); //@TODO add comment/documentation for this line
 		if (bytes_read == -1) {
 			perror("[LogThread] Failed to recieve");
