@@ -27,26 +27,17 @@ void *doControl(void *p)
 					// Print
 					case 'A':
 						// Block parts packager
-						pthread_mutex_lock(&LockBox);
-						LockBoxValue = TRUE;
-						pthread_cond_signal(&CondBox);
-						pthread_mutex_unlock(&LockBox);
+						SET(Box, TRUE);
 						break;
 					// Palette maker
 					case 'P':
 						// Block print
-						pthread_mutex_lock(&LockImp);
-						LockImpValue = TRUE;
-						pthread_cond_signal(&CondImp);
-						pthread_mutex_unlock(&LockImp);
+						SET(Imp, TRUE);
 						break;
 					// Warehouse
 					case 'W':
 						// Block palette maker
-						pthread_mutex_lock(&LockPalette);
-						LockPaletteValue = TRUE;
-						pthread_cond_signal(&CondPalette);
-						pthread_mutex_unlock(&LockPalette);
+						SET(Palette, TRUE);
 						break;
 				}
 				break;
@@ -57,26 +48,17 @@ void *doControl(void *p)
 					// Print
 					case 'A':
 						// Block parts packager
-						pthread_mutex_lock(&LockBox);
-						LockBoxValue = FALSE;
-						pthread_cond_signal(&CondBox);
-						pthread_mutex_unlock(&LockBox);
+						SET(Box, FALSE);
 						break;
 					// Palette maker
 					case 'P':
 						// Block print
-						pthread_mutex_lock(&LockImp);
-						LockImpValue = FALSE;
-						pthread_cond_signal(&CondImp);
-						pthread_mutex_unlock(&LockImp);
+						SET(Imp, FALSE);
 						break;
 					// Warehouse
 					case 'W':
 						// Block palette maker
-						pthread_mutex_lock(&LockPalette);
-						LockPaletteValue = FALSE;
-						pthread_cond_signal(&CondPalette);
-						pthread_mutex_unlock(&LockPalette);
+						SET(Palette, FALSE);
 						break;
 				}
 				break;

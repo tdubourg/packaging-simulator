@@ -79,5 +79,10 @@ extern bool LockBoxValue;
 extern bool LockImpValue;
 extern bool LockPaletteValue;
 
+#define SET(V, S) pthread_mutex_lock(&Lock ## V);\
+       Lock ## V ## Value = S;\
+       pthread_cond_signal(&Cond ## V);\
+       pthread_mutex_unlock(&Lock ## V);
+
 #endif	/* COMMON_H */
 

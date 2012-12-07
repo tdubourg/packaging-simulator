@@ -55,25 +55,10 @@ int main(int argc, char** argv) {
 	pthread_t tSimuNewPart;
 #endif
 
-	pthread_mutex_lock(&LockBox);
-	LockBoxValue = TRUE;
-	pthread_cond_signal(&CondBox);
-	pthread_mutex_unlock(&LockBox);
-	
-	pthread_mutex_lock(&LockPalette);
-	LockPaletteValue = TRUE;
-	pthread_cond_signal(&CondPalette);
-	pthread_mutex_unlock(&LockPalette);
-
-	pthread_mutex_lock(&LockImp);
-	LockImpValue = TRUE;
-	pthread_cond_signal(&CondImp);
-	pthread_mutex_unlock(&LockImp);
-
-    pthread_mutex_lock(&LockValve);
-    LockValveValue = TRUE;
-    pthread_cond_signal(&CondValve);
-    pthread_mutex_unlock(&LockValve);
+	SET(Box, TRUE);
+	SET(Palette, TRUE);
+	SET(Imp, TRUE);
+	SET(Valve, TRUE);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
