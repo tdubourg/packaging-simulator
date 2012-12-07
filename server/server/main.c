@@ -2,23 +2,27 @@
 #include <stdlib.h>
 #include "common.h"
 
-sem_t SemCtrlBox;
-sem_t SemCtrlPallet;
-sem_t SemCtrlImp;
-
+// Transformation des semaphores en variable condition
 sem_t SemSyncBoxImp;
 sem_t SemPushBoxImp;
 sem_t SemSyncImpPalette;
 sem_t SemSocket;
 sem_t SemStock;
+sem_t SemNewPart;
 
-pthread_mutex_t boxLock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t boxCond = PTHREAD_COND_INITIALIZER;
-bool boxLockBool;
-pthread_mutex_t valveLock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t valveCond = PTHREAD_COND_INITIALIZER;
-bool valveLockBool;
+pthread_mutex_t LockBox = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t LockImp = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t LockPalette = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t LockValve = PTHREAD_MUTEX_INITIALIZER;
 
+pthread_cond_t CondValve = PTHREAD_COND_INITIALIZER;
+pthread_cond_t CondBox = PTHREAD_COND_INITIALIZER;
+pthread_cond_t CondPalette = PTHREAD_COND_INITIALIZER;
+pthread_cond_t CondImp = PTHREAD_COND_INITIALIZER;
+bool LockBoxValue;
+bool LockImpValue;
+bool LockPaletteValue;
+bool LockValveValue;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 42;
@@ -39,29 +43,28 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 
 int main(int argc, char** argv) {
 	pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
-	mqd_t mboxCommunication, mboxControl, mboxLogs, mboxPalletStore;
-#ifdef SIMU_MODE
-	mqd_t tSimuNewPart;
-#endif
+	pthread_t tSimuNewPart;
 
-	sem_init(&SemCtrlBox, 0, 1);
+	pthread_mutex_lock(&LockBox);
+	LockBoxValue = TRUE;
+	pthread_cond_signal(&CondBox);
+	pthread_mutex_unlock(&LockBox);
 
-	// Temporary stuff, to be renamed
-	//--------------
-	
-	pthread_mutex_lock(&boxLock);
-	boxLockBool = TRUE;
-	pthread_cond_signal(&boxCond);
-	pthread_mutex_unlock(&boxLock);
-	//--------------
-    pthread_mutex_lock(&valveLock);
-    valveLockBool = TRUE;
-    pthread_cond_signal(&valveCond);
-    pthread_mutex_unlock(&valveLock);
-    // ---------------
+	pthread_mutex_lock(&LockImp);
+	LockImpValue = TRUE;
+	pthread_cond_signal(&CondImp);
+	pthread_mutex_unlock(&LockImp);
 
-	sem_init(&SemCtrlPallet, 0, 1);
-	sem_init(&SemCtrlImp, 0, 1);
+	pthread_mutex_lock(&LockPalette);
+	LockPaletteValue = TRUE;
+	pthread_cond_signal(&CondPalette);
+	pthread_mutex_unlock(&LockPalette);
+
+    pthread_mutex_lock(&LockValve);
+    LockValveValue = TRUE;
+    pthread_cond_signal(&CondValve);
+    pthread_mutex_unlock(&LockValve);
+
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
 	sem_init(&SemSyncImpPalette, 0, 1);
@@ -69,10 +72,8 @@ int main(int argc, char** argv) {
 	sem_init(&SemStock, 0, 1);
 
 
-#ifdef SIMU_MODE
-	extern sem_t SemNewPart;
 	sem_init(&SemNewPart, 0, 0);
-#endif
+
 	// Open message queues
 	mboxCommunication = mq_open(MBOXCOMMUNICATION, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 	mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
@@ -127,9 +128,6 @@ int main(int argc, char** argv) {
 	sem_destroy(&SemSocket);
 	sem_destroy(&SemSyncImpPalette);
 	sem_destroy(&SemSyncBoxImp);
-	sem_destroy(&SemCtrlImp);
-	sem_destroy(&SemCtrlPallet);
-	sem_destroy(&SemCtrlBox);
 
 
 	return (EXIT_SUCCESS);

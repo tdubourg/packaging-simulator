@@ -26,14 +26,6 @@ static bool simu_refusal() {
 #endif
 
 void* partsPackager(void*a) {
-	extern int PARTS_BY_BOX;
-	extern int MAX_REFUSED_PARTS_BY_BOX;
-	extern sem_t SemSyncBoxImp;
-	extern sem_t SemPushBoxImp;
-	extern sem_t SemNewPart;
-	extern pthread_mutex_t boxLock;
-	extern pthread_cond_t boxCond;
-	extern bool boxLockBool;
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	
 	int currentBoxPartsNumber = 0;
@@ -46,12 +38,11 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-		// sem_wait(&SemCtrlBox);
 		pthread_mutex_lock(&boxLock);
-		while(!boxLockBool) { /* We're paused */
-			pthread_cond_wait(&boxCond, &boxLock); /* Wait for play signal */
+		while(!LockBoxValue) { /* We're paused */
+			pthread_cond_wait(&CondBox, &LockBox); /* Wait for play signal */
 		}
-		pthread_mutex_unlock(&boxLock);
+		pthread_mutex_unlock(&LockBox);
 		sem_wait(&SemNewPart);
 		bool refused = TRUE;
 #ifdef SIMU_MODE
