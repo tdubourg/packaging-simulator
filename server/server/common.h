@@ -46,17 +46,14 @@ typedef unsigned char bool;
 #define FALSE 0
 #define MAX_MSG_LEN 8192
 
-#ifndef DBG
 #define DBG
-#endif
+
 #define SIMU_MODE
 
-#ifndef DBG(A, B, C)
 #ifdef DBG
 #define DBG(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
 #else
 #define DBG(A, B, C);  
-#endif
 #endif
 
 #define ERR_PALETTE "EP"
