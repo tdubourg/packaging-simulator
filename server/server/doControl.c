@@ -15,7 +15,6 @@ void *doControl(void *p)
 	for (;;)
 	{
 		// Wait for a command
-		// usleep(600000*1000);
 		mq_receive(mboxControl, msg, MAX_MSG_LEN, NULL);
 		DBG("doControl", "Main", "Received a message");
 		DBG("doControl", "Main", msg);
@@ -27,15 +26,27 @@ void *doControl(void *p)
 				{
 					// Print
 					case 'A':
-						sem_trywait(&SemCtrlBox); // Bloc parts packager
+						// Block parts packager
+						pthread_mutex_lock(&LockBox);
+						LockBoxValue = TRUE;
+						pthread_cond_signal(&CondBox);
+						pthread_mutex_unlock(&LockBox);
 						break;
 					// Palette maker
 					case 'P':
-						sem_trywait(&SemCtrlImp); // Block print
+						// Block print
+						pthread_mutex_lock(&LockImp);
+						LockImpValue = TRUE;
+						pthread_cond_signal(&CondImp);
+						pthread_mutex_unlock(&LockImp);
 						break;
 					// Warehouse
 					case 'W':
-						sem_trywait(&SemCtrlPallet); // Block palette maker
+						// Block palette maker
+						pthread_mutex_lock(&LockPalette);
+						LockPaletteValue = TRUE;
+						pthread_cond_signal(&CondPalette);
+						pthread_mutex_unlock(&LockPalette);
 						break;
 				}
 				break;
@@ -45,18 +56,27 @@ void *doControl(void *p)
 				{
 					// Print
 					case 'A':
-						sem_trywait(&SemCtrlBox); // Ensure parts packager is blocked
-						sem_post(&SemCtrlBox); // Re-launch parts packager
+						// Block parts packager
+						pthread_mutex_lock(&LockBox);
+						LockBoxValue = FALSE;
+						pthread_cond_signal(&CondBox);
+						pthread_mutex_unlock(&LockBox);
 						break;
 					// Palette maker
 					case 'P':
-						sem_trywait(&SemCtrlImp); // Ensure print is blocked
-						sem_post(&SemCtrlImp); // Re-launch print
+						// Block print
+						pthread_mutex_lock(&LockImp);
+						LockImpValue = FALSE;
+						pthread_cond_signal(&CondImp);
+						pthread_mutex_unlock(&LockImp);
 						break;
 					// Warehouse
 					case 'W':
-						sem_trywait(&SemCtrlPallet); // Ensure palette maker is blocked
-						sem_post(&SemCtrlPallet); // Re-launch palette maker
+						// Block palette maker
+						pthread_mutex_lock(&LockPalette);
+						LockPaletteValue = FALSE;
+						pthread_cond_signal(&CondPalette);
+						pthread_mutex_unlock(&LockPalette);
 						break;
 				}
 				break;

@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-	void newpart(void*);
+	void *newpart(void*);
 
 
 #ifdef	__cplusplus
