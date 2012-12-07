@@ -8,10 +8,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,10 +39,9 @@ public class ThreadCommand extends Thread {
 	BufferedReader in;
 	PrintWriter out;
 	try {
-		    out = new PrintWriter(socketCommand.getOutputStream());
+		out = new PrintWriter(socketCommand.getOutputStream());
 	    out.println(nbA);
 	    out.flush();
-	    System.out.println("Envoi de " + nbA + " + flush");
 	} catch (IOException ex) {
 	    Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
 	}

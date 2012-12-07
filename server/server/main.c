@@ -24,8 +24,13 @@ bool LockPaletteValue;
 bool LockValveValue;
 
 int STOCKS = 0;
-int PARTS_BY_BOX = 42;
+int PARTS_BY_BOX = 10;
+int BOXES_BY_PALETTE = 10;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
+int BOXES_QUEUE = 0;
+int MAX_BOXES_QUEUE = 10;
+
+bool needToStop = TRUE;
 
 #include "partsPackager.h"
 #include "doCommunication.h"
@@ -47,25 +52,10 @@ int main(int argc, char** argv) {
 	pthread_t tSimuNewPart;
 #endif
 
-	pthread_mutex_lock(&LockBox);
-	LockBoxValue = TRUE;
-	pthread_cond_signal(&CondBox);
-	pthread_mutex_unlock(&LockBox);
-
-	pthread_mutex_lock(&LockImp);
-	LockImpValue = TRUE;
-	pthread_cond_signal(&CondImp);
-	pthread_mutex_unlock(&LockImp);
-
-	pthread_mutex_lock(&LockPalette);
-	LockPaletteValue = TRUE;
-	pthread_cond_signal(&CondPalette);
-	pthread_mutex_unlock(&LockPalette);
-
-    pthread_mutex_lock(&LockValve);
-    LockValveValue = TRUE;
-    pthread_cond_signal(&CondValve);
-    pthread_mutex_unlock(&LockValve);
+	SET(Box, TRUE);
+	SET(Palette, TRUE);
+	SET(Imp, TRUE);
+	SET(Valve, TRUE);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
@@ -95,6 +85,7 @@ int main(int argc, char** argv) {
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);
 #endif
 
+
 	// Wait
 	//@TODO : Remove those lines that are used for testing purposes
 	// usleep(15 * 1000 * 1000);
@@ -109,6 +100,8 @@ int main(int argc, char** argv) {
 	// boxLockBool = TRUE;
 	// pthread_cond_signal(&boxCond);
 	// pthread_mutex_unlock(&boxLock);
+	
+	mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
 	
 	// Wait for end of threads
 	pthread_join(tCommunication, NULL);

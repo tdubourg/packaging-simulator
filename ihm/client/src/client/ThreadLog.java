@@ -32,14 +32,20 @@ public class ThreadLog extends Thread {
     public void run() {
         //écoute sur socket
         BufferedReader in;
-        while (true)
+		boolean openedSocket = true;
+        while (openedSocket)
         {
             try {
                 in = new BufferedReader (new InputStreamReader (socketCommand.getInputStream()));
                 String message_distant = in.readLine();
-                System.out.println(message_distant);
+				if (message_distant != null){
+					System.out.println(message_distant);
+				}else{
+					openedSocket = false;
+				}
             } catch (IOException ex) {
                 Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+				openedSocket = false;
             }
         }
     }
