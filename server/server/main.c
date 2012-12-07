@@ -90,7 +90,7 @@ int main(int argc, char** argv) {
     // boxLockBool = FALSE;
     // pthread_cond_signal(&boxCond);
     // pthread_mutex_unlock(&boxLock);
-    
+	
 	// Wait for end of threads
     pthread_join(tCommunication, NULL);
     pthread_join(tBox, NULL);
