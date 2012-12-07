@@ -25,17 +25,11 @@ public class ThreadCommand extends Thread {
     int nbA;
     int nbB;
     
-    public ThreadCommand() {
-        try {
-            serverAddress = InetAddress.getByName("127.0.0.1");
-            serverPort = 13003;
-            //creation socket
-            socketCommand = new Socket(serverAddress,serverPort);	
-            System.out.println("Connexion socket command");
-            
-        } catch (IOException ex) {
-            Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public ThreadCommand() throws IOException {
+		serverAddress = InetAddress.getLocalHost();
+		serverPort = 13003;
+		//creation socket
+		socketCommand = new Socket(serverAddress,serverPort);	            
     }
     
     
