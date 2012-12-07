@@ -38,8 +38,7 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-		// sem_wait(&SemCtrlBox);
-		pthread_mutex_unlock(&LockBox);
+		pthread_mutex_lock(&boxLock);
 		while(!LockBoxValue) { /* We're paused */
 			pthread_cond_wait(&CondBox, &LockBox); /* Wait for play signal */
 		}
