@@ -90,7 +90,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
 			threadCmd.start();
 			threadLog.start();
 			
-			ManagerFrame managerFrame = new ManagerFrame();
+			ParametersFrame managerFrame = new ParametersFrame();
 			managerFrame.setVisible(true);
 		}
 		catch (IOException e)

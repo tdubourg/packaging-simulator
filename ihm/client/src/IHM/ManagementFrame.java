@@ -8,12 +8,12 @@ package IHM;
  *
  * @author Elodie
  */
-public class ManagerFrame extends javax.swing.JFrame {
+public class ManagementFrame extends javax.swing.JFrame {
 
 	/**
-	 * Creates new form ManagerFrame
+	 * Creates new form ManagementFrame
 	 */
-	public ManagerFrame() {
+	public ManagementFrame() {
 		initComponents();
 	}
 
@@ -26,19 +26,29 @@ public class ManagerFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Chaine de production - Supervision");
+        setTitle("Suivi de la chaine de production");
         setResizable(false);
+
+        jLabel1.setText("Suivi");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 644, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(jLabel1)
+                .addContainerGap(586, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 447, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(52, 52, 52)
+                .addComponent(jLabel1)
+                .addContainerGap(364, Short.MAX_VALUE))
         );
 
         pack();
@@ -65,13 +75,13 @@ public class ManagerFrame extends javax.swing.JFrame {
 				}
 			}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(ManagerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(ManagementFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(ManagerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(ManagementFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(ManagerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(ManagementFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(ManagerFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+			java.util.logging.Logger.getLogger(ManagementFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		//</editor-fold>
 
@@ -81,10 +91,11 @@ public class ManagerFrame extends javax.swing.JFrame {
 		java.awt.EventQueue.invokeLater(new Runnable() {
 
 			public void run() {
-				new ManagerFrame().setVisible(true);
+				new ManagementFrame().setVisible(true);
 			}
 		});
 	}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }
