@@ -4,8 +4,11 @@
 #include <stdio.h>
 
 void *doPrint(void *p) {
+	extern sem_t SemSyncBoxImp;
+	extern sem_t SemPushBoxImp;
 	for(;;) {
-		sleep(500 * 1000);
-		printf("Printing");
+		sem_wait(&SemPushBoxImp);
+		DBG("doPrint", "Main", "Printing");
+		sem_post(&SemSyncBoxImp);
 	}
 }

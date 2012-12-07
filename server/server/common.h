@@ -51,9 +51,9 @@ typedef unsigned char bool;
 
 // Debug stuff : console-logging macro ! better with a macro : will be deleted upon compilation
 #ifdef DBG
-#define DBG(A, B, C) printf("%s::%s(): %s");
+#define DBG(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
 #else
-#define DBG(A, B, C)  
+#define DBG(A, B, C);  
 #endif
 
 
