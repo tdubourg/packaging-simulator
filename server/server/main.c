@@ -15,9 +15,14 @@ pthread_mutex_t boxLock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t boxCond = PTHREAD_COND_INITIALIZER;
 bool boxLockBool;
 
+pthread_mutex_t paletteLock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t paletteCond = PTHREAD_COND_INITIALIZER;
+
 int STOCKS = 0;
-int PARTS_BY_BOX = 42;
+int PARTS_BY_BOX = 10;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
+int BOXES_QUEUE = 0;
+int MAX_BOXES_QUEUE = 10;
 
 #include "partsPackager.h"
 #include "doCommunication.h"
@@ -48,6 +53,10 @@ int main(int argc, char** argv) {
     boxLockBool = TRUE;
     pthread_cond_signal(&boxCond);
     pthread_mutex_unlock(&boxLock);
+	
+	pthread_mutex_lock(&paletteLock);
+	pthread_cond_signal(&paletteCond);
+	pthread_mutex_unlock(&paletteLock);
     //--------------
 
     sem_init(&SemCtrlPallet, 0, 1);

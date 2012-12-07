@@ -33,6 +33,8 @@ extern sem_t SemStock;
 extern int STOCKS;
 extern int PARTS_BY_BOX;
 extern int MAX_REFUSED_PARTS_BY_BOX;
+extern int BOXES_QUEUE;
+extern int MAX_BOXES_QUEUE;
 
 typedef unsigned char bool;
 #define TRUE 1
