@@ -13,11 +13,14 @@ pthread_mutex_t LockBox = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockImp = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockPalette = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockValve = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t paletteLock;
 
 pthread_cond_t CondValve = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondBox = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondPalette = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondImp = PTHREAD_COND_INITIALIZER;
+pthread_cond_t paletteCond;
+
 bool LockBoxValue;
 bool LockImpValue;
 bool LockPaletteValue;
@@ -27,8 +30,9 @@ int STOCKS = 0;
 int PARTS_BY_BOX = 10;
 int BOXES_BY_PALETTE = 10;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
-int BOXES_QUEUE = 0;
+int BoxesQueue = 0;
 int MAX_BOXES_QUEUE = 10;
+
 
 bool needToStop = TRUE;
 

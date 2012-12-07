@@ -86,12 +86,9 @@ void* partsPackager(void*a) {
 
 							//* @TODO : replace message with correct format
 				//* Closing the valve
-				pthread_mutex_lock(&LockValve);
+				SET(Valve, FALSE);
 				DBG("doControl", "Main", "Closing valve.");
-				LockValveValue = FALSE;
-				pthread_cond_signal(&CondValve);
-				pthread_mutex_unlock(&LockValve);
-
+				
 				// Sending error message (priority 2)
 				int res=mq_send(mboxControl, "E Error refused parts rate", MAX_MSG_LEN, 2);
 				refusedPartsCount = 0;

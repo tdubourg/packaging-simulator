@@ -3,9 +3,11 @@
 
 void *doPalette(void *p)
 {
-	extern int BOXES_BY_PALETTE;
 	INCLUDE(Palette)
-	extern int BOXES_QUEUE;
+	extern int BOXES_BY_PALETTE;
+	extern pthread_mutex_t paletteLock;
+	extern pthread_cond_t paletteCond;
+	extern int BoxesQueue;
 	extern sem_t SemSyncImpPalette;
     int currentPaletteBoxesNumber = 0;
 	
@@ -15,15 +17,15 @@ void *doPalette(void *p)
 	
     for(;;) {
 		sem_wait(&SemSyncImpPalette);
-		pthread_mutex_lock(&LockPalette);
-		while (BOXES_QUEUE <= 0) { /* We're paused */
-			pthread_cond_wait(&CondPalette, &LockPalette); /* Wait for play signal */
+		pthread_mutex_lock(&paletteLock);
+		while (BoxesQueue <= 0) { /* We're paused */
+			pthread_cond_wait(&paletteCond, &paletteLock); /* Wait for play signal */
 		}
 		DBG("doPalette", "Main", "New box added in palette");
-        --BOXES_QUEUE;
+        --BoxesQueue;
 		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
-		pthread_cond_signal(&CondPalette);
-		pthread_mutex_unlock(&LockPalette);
+		pthread_cond_signal(&paletteCond);
+		pthread_mutex_unlock(&paletteLock);
 		
         sem_post(&SemSyncImpPalette);
 	}
