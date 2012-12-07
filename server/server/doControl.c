@@ -3,6 +3,7 @@
 
 #ifdef DBG
 #include "time.h"
+#include "stdio.h"
 #endif
 /*
  * Control thread

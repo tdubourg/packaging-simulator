@@ -58,5 +58,10 @@ typedef unsigned char bool;
 	extern pthread_cond_t Cond ## V;\
 	extern bool Lock ## V ## Value;
 
+#define INCLUDE_INTEGER(V) extern pthread_mutex_t Lock ## V;\
+	extern pthread_cond_t Cond ## V;\
+	extern int V ## Value;
+
+
 #endif	/* COMMON_H */
 
