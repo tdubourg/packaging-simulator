@@ -101,6 +101,8 @@ int main(int argc, char** argv) {
 	// pthread_cond_signal(&boxCond);
 	// pthread_mutex_unlock(&boxLock);
 	
+	mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
+	
 	// Wait for end of threads
 	pthread_join(tCommunication, NULL);
 	pthread_join(tBox, NULL);

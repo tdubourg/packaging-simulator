@@ -45,10 +45,9 @@ public class ThreadCommand extends Thread {
 	BufferedReader in;
 	PrintWriter out;
 	try {
-		    out = new PrintWriter(socketCommand.getOutputStream());
+		out = new PrintWriter(socketCommand.getOutputStream());
 	    out.println(nbA);
 	    out.flush();
-	    System.out.println("Envoi de " + nbA + " + flush");
 	} catch (IOException ex) {
 	    Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
 	}
