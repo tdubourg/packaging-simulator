@@ -45,6 +45,7 @@ int main(int argc, char** argv) {
 	mqd_t mboxCommunication, mboxControl, mboxLogs, mboxPalletStore;
 #ifdef SIMU_MODE
 	pthread_t tSimuNewPart;
+#endif
 
 	pthread_mutex_lock(&LockBox);
 	LockBoxValue = TRUE;
