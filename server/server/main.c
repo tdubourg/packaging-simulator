@@ -23,9 +23,14 @@ bool LockImpValue;
 bool LockPaletteValue;
 bool LockValveValue;
 
+pthread_mutex_t paletteLock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t paletteCond = PTHREAD_COND_INITIALIZER;
+
 int STOCKS = 0;
-int PARTS_BY_BOX = 42;
+int PARTS_BY_BOX = 10;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
+int BOXES_QUEUE = 0;
+int MAX_BOXES_QUEUE = 10;
 
 #include "partsPackager.h"
 #include "doCommunication.h"
@@ -51,16 +56,16 @@ int main(int argc, char** argv) {
 	LockBoxValue = TRUE;
 	pthread_cond_signal(&CondBox);
 	pthread_mutex_unlock(&LockBox);
+	
+	pthread_mutex_lock(&LockPalette);
+	LockPaletteValue = TRUE;
+	pthread_cond_signal(&CondPalette);
+	pthread_mutex_unlock(&LockPalette);
 
 	pthread_mutex_lock(&LockImp);
 	LockImpValue = TRUE;
 	pthread_cond_signal(&CondImp);
 	pthread_mutex_unlock(&LockImp);
-
-	pthread_mutex_lock(&LockPalette);
-	LockPaletteValue = TRUE;
-	pthread_cond_signal(&CondPalette);
-	pthread_mutex_unlock(&LockPalette);
 
     pthread_mutex_lock(&LockValve);
     LockValveValue = TRUE;
