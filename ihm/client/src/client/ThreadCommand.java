@@ -27,7 +27,7 @@ public class ThreadCommand extends Thread {
     
     public ThreadCommand() {
         try {
-            serverAddress = InetAddress.getByName("192.168.0.1");
+            serverAddress = InetAddress.getByName("127.0.0.1");
             serverPort = 13003;
             //creation socket
             socketCommand = new Socket(serverAddress,serverPort);	

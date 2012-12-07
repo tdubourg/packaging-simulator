@@ -24,7 +24,7 @@ public class ThreadLog extends Thread {
     public ThreadLog() {
         try {
             System.out.println("ici");
-            serverAddress = InetAddress.getByName("192.168.0.1");
+            serverAddress = InetAddress.getByName("127.0.0.1");
             System.out.println("plouf");
             serverPort = 30035;
             //creation socket

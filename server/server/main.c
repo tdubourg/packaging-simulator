@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "common.h"
 
-// Transformation des semaphores en variable condition
 sem_t SemSyncBoxImp;
 sem_t SemPushBoxImp;
 sem_t SemSyncImpPalette;
@@ -43,6 +42,8 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 
 int main(int argc, char** argv) {
 	pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
+	mqd_t mboxCommunication, mboxControl, mboxLogs, mboxPalletStore;
+#ifdef SIMU_MODE
 	pthread_t tSimuNewPart;
 
 	pthread_mutex_lock(&LockBox);
