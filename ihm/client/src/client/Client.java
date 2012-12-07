@@ -4,6 +4,8 @@
  */
 package client;
 
+import IHM.MainFrame;
+import IHM.WelcomeFrame;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,14 +25,7 @@ public class Client {
      */
     public static void main(String[] args) throws IOException {
         //System.out.println("Hello World !!!");
-        //SocketClient socketClient = new SocketClient();
-        
-        // création des threads
-        ThreadCommand threadCmd = new ThreadCommand();
-        ThreadLog threadLog = new ThreadLog();
-        // activation des threads
-        threadCmd.start();
-        threadLog.start();
-
+		WelcomeFrame frame = new WelcomeFrame();
+		frame.setVisible(true);
     }
 }

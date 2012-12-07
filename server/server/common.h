@@ -11,13 +11,20 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-extern sem_t SemCtrlBox;
-extern sem_t SemCtrlPallet;
-extern sem_t SemCtrlImp;
 extern sem_t SemSyncBoxImp;
+extern sem_t SemPushBoxImp;
 extern sem_t SemSyncImpPalette;
 extern sem_t SemSocket;
 extern sem_t SemStock;
+extern sem_t SemNewPart;
+
+extern pthread_mutex_t LockBox;
+extern pthread_mutex_t LockImp;
+extern pthread_mutex_t LockPalette;
+extern pthread_cond_t CondBox;
+extern pthread_cond_t CondPalette;
+extern pthread_cond_t CondImp;
+
 
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -41,8 +48,18 @@ typedef unsigned char bool;
 #define FALSE 0
 #define MAX_MSG_LEN 8192
 
+#ifndef DBG
 #define DBG
+#endif
 #define SIMU_MODE
+
+#ifndef DBG(A, B, C)
+#ifdef DBG
+#define DBG(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
+#else
+#define DBG(A, B, C);  
+#endif
+#endif
 
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
@@ -52,13 +69,10 @@ typedef unsigned char bool;
 #define SOLVE_WAREHOUSE "SW"
 
 // Debug stuff : console-logging macro ! better with a macro : will be deleted upon compilation
-#ifdef DBG
-#define DBG(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
-#else
-#define DBG(A, B, C);  
-#endif
 
-
+extern bool LockBoxValue;
+extern bool LockImpValue;
+extern bool LockPaletteValue;
 
 #endif	/* COMMON_H */
 

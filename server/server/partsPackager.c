@@ -19,12 +19,14 @@ static bool simu_refusal() {
 
 	//* 30% probability to fail, 70 to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
 	bool result = ((rand() % 100) < 30) ? TRUE : FALSE; //* hey, that's C, so this is bool emulation, to shout about useless "TRUE : FALSE"
+
 	return result;
 }
 
 #endif
 
 void* partsPackager(void*a) {
+
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
@@ -34,7 +36,6 @@ void* partsPackager(void*a) {
 	extern pthread_cond_t boxCond;
 	extern bool boxLockBool;
 	int refusedPartsCount = 0; //* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
-
 	int currentBoxPartsNumber = 0;
 	//**** INIT
 	// Opening message queue
@@ -45,12 +46,12 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-		// sem_wait(&SemCtrlBox);
-		pthread_mutex_lock(&boxLock);
-		while (!boxLockBool) { /* We're paused */
-			pthread_cond_wait(&boxCond, &boxLock); /* Wait for play signal */
+
+		pthread_mutex_lock(&LockBox);
+		while(!LockBoxValue) { /* We're paused */
+			pthread_cond_wait(&CondBox, &LockBox); /* Wait for play signal */
 		}
-		pthread_mutex_unlock(&boxLock);
+		pthread_mutex_unlock(&LockBox);
 		sem_wait(&SemNewPart);
 		bool refused = TRUE;
 #ifdef SIMU_MODE
@@ -83,7 +84,6 @@ void* partsPackager(void*a) {
 			refusedPartsCount++;
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX) {
 				//* @TODO Error case: parts refused rate reached for the current box
-
 				// Sending error message (priority 2)
 				//* @TODO : replace message with correct format
 				int res = mq_send(mboxControl, "Error refused parts rate", MAX_MSG_LEN, 2);
