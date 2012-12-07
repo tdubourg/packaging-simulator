@@ -28,6 +28,7 @@ pthread_cond_t paletteCond = PTHREAD_COND_INITIALIZER;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 10;
+int BOXES_BY_PALETTE = 10;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
 int BOXES_QUEUE = 0;
 int MAX_BOXES_QUEUE = 10;
