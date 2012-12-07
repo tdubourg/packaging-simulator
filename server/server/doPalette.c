@@ -3,5 +3,5 @@
 
 void *doPalette(void *p)
 {
-    
+	
 }

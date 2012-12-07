@@ -86,8 +86,8 @@ void* partsPackager(void*a) {
 		{
 			//* @TODO Error case: parts refused rate reached for the current box
 
-                        // Sending error message (priority 2)
-                        //* @TODO : replace message with correct format
+						// Sending error message (priority 2)
+						//* @TODO : replace message with correct format
 			int res=mq_send(mboxControl, "Error refused parts rate", MAX_MSG_LEN, 2);
 			refusedPartsCount = 0;
 			if (res)
