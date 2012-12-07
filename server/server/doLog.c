@@ -23,6 +23,7 @@ void *doLog(void *p) {
 
     while (keepRunning) {
         bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);//@TODO add comment/documentation for this line
+        DBG("doLog", "Main", "Received a new message");
         //printf("%d", bytes_read);
         if (bytes_read == -1) {
             perror("[LogThread] Failed to recieve");
