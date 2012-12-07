@@ -15,7 +15,7 @@ static bool simu_refusal() {
 	if (!init)
 	{
 		init = TRUE;
-		srand(NULL);
+		srand(1024);
 	}
 
 	//* 30% probability to fail, 70 to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
@@ -27,6 +27,9 @@ static bool simu_refusal() {
 
 void* partsPackager(void*a) {
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
+	extern pthread_cond_t CondValve;
+	extern pthread_mutex_t LockValve;
+	extern bool LockValveValue;
 	
 	int currentBoxPartsNumber = 0;
 	//**** INIT
@@ -77,8 +80,15 @@ void* partsPackager(void*a) {
 		{
 			//* @TODO Error case: parts refused rate reached for the current box
 
-						// Sending error message (priority 2)
 						//* @TODO : replace message with correct format
+			//* Closing the valve
+			pthread_mutex_lock(&LockValve);
+			DBG("doControl", "Main", "Closing valve.");
+			LockValveValue = FALSE;
+			pthread_cond_signal(&CondValve);
+			pthread_mutex_unlock(&LockValve);
+
+			// Sending error message (priority 2)
 			int res=mq_send(mboxControl, "E Error refused parts rate", MAX_MSG_LEN, 2);
 			refusedPartsCount = 0;
 			if (res)
