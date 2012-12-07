@@ -16,7 +16,7 @@ void *doControl(void *p)
     {
 		// Wait for a command
         // usleep(600000*1000);
-        mq_receive(&mboxControl, msg, MAX_MSG_LEN, NULL);
+        mq_receive(mboxControl, msg, MAX_MSG_LEN, NULL);
         DBG("doControl", "Main", "Received a message");
         DBG("doControl", "Main", msg);
         switch (msg[0])
