@@ -43,9 +43,6 @@ void *doPush(void *p) {
 		error("ERROR on binding");
 
 	for (;;) {
-
-		//char string[256];
-
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
@@ -111,18 +108,17 @@ void *doCommunication(void *p) {
 			n = read(newsockfd, buffer, 255);
 			if (n < 0) error("ERROR reading from socket");
 
-			if (strcmp(buffer, "exit\r\n") == 0) {
+			if (!strcmp(buffer, "exit\r\n")) {
 				close(newsockfd);
 				break;
 			}
 
-			if (strcmp(buffer, "shutdown\r\n") == 0) {
+			if (!strcmp(buffer, "shutdown\r\n")) {
 				close(newsockfd);
 				close(sockfd);
 				return 0;
 			}
 
-			//printf("Here is the message: %s\n", buffer);
 			n = write(newsockfd, "I got your message\r\n", 20);
 			if (n < 0)
 				error("ERROR writing to socket");

@@ -12,7 +12,6 @@ void *doLog(void *p) {
 
 	char buffer[MAX_MSG_LEN + 1];
 	int bytes_read;
-	bool keepRunning = TRUE;
 	time_t temps;
 	struct tm date;
 
@@ -25,11 +24,9 @@ void *doLog(void *p) {
 		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); //@TODO add comment/documentation for this line
 		if (bytes_read == -1) {
 			perror("[LogThread] Failed to recieve");
-			//return 0;
 		} else {
-			if (strcmp(buffer, STOP_MESSAGE_QUEUE) == 0) {
+			if (!strcmp(buffer, STOP_MESSAGE_QUEUE)) {
 				printf("Receiving stop message");
-				keepRunning = FALSE;
 			} else {
 
 				printf("[LogThread] Data: %s %d\n", buffer, bytes_read);

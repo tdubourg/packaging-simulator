@@ -12,7 +12,6 @@
 static bool simu_refusal() {
 	extern pthread_mutex_t LockBox;
 	extern pthread_cond_t CondBox;
-	extern bool LockBoxValue;
 	static bool init = FALSE;
 
 	if (!init) {
@@ -21,9 +20,7 @@ static bool simu_refusal() {
 	}
 
 	//* 30% probability to fail, 70 to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
-	bool result = ((rand() % 100) < 30) ? TRUE : FALSE; //* hey, that's C, so this is bool emulation, to shout about useless "TRUE : FALSE"
-
-	return result;
+	return (rand() % 100) < 30;
 }
 
 #endif

@@ -21,7 +21,7 @@ void *doPalette(void *p)
 			pthread_cond_wait(&paletteCond, &paletteLock); /* Wait for play signal */
 		}
 		DBG("doPalette", "Main", "New box added in palette");
-        BOXES_QUEUE--;
+        --BOXES_QUEUE;
 		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
 		pthread_cond_signal(&paletteCond);
 		pthread_mutex_unlock(&paletteLock);
