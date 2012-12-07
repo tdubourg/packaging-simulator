@@ -39,6 +39,7 @@ extern pthread_cond_t CondImp;
 
 extern int STOCKS;
 extern int PARTS_BY_BOX;
+extern int BOXES_BY_PALETTE;
 extern int MAX_REFUSED_PARTS_BY_BOX;
 extern int BOXES_QUEUE;
 extern int MAX_BOXES_QUEUE;

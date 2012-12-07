@@ -3,6 +3,7 @@
 
 void *doPalette(void *p)
 {
+	extern int BOXES_BY_PALETTE;
 	extern pthread_mutex_t paletteLock;
 	extern pthread_cond_t paletteCond;
 	extern bool paletteLockNumber;
@@ -20,6 +21,7 @@ void *doPalette(void *p)
 		}
 		DBG("doPalette", "Main", "New box added in palette");
         BOXES_QUEUE--;
+		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
 		pthread_cond_signal(&paletteCond);
 		pthread_mutex_unlock(&paletteLock);
 		
