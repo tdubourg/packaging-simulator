@@ -15,6 +15,10 @@ sem_t SemStock;
 pthread_mutex_t boxLock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t boxCond = PTHREAD_COND_INITIALIZER;
 bool boxLockBool;
+pthread_mutex_t valveLock = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t valveCond = PTHREAD_COND_INITIALIZER;
+bool valveLockBool;
+
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 42;
@@ -50,6 +54,11 @@ int main(int argc, char** argv) {
 	pthread_cond_signal(&boxCond);
 	pthread_mutex_unlock(&boxLock);
 	//--------------
+    pthread_mutex_lock(&valveLock);
+    valveLockBool = TRUE;
+    pthread_cond_signal(&valveCond);
+    pthread_mutex_unlock(&valveLock);
+    // ---------------
 
 	sem_init(&SemCtrlPallet, 0, 1);
 	sem_init(&SemCtrlImp, 0, 1);

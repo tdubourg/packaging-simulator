@@ -47,7 +47,7 @@ void* partsPackager(void*a) {
 	//**** MAIN LOOP
 	for (;;) {
 		// sem_wait(&SemCtrlBox);
-		pthread_mutex_unlock(&boxLock);
+		pthread_mutex_lock(&boxLock);
 		while(!boxLockBool) { /* We're paused */
 			pthread_cond_wait(&boxCond, &boxLock); /* Wait for play signal */
 		}
