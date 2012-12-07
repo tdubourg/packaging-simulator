@@ -56,5 +56,10 @@ typedef unsigned char bool;
        pthread_cond_signal(&Cond ## V);\
        pthread_mutex_unlock(&Lock ## V);
 
+/* Include a variable condition*/
+#define INCLUDE(V) extern pthread_mutex_t Lock ## V;\
+	extern pthread_cond_t Cond ## V;\
+	extern bool Lock ## V ## Value;
+
 #endif	/* COMMON_H */
 

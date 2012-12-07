@@ -23,9 +23,6 @@ bool LockImpValue;
 bool LockPaletteValue;
 bool LockValveValue;
 
-pthread_mutex_t paletteLock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t paletteCond = PTHREAD_COND_INITIALIZER;
-
 int STOCKS = 0;
 int PARTS_BY_BOX = 10;
 int BOXES_BY_PALETTE = 10;
