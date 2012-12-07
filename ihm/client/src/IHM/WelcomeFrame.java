@@ -82,21 +82,21 @@ public class WelcomeFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
-//		try {
-//			// création des threads
-//			ThreadCommand threadCmd = new ThreadCommand();
-//			ThreadLog threadLog = new ThreadLog();
-//			// activation des threads
-//			threadCmd.start();
-//			threadLog.start();
+		try {
+			// création des threads
+			ThreadCommand threadCmd = new ThreadCommand();
+			ThreadLog threadLog = new ThreadLog();
+			// activation des threads
+			threadCmd.start();
+			threadLog.start();
 			
 			ParametersFrame managerFrame = new ParametersFrame();
 			managerFrame.setVisible(true);
-//		}
-//		catch (IOException e)
-//		{
-//			this.waitingMessage.setText("Connection impossible");
-//		}
+		}
+		catch (IOException e)
+		{
+			this.waitingMessage.setText("Connection impossible");
+		}
 		
 
 	}//GEN-LAST:event_connectButtonActionPerformed
