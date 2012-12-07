@@ -22,7 +22,6 @@ void *doPrint(void *p) {
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		DBG("doPrint", "Main", "New box in the queue");
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
-		
 		sem_post(&SemSyncBoxImp);
 	}
 }

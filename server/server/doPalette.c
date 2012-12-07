@@ -24,7 +24,6 @@ void *doPalette(void *p)
 		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
-		
         sem_post(&SemSyncImpPalette);
 	}
 }
