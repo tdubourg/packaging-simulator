@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "common.h"
 
 sem_t SemSyncBoxImp;
@@ -35,6 +36,7 @@ int MAX_BOXES_QUEUE = 10;
 
 
 bool needToStop = TRUE;
+static mqd_t mboxControl;
 
 #include "partsPackager.h"
 #include "doCommunication.h"
@@ -49,13 +51,16 @@ bool needToStop = TRUE;
 #include "time.h"
 #endif
 
+static void handler_alert(int);
+
 int main(int argc, char** argv) {
 	pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
-	mqd_t mboxCommunication, mboxControl, mboxLogs, mboxPalletStore;
-#ifdef SIMU_MODE
+	mqd_t mboxCommunication, mboxLogs, mboxPalletStore;
+	#ifdef SIMU_MODE
 	pthread_t tSimuNewPart;
-#endif
-
+	#endif
+	signal(SIGINT, handler_alert);
+	
 	SET(Box, TRUE);
 	SET(Palette, TRUE);
 	SET(Imp, TRUE);
@@ -132,3 +137,21 @@ int main(int argc, char** argv) {
 	return (EXIT_SUCCESS);
 }
 
+
+static void handler_alert(int n)
+{
+	#ifdef DBG
+	static bool s = FALSE;
+	s = !s;
+	if (!s)
+	{
+		mq_send(mboxControl, "R", 2, 5);
+		return;
+	}
+	printf("Alert\n");
+	#endif
+	SET(Box, FALSE);
+	SET(Palette, FALSE);
+	SET(Imp, FALSE);
+	SET(Valve, FALSE);
+}
