@@ -10,22 +10,6 @@
 
 #include <pthread.h>
 #include <semaphore.h>
-
-extern sem_t SemSyncBoxImp;
-extern sem_t SemPushBoxImp;
-extern sem_t SemSyncImpPalette;
-extern sem_t SemSocket;
-extern sem_t SemStock;
-extern sem_t SemNewPart;
-
-extern pthread_mutex_t LockBox;
-extern pthread_mutex_t LockImp;
-extern pthread_mutex_t LockPalette;
-extern pthread_cond_t CondBox;
-extern pthread_cond_t CondPalette;
-extern pthread_cond_t CondImp;
-
-
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <mqueue.h>
@@ -37,28 +21,21 @@ extern pthread_cond_t CondImp;
 #define MBOXLOGS "/MboxLogs"
 #define MBOXPALLETSTORE "/MboxPalletStore"
 
-extern int STOCKS;
-extern int PARTS_BY_BOX;
-extern int MAX_REFUSED_PARTS_BY_BOX;
-extern int BOXES_QUEUE;
-extern int MAX_BOXES_QUEUE;
-
 typedef unsigned char bool;
+
+
 #define TRUE 1
 #define FALSE 0
 #define MAX_MSG_LEN 8192
 
-#ifndef DBG
 #define DBG
-#endif
+
 #define SIMU_MODE
 
-#ifndef DBG(A, B, C)
 #ifdef DBG
 #define DBG(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
 #else
 #define DBG(A, B, C);  
-#endif
 #endif
 
 #define ERR_PALETTE "EP"
@@ -68,11 +45,24 @@ typedef unsigned char bool;
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
 
-// Debug stuff : console-logging macro ! better with a macro : will be deleted upon compilation
+#define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
+#define STOP_APP "QUIT"
 
-extern bool LockBoxValue;
-extern bool LockImpValue;
-extern bool LockPaletteValue;
+/* Set a value (S: bool) to a variable condtion (V) */
+#define SET(V, S) pthread_mutex_lock(&Lock ## V);\
+       Lock ## V ## Value = S;\
+       pthread_cond_signal(&Cond ## V);\
+       pthread_mutex_unlock(&Lock ## V);
+
+/* Include a variable condition*/
+#define INCLUDE(V) extern pthread_mutex_t Lock ## V;\
+	extern pthread_cond_t Cond ## V;\
+	extern bool Lock ## V ## Value;
+
+#define INCLUDE_INTEGER(V) extern pthread_mutex_t Lock ## V;\
+	extern pthread_cond_t Cond ## V;\
+	extern int V ## Value;
+
 
 #endif	/* COMMON_H */
 

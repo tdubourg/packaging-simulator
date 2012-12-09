@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 #include "common.h"
 
 sem_t SemSyncBoxImp;
@@ -13,24 +14,29 @@ pthread_mutex_t LockBox = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockImp = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockPalette = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockValve = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t LockPrintPaletteQueue = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_cond_t CondValve = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondBox = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondPalette = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondImp = PTHREAD_COND_INITIALIZER;
+pthread_cond_t CondPrintPaletteQueue = PTHREAD_COND_INITIALIZER;
+
 bool LockBoxValue;
 bool LockImpValue;
 bool LockPaletteValue;
 bool LockValveValue;
-
-pthread_mutex_t paletteLock = PTHREAD_MUTEX_INITIALIZER;
-pthread_cond_t paletteCond = PTHREAD_COND_INITIALIZER;
+int PrintPaletteQueueValue = 0;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 10;
+int BOXES_BY_PALETTE = 10;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
-int BOXES_QUEUE = 0;
 int MAX_BOXES_QUEUE = 10;
+
+
+bool needToStop = TRUE;
+static mqd_t mboxControl;
 
 #include "partsPackager.h"
 #include "doCommunication.h"
@@ -45,32 +51,20 @@ int MAX_BOXES_QUEUE = 10;
 #include "time.h"
 #endif
 
+static void handler_alert(int);
+
 int main(int argc, char** argv) {
 	pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
-	mqd_t mboxCommunication, mboxControl, mboxLogs, mboxPalletStore;
-#ifdef SIMU_MODE
+	mqd_t mboxCommunication, mboxLogs, mboxPalletStore;
+	#ifdef SIMU_MODE
 	pthread_t tSimuNewPart;
-#endif
-
-	pthread_mutex_lock(&LockBox);
-	LockBoxValue = TRUE;
-	pthread_cond_signal(&CondBox);
-	pthread_mutex_unlock(&LockBox);
+	#endif
+	signal(SIGINT, handler_alert);
 	
-	pthread_mutex_lock(&LockPalette);
-	LockPaletteValue = TRUE;
-	pthread_cond_signal(&CondPalette);
-	pthread_mutex_unlock(&LockPalette);
-
-	pthread_mutex_lock(&LockImp);
-	LockImpValue = TRUE;
-	pthread_cond_signal(&CondImp);
-	pthread_mutex_unlock(&LockImp);
-
-    pthread_mutex_lock(&LockValve);
-    LockValveValue = TRUE;
-    pthread_cond_signal(&CondValve);
-    pthread_mutex_unlock(&LockValve);
+	SET(Box, TRUE);
+	SET(Palette, TRUE);
+	SET(Imp, TRUE);
+	SET(Valve, TRUE);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
@@ -100,6 +94,7 @@ int main(int argc, char** argv) {
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);
 #endif
 
+
 	// Wait
 	//@TODO : Remove those lines that are used for testing purposes
 	// usleep(15 * 1000 * 1000);
@@ -114,6 +109,8 @@ int main(int argc, char** argv) {
 	// boxLockBool = TRUE;
 	// pthread_cond_signal(&boxCond);
 	// pthread_mutex_unlock(&boxLock);
+	
+	mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
 	
 	// Wait for end of threads
 	pthread_join(tCommunication, NULL);
@@ -140,3 +137,21 @@ int main(int argc, char** argv) {
 	return (EXIT_SUCCESS);
 }
 
+
+static void handler_alert(int n)
+{
+	#ifdef DBG
+	static bool s = FALSE;
+	s = !s;
+	if (!s)
+	{
+		mq_send(mboxControl, "R", 2, 5);
+		return;
+	}
+	printf("Alert\n");
+	#endif
+	SET(Box, FALSE);
+	SET(Palette, FALSE);
+	SET(Imp, FALSE);
+	SET(Valve, FALSE);
+}

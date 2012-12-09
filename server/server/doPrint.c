@@ -4,30 +4,24 @@
 #include <stdio.h>
 
 void *doPrint(void *p) {
+	INCLUDE(Print)
+	INCLUDE_INTEGER(PrintPaletteQueue)
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
-    extern sem_t SemSyncImpPalette;
-	extern pthread_mutex_t paletteLock;
-	extern pthread_cond_t paletteCond;
-	extern bool paletteLockNumber;
-
-#ifdef DBG
-	printf("%d\n", (int)getpid());
-#endif
+	extern int MAX_BOXES_QUEUE;
 
 	for(;;) {
 		sem_wait(&SemPushBoxImp);
 		
-		pthread_mutex_lock(&paletteLock);
-		while (BOXES_QUEUE>=MAX_BOXES_QUEUE) { /* We're paused */
-			pthread_cond_wait(&paletteCond, &paletteLock); /* Wait for play signal */
+		pthread_mutex_lock(&LockPrintPaletteQueue);
+		while (PrintPaletteQueueValue >= MAX_BOXES_QUEUE) { /* We're paused */
+			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
 		DBG("doPrint", "Main", "Printing");
-        BOXES_QUEUE++;
-		pthread_cond_signal(&paletteCond);
+        PrintPaletteQueueValue++;
+		pthread_cond_signal(&CondPrintPaletteQueue);
 		DBG("doPrint", "Main", "New box in the queue");
-		pthread_mutex_unlock(&paletteLock);
-		
+		pthread_mutex_unlock(&LockPrintPaletteQueue);
 		sem_post(&SemSyncBoxImp);
 	}
 }

@@ -19,6 +19,9 @@ void error(const char *msg) {
 
 void *doPush(void *p) {
 
+	char logsBuffer[MAX_MSG_LEN + 1];
+	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
+
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
 	char buffer[256];
@@ -40,10 +43,6 @@ void *doPush(void *p) {
 		error("ERROR on binding");
 
 	for (;;) {
-
-		int cmpt = 0;
-		char string[256];
-
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
 		newsockfd = accept(sockfd, (struct sockaddr *) &cli_addr, &clilen);
@@ -52,12 +51,19 @@ void *doPush(void *p) {
 			error("ERROR on accept");
 
 		for (;;) {
-			sprintf(string, "Je PUSH depuis %d secondes !\r\n", cmpt);
-			bzero(buffer, 256);
-			n = write(newsockfd, string, strlen(string));
-			if (n < 0) error("ERROR writing to socket");
-			sleep(2);
-			cmpt++;
+			
+			int bytes_read = mq_receive(mboxCom, logsBuffer, MAX_MSG_LEN, NULL);
+
+			if (bytes_read == -1) {
+				perror("[CommunicationThread] Failed to recieve from LogThread");
+			} else {
+				strcat(logsBuffer,"\r\n");
+				printf(logsBuffer);
+				bzero(buffer, 256);
+				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
+				if (n < 0) 
+					error("ERROR writing to socket");
+			}
 		}
 	}
 	exit(1);
@@ -102,18 +108,17 @@ void *doCommunication(void *p) {
 			n = read(newsockfd, buffer, 255);
 			if (n < 0) error("ERROR reading from socket");
 
-			if (strcmp(buffer, "exit\r\n") == 0) {
+			if (!strcmp(buffer, "exit\r\n")) {
 				close(newsockfd);
 				break;
 			}
 
-			if (strcmp(buffer, "shutdown\r\n") == 0) {
+			if (!strcmp(buffer, "shutdown\r\n")) {
 				close(newsockfd);
 				close(sockfd);
 				return 0;
 			}
 
-			printf("Here is the message: %s\n", buffer);
 			n = write(newsockfd, "I got your message\r\n", 20);
 			if (n < 0)
 				error("ERROR writing to socket");

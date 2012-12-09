@@ -14,32 +14,29 @@ static bool simu_refusal() {
 
 	if (!init) {
 		init = TRUE;
-		srand(NULL);
+		srand(1024);
 	}
 
 	//* 30% probability to fail, 70 to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
-	bool result = ((rand() % 100) < 30) ? TRUE : FALSE; //* hey, that's C, so this is bool emulation, to shout about useless "TRUE : FALSE"
-
-	return result;
+	return (rand() % 100) < 30;
 }
 
 #endif
 
 void* partsPackager(void*a) {
-
+	//**** INIT
+	INCLUDE(Box)
+	INCLUDE(Valve)
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
 	extern sem_t SemNewPart;
-	extern pthread_mutex_t boxLock;
-	extern pthread_cond_t boxCond;
-	extern bool boxLockBool;
-	int refusedPartsCount = 0; //* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
+	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	int currentBoxPartsNumber = 0;
-	//**** INIT
 	// Opening message queue
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
+
 #ifdef DBG
 	printf("%d\n", (int) getpid());
 #endif
@@ -48,11 +45,15 @@ void* partsPackager(void*a) {
 	for (;;) {
 
 		pthread_mutex_lock(&LockBox);
-		while(!LockBoxValue) { /* We're paused */
-			pthread_cond_wait(&CondBox, &LockBox); /* Wait for play signal */
+		while(!LockBoxValue) {
+			pthread_cond_wait(&CondBox, &LockBox);
 		}
 		pthread_mutex_unlock(&LockBox);
+
+		//* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
+		//* This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT)
 		sem_wait(&SemNewPart);
+
 		bool refused = TRUE;
 #ifdef SIMU_MODE
 		refused = simu_refusal();
@@ -76,17 +77,20 @@ void* partsPackager(void*a) {
 				sem_wait(&SemSyncBoxImp);
 				sem_post(&SemPushBoxImp);
 			}
-			//* At the end of the loop, we are basically just waiting for a new part
-			//* This part will come as a signal (supposed to be an IT)
-			//* Thus in order to wait for it, we just pause ourself:
 		} else {
 			DBG("partsPackager", "Main", "New REFUSED part.");
 			refusedPartsCount++;
-			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX) {
+			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
+			{
 				//* @TODO Error case: parts refused rate reached for the current box
+
+							//* @TODO : replace message with correct format
+				//* Closing the valve
+				SET(Valve, FALSE);
+				DBG("doControl", "Main", "Closing valve.");
+				
 				// Sending error message (priority 2)
-				//* @TODO : replace message with correct format
-				int res = mq_send(mboxControl, "Error refused parts rate", MAX_MSG_LEN, 2);
+				int res=mq_send(mboxControl, "E Error refused parts rate", MAX_MSG_LEN, 2);
 				refusedPartsCount = 0;
 				if (res) {
 					perror("Error while sending the error to the Control Thread");
@@ -94,6 +98,5 @@ void* partsPackager(void*a) {
 			}
 		}
 	}
-
 	//**** END / CLEANING 
 }
