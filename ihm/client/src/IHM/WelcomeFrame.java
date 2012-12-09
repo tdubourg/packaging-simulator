@@ -95,7 +95,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
 		}
 		catch (IOException e)
 		{
-			this.waitingMessage.setText("Connection impossible");
+			this.waitingMessage.setText("Connection impossible.");
 		}
 		
 
