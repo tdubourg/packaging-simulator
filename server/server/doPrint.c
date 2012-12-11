@@ -4,17 +4,27 @@
 #include <stdio.h>
 
 void *doPrint(void *p) {
-	INCLUDE(Print)
+	INCLUDE(Imp)
 	INCLUDE_INTEGER(PrintPaletteQueue)
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
 	extern int MAX_BOXES_QUEUE;
 
+	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
+
 	for(;;) {
+		CHECK_WAIT_BOOL(Imp);
 		sem_wait(&SemPushBoxImp);
 		
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue >= MAX_BOXES_QUEUE) { /* We're paused */
+			//* Error : The queue is full and we have to push a box to it
+			SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+			// Sending error message (priority 2)
+			int res=mq_send(mboxControl, ERR_PALETTEQUEUE, MAX_MSG_LEN, ERR_MSG_PRIORITY);
+			if (res) {//* Sthing went wrong when writing to mqueue
+				perror("Error while sending the error to the Control Thread");
+			}
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
 		DBG("doPrint", "Main", "Printing");
