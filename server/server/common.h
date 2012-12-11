@@ -61,6 +61,8 @@ typedef unsigned char bool;
        pthread_cond_signal(&Cond ## V);\
        pthread_mutex_unlock(&Lock ## V);
 
+//* This macro basically checks that a "bool" Lock-type variable is FALSE
+//* and if it is not, it waits until the variable becomes TRUE (need notification for that, so, use the SET() macro!)
 #define CHECK_WAIT_BOOL(V) pthread_mutex_lock(&Lock ## V);\
 		while(Lock ## V ## Value) {\
 			pthread_cond_wait(&Cond ## V, &Lock ## V);\
