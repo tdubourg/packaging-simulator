@@ -50,6 +50,7 @@ typedef unsigned char bool;
 #define ERR_MSG_PRIORITY 2
 
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
+#define STOP_APP "QUIT"
 
 /* Set a value (S: bool) to a variable condtion (V) */
 #define SET(V, S) pthread_mutex_lock(&Lock ## V);\

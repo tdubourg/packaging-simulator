@@ -5,6 +5,9 @@
 #include "time.h"
 #include "stdio.h"
 #endif
+
+static void stopApplication();
+
 /*
  * Control thread
  */
@@ -68,28 +71,39 @@ void *doControl(void *p)
 						break;
 				}
 				break;
+			// Relaunch all tasks (after an urgent stop)
+			case 'R':
+				SET(Box, TRUE);
+				SET(Palette, TRUE);
+				SET(Imp, TRUE);
+				SET(Valve, TRUE);
+				break;
+			// Stop app
+			case 'Q':
+				stopApplication();
+				break;
 		}
 	}
 }
 
-void stopApplication(){
+static void stopApplication(){
 	// stopping simulation threads
 	extern bool needToStop;
+	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR);
+	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
+	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 	needToStop = TRUE;
 	
-	mqd_t mBoxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR);
-	mq_send(mBoxPalletStore,STOP_MESSAGE_QUEUE,sizeof(STOP_MESSAGE_QUEUE),1);
+	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), 1);
 	
 	// waiting for simulation threads to end
 	sleep(1);
 	
 	// closing Log thread;
-	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
-	mq_send(mboxLogs,STOP_MESSAGE_QUEUE,sizeof(STOP_MESSAGE_QUEUE),1);
+	mq_send(mboxLogs,STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), 1);
 	
 	// closing Communication thread;
-	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
-	mq_send(mboxCom,STOP_MESSAGE_QUEUE,sizeof(STOP_MESSAGE_QUEUE),1);
+	mq_send(mboxCom,STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), 1);
 	
 	//TODO: close control thread
 	
