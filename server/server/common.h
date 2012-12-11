@@ -61,6 +61,12 @@ typedef unsigned char bool;
        pthread_cond_signal(&Cond ## V);\
        pthread_mutex_unlock(&Lock ## V);
 
+#define CHECK_WAIT_BOOL(V) pthread_mutex_lock(&Lock ## V);\
+		while(Lock ## V ## Value) {\
+			pthread_cond_wait(&Cond ## V, &Lock ## V);\
+		}\
+		pthread_mutex_unlock(&Lock ## V);
+
 /* Include a variable condition*/
 #define INCLUDE(V) extern pthread_mutex_t Lock ## V;\
 	extern pthread_cond_t Cond ## V;\
