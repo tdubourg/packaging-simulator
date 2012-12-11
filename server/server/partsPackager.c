@@ -44,11 +44,7 @@ void* partsPackager(void*a) {
 	//**** MAIN LOOP
 	for (;;) {
 
-		pthread_mutex_lock(&LockBox);
-		while(!LockBoxValue) {
-			pthread_cond_wait(&CondBox, &LockBox);
-		}
-		pthread_mutex_unlock(&LockBox);
+		CHECK_WAIT_BOOL(Box);
 
 		//* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
 		//* This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT)
@@ -82,15 +78,13 @@ void* partsPackager(void*a) {
 			refusedPartsCount++;
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 			{
-				//* @TODO Error case: parts refused rate reached for the current box
-
-							//* @TODO : replace message with correct format
 				//* Closing the valve
-				SET(Valve, FALSE);
+				SET(Valve, TRUE);
 				DBG("doControl", "Main", "Closing valve.");
+				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
 				// Sending error message (priority 2)
-				int res=mq_send(mboxControl, "E Error refused parts rate", MAX_MSG_LEN, 2);
+				int res=mq_send(mboxControl, ERR_BOX_REFUSED_RATE, MAX_MSG_LEN, 2);
 				refusedPartsCount = 0;
 				if (res) {
 					perror("Error while sending the error to the Control Thread");
