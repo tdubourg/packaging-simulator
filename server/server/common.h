@@ -44,6 +44,9 @@ typedef unsigned char bool;
 #define ERR_WAREHOUSE "EW"
 //* The following error is in the case the doPalette task queue is full and the doPrint one wants to push somthing to it
 #define ERR_PALETTEQUEUE "EQ"
+//* In case the refused rate of the currently packaging box is higher than the limit:
+#define ERR_BOX_REFUSED_RATE "ER"
+
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
