@@ -13,7 +13,8 @@ void *doPalette(void *p)
 	// Opening message queue
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 	
-    for(;;) {
+    for(;;) {//@TODO Log things
+    	CHECK_WAIT_BOOL(Palette);
 		sem_wait(&SemSyncImpPalette);
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue <= 0) { /* We're paused */
