@@ -12,7 +12,7 @@ void *doPrint(void *p) {
 
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
-	for(;;) {
+	for(;;) {//@TODO Log things
 		CHECK_WAIT_BOOL(Imp);
 		sem_wait(&SemPushBoxImp);
 		

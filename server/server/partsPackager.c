@@ -42,7 +42,7 @@ void* partsPackager(void*a) {
 #endif
 
 	//**** MAIN LOOP
-	for (;;) {
+	for (;;) {//@TODO Log things
 
 		CHECK_WAIT_BOOL(Box);
 
