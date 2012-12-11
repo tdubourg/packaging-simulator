@@ -27,7 +27,7 @@ void *doControl(void *p)
 		switch (msg[0])
 		{
 			// Error case
-			case 'E':
+			case 'E': //* @TODO (bt td): manage the new Q error (see commong.h, lines 44-45)
 				switch (msg[1])
 				{
 					// Print

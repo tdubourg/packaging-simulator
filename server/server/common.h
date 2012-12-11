@@ -38,12 +38,16 @@ typedef unsigned char bool;
 #define DBG(A, B, C);  
 #endif
 
+//@TODO: Write a bit of documentation to explain what those constants actually stand for
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
 #define ERR_WAREHOUSE "EW"
+//* The following error is in the case the doPalette task queue is full and the doPrint one wants to push somthing to it
+#define ERR_PALETTEQUEUE "EQ"
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
+#define ERR_MSG_PRIORITY 2
 
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 
