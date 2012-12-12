@@ -27,6 +27,7 @@ void* partsPackager(void*a) {
 	//**** INIT
 	INCLUDE(Box)
 	INCLUDE(Valve)
+	INIT_LOGGER();
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
@@ -60,6 +61,7 @@ void* partsPackager(void*a) {
 			//* There's a new part to put in that freaking box:
 			currentBoxPartsNumber = (currentBoxPartsNumber + 1) % PARTS_BY_BOX;
 			DBG("partsPackager", "Main", "currentBoxPartsNumber=");
+			LOG("partsPackager: New accepted part.");
 #ifdef DBG
 			printf("%d\n", currentBoxPartsNumber);
 #endif
@@ -75,6 +77,8 @@ void* partsPackager(void*a) {
 			}
 		} else {
 			DBG("partsPackager", "Main", "New REFUSED part.");
+			LOG("partsPackager: New REFUSED part.");
+
 			refusedPartsCount++;
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 			{

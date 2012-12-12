@@ -6,6 +6,7 @@
 void *doPrint(void *p) {
 	INCLUDE(Imp)
 	INCLUDE_INTEGER(PrintPaletteQueue)
+	INIT_LOGGER();
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
 	extern int MAX_BOXES_QUEUE;
@@ -28,9 +29,11 @@ void *doPrint(void *p) {
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
 		DBG("doPrint", "Main", "Printing");
+		LOG("doPrint: Printing.");
         PrintPaletteQueueValue++;
 		pthread_cond_signal(&CondPrintPaletteQueue);
-		DBG("doPrint", "Main", "New box in the queue");
+		DBG("doPrint", "Main", "Pushing a new box to the doPalette queue");
+		LOG("doPrint: Pushing a new box to the doPalette queue");
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
 		sem_post(&SemSyncBoxImp);
 	}

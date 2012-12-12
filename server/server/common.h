@@ -51,6 +51,7 @@ typedef unsigned char bool;
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
 #define ERR_MSG_PRIORITY 2
+#define LOG_MSG_PRIORITY 1 //@TODO Check that 1 is lower than 2, in terms of mq messages priorities
 
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 #define STOP_APP "QUIT"
@@ -77,6 +78,12 @@ typedef unsigned char bool;
 #define INCLUDE_INTEGER(V) extern pthread_mutex_t Lock ## V;\
 	extern pthread_cond_t Cond ## V;\
 	extern int V ## Value;
+
+#define INIT_LOGGER(); mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR);
+
+#define LOG(M); if (mq_send(mboxLogger, M, MAX_MSG_LEN, LOG_MSG_PRIORITY)) {\
+					perror("Error while pushing a new log message");\
+				}
 
 
 #endif	/* COMMON_H */
