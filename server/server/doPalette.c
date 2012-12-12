@@ -10,6 +10,7 @@ void *doPalette(void *p)
 	INIT_CONTROL();
 	extern int BOXES_BY_PALETTE;
 	extern sem_t SemSyncImpPalette;
+	extern sem_t SemWarehouse;
 	int currentPaletteBoxesNumber = 0;
 	
 	//***** MAIN LOOP
@@ -28,8 +29,15 @@ void *doPalette(void *p)
 		LOG("doPalette: New box added in current palette");
 		--PrintPaletteQueueValue;
 		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
+		if (!currentPaletteBoxesNumber)
+		{
+			DBG("doPalette", "Main", "The palette is full. Pushing it to the warehouse");
+			LOG("doPalette: The palette is full. Pushing it to the warehouse");
+			sem_post(&SemWarehouse);
+		}
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
+		//* "Sending" the palette to the doWarehouse task
 		sem_post(&SemSyncImpPalette);
 	}
 }

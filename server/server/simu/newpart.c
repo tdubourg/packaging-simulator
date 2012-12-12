@@ -10,6 +10,6 @@ void *newpart(void* a) {
 		CHECK_WAIT_BOOL(Valve);
 		DBG("newpart", "Main", "Pushing new part");
 		sem_post(&SemNewPart);
-		usleep(500 * 1000);
+		usleep(200 * 1000);
 	}
 }

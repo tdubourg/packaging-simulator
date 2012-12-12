@@ -33,8 +33,8 @@ int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B pal
 batch_type CurrentBatchType;
 
 int STOCKS = 0;
-int PARTS_BY_BOX = 10;
-int BOXES_BY_PALETTE = 10;
+int PARTS_BY_BOX = 5;
+int BOXES_BY_PALETTE = 5;
 int MAX_REFUSED_PARTS_BY_BOX = 42;
 int MAX_BOXES_QUEUE = 10;
 
@@ -106,6 +106,7 @@ int main(int argc, char** argv) {
 	// SET(Box, FALSE);
 
 	// usleep(5 * 1000 * 1000);
+	// CurrentBatchType = BATCH_TYPE_A;
 	// DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
 	// SET(Valve, FALSE)
 	// SET(Palette, FALSE);
