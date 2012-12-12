@@ -12,6 +12,7 @@ void *doPalette(void *p)
 	extern sem_t SemSyncImpPalette;
     int currentPaletteBoxesNumber = 0;
 	
+	//***** MAIN LOOP
     for(;;) {
     	CHECK_WAIT_BOOL(Palette);
 		sem_wait(&SemSyncImpPalette);
