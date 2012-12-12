@@ -28,6 +28,7 @@ void* partsPackager(void*a) {
 	INCLUDE(Box)
 	INCLUDE(Valve)
 	INIT_LOGGER();
+	INIT_CONTROL();
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
@@ -36,7 +37,7 @@ void* partsPackager(void*a) {
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	int currentBoxPartsNumber = 0;
 	// Opening message queue
-	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
+	
 
 #ifdef DBG
 	printf("%d\n", (int) getpid());
@@ -87,12 +88,8 @@ void* partsPackager(void*a) {
 				DBG("doControl", "Main", "Closing valve.");
 				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
-				// Sending error message (priority 2)
-				int res = mq_send(mboxControl, ERR_BOX_REFUSED_RATE, MAX_MSG_LEN, ERR_MSG_PRIORITY);
-				refusedPartsCount = 0;
-				if (res) {
-					perror("Error while sending the error to the Control Thread");
-				}
+				// Sending error message
+				ERR_MSG(ERR_BOX_REFUSED_RATE);
 			}
 		}
 	}
