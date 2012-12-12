@@ -46,7 +46,7 @@ void* partsPackager(void*a) {
 	for (;;) {//@TODO Log things
 
 		CHECK_WAIT_BOOL(Box);
-
+		DBG("partsPackager", "Main", "Task is unlocked.");
 		//* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
 		//* This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT)
 		sem_wait(&SemNewPart);
@@ -58,10 +58,10 @@ void* partsPackager(void*a) {
 		if (!refused) //* Part is accepted
 		{
 			DBG("partsPackager", "Main", "New accepted part.");
+			LOG("partsPackager: New accepted part.");
 			//* There's a new part to put in that freaking box:
 			currentBoxPartsNumber = (currentBoxPartsNumber + 1) % PARTS_BY_BOX;
 			DBG("partsPackager", "Main", "currentBoxPartsNumber=");
-			LOG("partsPackager: New accepted part.");
 #ifdef DBG
 			printf("%d\n", currentBoxPartsNumber);
 #endif
