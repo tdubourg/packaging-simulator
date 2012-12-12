@@ -36,15 +36,13 @@ void* partsPackager(void*a) {
 	extern sem_t SemNewPart;
 	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
 	int currentBoxPartsNumber = 0;
-	// Opening message queue
-	
 
 #ifdef DBG
 	printf("%d\n", (int) getpid());
 #endif
 
 	//**** MAIN LOOP
-	for (;;) {//@TODO Log things
+	for (;;) {
 
 		CHECK_WAIT_BOOL(Box);
 		DBG("partsPackager", "Main", "Task is unlocked.");
@@ -86,6 +84,7 @@ void* partsPackager(void*a) {
 				//* Closing the valve
 				SET(Valve, TRUE);
 				DBG("doControl", "Main", "Closing valve.");
+				LOG("partsPackager: Refused rate is too high, ERROR.");
 				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
 				// Sending error message
