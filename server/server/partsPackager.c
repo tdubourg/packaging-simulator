@@ -84,7 +84,7 @@ void* partsPackager(void*a) {
 				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
 				// Sending error message (priority 2)
-				int res=mq_send(mboxControl, ERR_BOX_REFUSED_RATE, MAX_MSG_LEN, 2);
+				int res = mq_send(mboxControl, ERR_BOX_REFUSED_RATE, MAX_MSG_LEN, ERR_MSG_PRIORITY);
 				refusedPartsCount = 0;
 				if (res) {
 					perror("Error while sending the error to the Control Thread");
