@@ -97,19 +97,18 @@ int main(int argc, char** argv) {
 
 	// Wait
 	//@TODO : Remove those lines that are used for testing purposes
-	// usleep(15 * 1000 * 1000);
-	// DBG("main", "Main", "======= NOW LOCKING THE partsPackager task =======");
-	// pthread_mutex_lock(&boxLock);
-	// boxLockBool = FALSE;
-	// pthread_cond_signal(&boxCond);
-	// pthread_mutex_unlock(&boxLock);
 	// usleep(7 * 1000 * 1000);
-	// DBG("main", "Main", "======= NOW UUUUUNNNNNLOCKING THE partsPackager task =======");
-	// pthread_mutex_lock(&boxLock);
-	// boxLockBool = TRUE;
-	// pthread_cond_signal(&boxCond);
-	// pthread_mutex_unlock(&boxLock);
+	// DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
+	// SET(Box, FALSE)
+
+	// usleep(5 * 1000 * 1000);
+	// DBG("main", "Main", "======= NOW UNLOCKING THE newpart task =======");
+	// SET(Valve, FALSE)
 	
+	// usleep(7 * 1000 * 1000);
+	// DBG("main", "Main", "======= NOW LOCKING THE partsPackager task =======");
+	// SET(Box, TRUE)
+
 	mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
 	
 	// Wait for end of threads
