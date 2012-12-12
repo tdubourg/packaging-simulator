@@ -9,12 +9,14 @@ sem_t SemSyncImpPalette;
 sem_t SemSocket;
 sem_t SemStock;
 sem_t SemNewPart;
+sem_t SemWarehouse;
 
 pthread_mutex_t LockBox = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockImp = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockPalette = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockValve = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockPrintPaletteQueue = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t LockWarehouseStorageData = PTHREAD_MUTEX_INITIALIZER;
 
 pthread_cond_t CondValve = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondBox = PTHREAD_COND_INITIALIZER;
@@ -27,6 +29,8 @@ bool LockImpValue;
 bool LockPaletteValue;
 bool LockValveValue;
 int PrintPaletteQueueValue = 0;
+int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
+batch_type CurrentBatchType;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 10;
@@ -97,13 +101,16 @@ int main(int argc, char** argv) {
 
 	// Wait
 	//@TODO : Remove those lines that are used for testing purposes
-	// usleep(7 * 1000 * 1000);
-	// DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
-	// SET(Box, FALSE)
+	usleep(7 * 1000 * 1000);
+	DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
+	SET(Box, FALSE);
 
-	// usleep(5 * 1000 * 1000);
-	// DBG("main", "Main", "======= NOW UNLOCKING THE newpart task =======");
-	// SET(Valve, FALSE)
+	usleep(5 * 1000 * 1000);
+	DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
+	SET(Valve, FALSE)
+	SET(Palette, FALSE);
+	SET(Imp, FALSE);
+	SET(Valve, FALSE);
 
 	// usleep(7 * 1000 * 1000);
 	// DBG("main", "Main", "======= NOW LOCKING THE partsPackager task =======");
@@ -122,7 +129,7 @@ int main(int argc, char** argv) {
 #ifdef SIMU_MODE
 	pthread_join(tSimuNewPart, NULL);
 #endif
-	
+
 	// Deleting message queue
 	mq_close(mboxCommunication);
 	mq_close(mboxControl);

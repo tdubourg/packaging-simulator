@@ -22,7 +22,7 @@
 #define MBOXPALLETSTORE "/MboxPalletStore"
 
 typedef unsigned char bool;
-
+typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define TRUE 1
 #define FALSE 0
