@@ -104,7 +104,7 @@ int main(int argc, char** argv) {
 	// usleep(5 * 1000 * 1000);
 	// DBG("main", "Main", "======= NOW UNLOCKING THE newpart task =======");
 	// SET(Valve, FALSE)
-	
+
 	// usleep(7 * 1000 * 1000);
 	// DBG("main", "Main", "======= NOW LOCKING THE partsPackager task =======");
 	// SET(Box, TRUE)
@@ -119,7 +119,10 @@ int main(int argc, char** argv) {
 	pthread_join(tWarehouse, NULL);
 	pthread_join(tControl, NULL);
 	pthread_join(tLog, NULL);
-
+#ifdef SIMU_MODE
+	pthread_join(tSimuNewPart, NULL);
+#endif
+	
 	// Deleting message queue
 	mq_close(mboxCommunication);
 	mq_close(mboxControl);
