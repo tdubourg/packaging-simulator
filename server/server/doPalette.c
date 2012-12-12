@@ -10,11 +10,11 @@ void *doPalette(void *p)
 	INIT_CONTROL();
 	extern int BOXES_BY_PALETTE;
 	extern sem_t SemSyncImpPalette;
-    int currentPaletteBoxesNumber = 0;
+	int currentPaletteBoxesNumber = 0;
 	
 	//***** MAIN LOOP
-    for(;;) {
-    	CHECK_WAIT_BOOL(Palette);
+	for(;;) {
+		CHECK_WAIT_BOOL(Palette);
 		sem_wait(&SemSyncImpPalette);
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		//@TODO Here check that there actually is a palette (sensor simulation)
@@ -26,10 +26,10 @@ void *doPalette(void *p)
 		}
 		DBG("doPalette", "Main", "New box added in palette");
 		LOG("doPalette: New box added in current palette");
-        --PrintPaletteQueueValue;
+		--PrintPaletteQueueValue;
 		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
-        sem_post(&SemSyncImpPalette);
+		sem_post(&SemSyncImpPalette);
 	}
 }
