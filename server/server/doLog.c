@@ -18,7 +18,7 @@ void *doLog(void *p) {
 	//opening mbox
 	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
 
-	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
+	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR | O_NONBLOCK);
 
 	for(;;) {
 		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); //@TODO add comment/documentation for this line
