@@ -5,6 +5,7 @@ void *doWarehouse(void *p)
 {
 	//**** INIT
 	INIT_LOGGER();
+	INIT_CHECK_FOR_APP_END();
 	extern sem_t SemWarehouse;
 	extern batch_type CurrentBatchType;
 	extern int AStock, BStock;
@@ -16,6 +17,7 @@ void *doWarehouse(void *p)
 	for(;;) {
 		DBG("doWarehouse", "Main", "is unlocked.");
 		sem_wait(&SemWarehouse);
+		CHECK_FOR_APP_END_AND_STOP(Warehouse);
 		DBG("doWarehouse", "Main", "New palette to store somwhere");
 		LOG("doWarehouse: New palette to store somewhere");
 		storageId++;

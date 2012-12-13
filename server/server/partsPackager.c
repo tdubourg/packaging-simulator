@@ -1,5 +1,6 @@
 #include "semaphore.h"
 #include "stdio.h"
+#include "errno.h"
 
 #include "common.h"
 #include "partsPackager.h"
@@ -21,6 +22,20 @@ static bool simu_refusal() {
 	return (rand() % 100) < 30;
 }
 
+static bool simu_missing_box() {
+	bool missing = TRUE;
+	FILE * fileMissingBox = fopen(SIMU_BOX_FILE_NAME, "rb");
+
+	if (fileMissingBox == NULL) { // If the file is not found, it means that the box is here
+		if(errno == ENOENT) {
+			missing = FALSE;
+		}
+	} else {
+		fclose(fileMissingBox);
+	}
+	return missing;
+}
+
 #endif
 
 void* partsPackager(void*a) {
@@ -29,6 +44,7 @@ void* partsPackager(void*a) {
 	INCLUDE(Valve)
 	INIT_LOGGER();
 	INIT_CONTROL();
+	INIT_CHECK_FOR_APP_END();
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
@@ -43,9 +59,28 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-
 		CHECK_WAIT_BOOL(Box);
+		CHECK_FOR_APP_END_AND_STOP(Box);
 		DBG("partsPackager", "Main", "Task is unlocked.");
+		
+		bool missing = TRUE;
+#ifdef SIMU_MODE
+		missing = simu_missing_box();
+#endif
+		
+		if(missing) {
+			//* Closing the valve
+				SET(Valve, TRUE);
+				DBG("doControl", "Main", "Closing valve.");
+				LOG("partsPackager: Missing box, ERROR.");
+				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+				
+				// Sending error message
+				ERR_MSG(ERR_BOX);
+				// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
+				continue;
+		}
+		
 		//* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
 		//* This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT)
 		sem_wait(&SemNewPart);
