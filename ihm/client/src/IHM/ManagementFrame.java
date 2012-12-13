@@ -15,14 +15,16 @@ public class ManagementFrame extends javax.swing.JFrame {
 
     ThreadCommand threadCmd;
     ThreadLog threadLog;
+    String lot;
     
 	/**
 	 * Creates new form ManagementFrame
 	 */
-	public ManagementFrame(ThreadCommand threadCmd, ThreadLog threadLog) {
+	public ManagementFrame(ThreadCommand threadCmd, ThreadLog threadLog, String lot) {
 		initComponents();
                 this.threadCmd = threadCmd;
                 this.threadLog = threadLog;
+                this.lot = lot;
 	}
 
 	/**
@@ -40,23 +42,23 @@ public class ManagementFrame extends javax.swing.JFrame {
         setTitle("Suivi de la chaine de production");
         setResizable(false);
 
-        jLabel1.setText("Suivi");
+        jLabel1.setText("Etat de fabrication du lot");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(66, 66, 66)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(586, Short.MAX_VALUE))
+                .addContainerGap(545, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addContainerGap(364, Short.MAX_VALUE))
+                .addContainerGap(405, Short.MAX_VALUE))
         );
 
         pack();

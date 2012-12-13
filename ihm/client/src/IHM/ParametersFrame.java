@@ -4,6 +4,7 @@
  */
 package IHM;
 
+import client.Client;
 import client.ThreadCommand;
 import client.ThreadLog;
 import java.awt.Color;
@@ -254,7 +255,7 @@ public class ParametersFrame extends javax.swing.JFrame {
                     threadCmd.sendParameters(lot, rebus, box, pal);
                     
                     //ouverture de la fenêtre de suivi
-                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog);
+                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog, lot);
                     this.setVisible(false);
                     managementFrame.setVisible(true);
 		}
