@@ -32,7 +32,7 @@ public class ThreadCommand {
 		socketCommand = new Socket(serverAddress,serverPort);	            
     }
     
-    public Boolean sendParameters(int rebus, int box, int pal)
+    public Boolean sendParameters(String lot, int rebus, int box, int pal)
     {
 	//écriture commande
 	BufferedReader in;
@@ -45,7 +45,7 @@ public class ThreadCommand {
 //	boolean openSocket = true;
 //	while (openSocket){
 		try {
-			toSend = rebus + "-" + box + "-" + pal+ "\r\n";
+			toSend = lot + "-" + rebus + "-" + box + "-" + pal+ "\r\n";
 			out = new PrintWriter(socketCommand.getOutputStream());
 			out.print(toSend);
 			out.flush();
