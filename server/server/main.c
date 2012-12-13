@@ -39,7 +39,7 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 int MAX_BOXES_QUEUE = 10;
 
 
-bool needToStop = TRUE;
+bool needToStop = TRUE;//@TODO rename this variable (global should start with a capital letter, and a better name might be useful as well)
 static mqd_t mboxControl;
 
 #include "partsPackager.h"

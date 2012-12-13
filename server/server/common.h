@@ -16,6 +16,9 @@
 
 #define LOG_FILE_NAME "log.txt" 
 
+#define SIMU_BOX_FILE_NAME "missingBox.txt"
+#define SIMU_PRINT_FILE_NAME "printerError.txt"
+
 #define MBOXCOMMUNICATION "/MboxCommunication"
 #define MBOXCONTROL "/MboxControl"
 #define MBOXLOGS "/MboxLogs"
@@ -39,6 +42,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #endif
 
 //@TODO: Write a bit of documentation to explain what those constants actually stand for
+#define ERR_BOX "EB"
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
 #define ERR_WAREHOUSE "EW"
