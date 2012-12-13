@@ -13,6 +13,7 @@ void *doPrint(void *p) {
 	extern int MAX_BOXES_QUEUE;
 	for(;;) {
 		CHECK_WAIT_BOOL(Imp);
+		CHECK_FOR_APP_END_AND_STOP(Imp);
 		sem_wait(&SemPushBoxImp);
 		
 		pthread_mutex_lock(&LockPrintPaletteQueue);

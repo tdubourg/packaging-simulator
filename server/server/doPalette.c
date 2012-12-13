@@ -16,6 +16,7 @@ void *doPalette(void *p)
 	//***** MAIN LOOP
 	for(;;) {
 		CHECK_WAIT_BOOL(Palette);
+		CHECK_FOR_APP_END_AND_STOP(Palette);
 		sem_wait(&SemSyncImpPalette);
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		//@TODO Here check that there actually is a palette (sensor simulation)

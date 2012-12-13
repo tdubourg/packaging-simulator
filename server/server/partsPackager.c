@@ -43,8 +43,8 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-
 		CHECK_WAIT_BOOL(Box);
+		CHECK_FOR_APP_END_AND_STOP(Box);
 		DBG("partsPackager", "Main", "Task is unlocked.");
 		//* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
 		//* This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT)
