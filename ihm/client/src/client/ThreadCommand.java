@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Elodie
  */
-public class ThreadCommand extends Thread {
+public class ThreadCommand {
 
     InetAddress serverAddress;
     Socket socketCommand;
@@ -32,21 +32,20 @@ public class ThreadCommand extends Thread {
 		socketCommand = new Socket(serverAddress,serverPort);	            
     }
     
-    
-    @Override
-    public void run() {
+    public Boolean sendParameters(int rebus, int box, int pal)
+    {
 	//écriture commande
 	BufferedReader in;
 	PrintWriter out;
 	String toSend;
 	
-	InputStreamReader isr=new InputStreamReader(System.in);
-	BufferedReader keyboardInput=new BufferedReader(isr);
+//	InputStreamReader isr=new InputStreamReader(System.in);
+//	BufferedReader keyboardInput=new BufferedReader(isr);
 	
-	boolean openSocket = true;
-	while (openSocket){
+//	boolean openSocket = true;
+//	while (openSocket){
 		try {
-			toSend = keyboardInput.readLine();
+			toSend = rebus + "-" + box + "-" + pal;
 			out = new PrintWriter(socketCommand.getOutputStream());
 			out.println(toSend);
 			out.flush();
@@ -61,6 +60,8 @@ public class ThreadCommand extends Thread {
 		} catch (IOException ex) {
 			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
 		}
-	}
+//	}
+        System.out.println("message envoyé");
+        return true;
     }
 }
