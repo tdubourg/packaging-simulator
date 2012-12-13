@@ -4,6 +4,9 @@
  */
 package IHM;
 
+import client.Client;
+import client.ThreadCommand;
+import client.ThreadLog;
 import java.awt.Color;
 
 /**
@@ -12,10 +15,13 @@ import java.awt.Color;
  */
 public class ParametersFrame extends javax.swing.JFrame {
 
+    ThreadCommand threadCmd;
+    ThreadLog threadLog;
+    
 	/**
 	 * Creates new form ManagerFrame
 	 */
-	public ParametersFrame() {
+	public ParametersFrame(ThreadCommand threadCmd, ThreadLog threadLog) {
 		initComponents();
 		rebusErrorLabel.setVisible(false);
 		rebusErrorLabel.setForeground(Color.red);
@@ -23,6 +29,8 @@ public class ParametersFrame extends javax.swing.JFrame {
 		boxErrorLabel.setForeground(Color.red);
 		palErrorLabel.setVisible(false);
 		palErrorLabel.setForeground(Color.red);
+                this.threadCmd = threadCmd;
+                this.threadLog = threadLog;
 	}
 
 	/**
@@ -45,6 +53,7 @@ public class ParametersFrame extends javax.swing.JFrame {
         boxErrorLabel = new javax.swing.JLabel();
         palErrorLabel = new javax.swing.JLabel();
         ValidateButton = new javax.swing.JButton();
+        lotComboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Saisie des paramètres");
@@ -139,6 +148,13 @@ public class ParametersFrame extends javax.swing.JFrame {
             }
         });
 
+        lotComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "A", "B" }));
+        lotComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lotComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,18 +166,23 @@ public class ParametersFrame extends javax.swing.JFrame {
                         .addComponent(ValidateButton))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(parametersLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(panelA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(panelA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lotComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(parametersLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(parametersLabel)
-                .addGap(18, 18, 18)
+                .addGap(3, 3, 3)
+                .addComponent(lotComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(ValidateButton)
@@ -188,36 +209,69 @@ public class ParametersFrame extends javax.swing.JFrame {
 		rebusErrorLabel.setVisible(false);
 		boxErrorLabel.setVisible(false);
 		palErrorLabel.setVisible(false);
-		if (rebusTextField.getText().isEmpty())
-		{
-			correct = false;
-			rebusErrorLabel.setVisible(true);
-		}
-		if (boxTextField.getText().isEmpty())
-		{
-			correct = false;
-			boxErrorLabel.setVisible(true);
-		}
-		if (palTextField.getText().isEmpty())
-		{
-			correct = false;
-			palErrorLabel.setVisible(true);
-		}
-		
+                int rebus;
+                int box;
+                int pal;
+                String lot;
+                
+                try 
+                {
+                    rebus = Integer.parseInt(rebusTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
+                    correct = false;
+                    rebusErrorLabel.setVisible(true);
+                }
+                
+                try 
+                {
+                    box = Integer.parseInt(boxTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
+                    correct = false;
+                    rebusErrorLabel.setVisible(true);
+                }
+                
+                try 
+                {
+                    pal = Integer.parseInt(this.palTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
+                    correct = false;
+                    rebusErrorLabel.setVisible(true);
+                }
+                    
 		if (correct == true)
-		{
-			ManagementFrame managementFrame = new ManagementFrame();
-			this.setVisible(false);
-			managementFrame.setVisible(true);
+		{       
+                    rebus = Integer.parseInt(rebusTextField.getText());
+                    box = Integer.parseInt(boxTextField.getText());
+                    pal = Integer.parseInt(this.palTextField.getText());
+                    lot = (String)lotComboBox.getSelectedItem();
+                    
+                    //envoi au serveur des infos de paramétrage
+                    threadCmd.sendParameters(lot, rebus, box, pal);
+                    
+                    //ouverture de la fenêtre de suivi
+                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog, lot);
+                    this.setVisible(false);
+                    managementFrame.setVisible(true);
 		}
 
 	}//GEN-LAST:event_ValidateButtonActionPerformed
+
+    private void lotComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lotComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lotComboBoxActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ValidateButton;
     private javax.swing.JLabel boxErrorLabel;
     private javax.swing.JLabel boxLabel;
     private javax.swing.JTextField boxTextField;
+    private javax.swing.JComboBox lotComboBox;
     private javax.swing.JLabel palErrorLabel;
     private javax.swing.JLabel palLabel;
     private javax.swing.JTextField palTextField;
