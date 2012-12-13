@@ -25,6 +25,7 @@ public class ManagementFrame extends javax.swing.JFrame {
                 this.threadCmd = threadCmd;
                 this.threadLog = threadLog;
                 this.lot = lot;
+                this.descriptionLabel.setText("Etat de fabrication du lot" + lot);
 	}
 
 	/**
@@ -36,13 +37,13 @@ public class ManagementFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        descriptionLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Suivi de la chaine de production");
         setResizable(false);
 
-        jLabel1.setText("Etat de fabrication du lot");
+        descriptionLabel.setText("Etat de fabrication du lot");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -50,14 +51,14 @@ public class ManagementFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(descriptionLabel)
                 .addContainerGap(545, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
+                .addComponent(descriptionLabel)
                 .addContainerGap(405, Short.MAX_VALUE))
         );
 
@@ -65,6 +66,6 @@ public class ManagementFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel descriptionLabel;
     // End of variables declaration//GEN-END:variables
 }
