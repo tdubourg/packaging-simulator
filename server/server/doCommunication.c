@@ -14,7 +14,7 @@
 
 void error(const char *msg) {
 	perror(msg);
-	exit(1);
+	return 0;
 }
 
 void *doPush(void *p) {
@@ -57,29 +57,39 @@ void *doPush(void *p) {
 		/*Boucle d'envoie en push lors de reception de logs
 		 *dans la boite aux lettres*/
 		for (;;) {
-			
+
 			int bytes_read = mq_receive(mboxCom, logsBuffer, MAX_MSG_LEN, NULL);
+
+			if (strcmp(logsBuffer, STOP_MESSAGE_QUEUE) == 0) {
+				close(newsockfd);
+				close(sockfd);
+				return 0;
+			}
 
 			if (bytes_read == -1) {
 				perror("[CommunicationThread] Failed to recieve from LogThread");
 			} else {
-				strcat(logsBuffer,"\r\n");
-				printf(logsBuffer);
+				strcat(logsBuffer, "\r\n");
 				bzero(buffer, 256);
 				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
-				if (n < 0) 
+				if (n < 0)
 					error("ERROR writing to socket");
 			}
 		}
 	}
-	exit(1);
+	return 0;
 }
 
 void *doCommunication(void *p) {
-	
+
 	/*Lancement du thread de push*/
 	pthread_t tPush;
 	pthread_create(&tPush, NULL, doPush, NULL);
+
+	/*Mise en place du buffer de commandes*/
+	char logsControl[MAX_MSG_LEN + 1];
+	/*Mise en place de la boite aux lettres avec le controler*/
+	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
 	/*Création des sockets et mise en place du buffer de communication*/
 	int sockfd, newsockfd, portno;
@@ -113,17 +123,18 @@ void *doCommunication(void *p) {
 			error("ERROR on accept");
 
 		/*Boucle de communication en pull pour les commandes du client*/
-		for(;;) {
+		for (;;) {
 			bzero(buffer, 256);
 			n = read(newsockfd, buffer, 255);
 			if (n < 0) error("ERROR reading from socket");
-
-			if (!strcmp(buffer, "exit\r\n")) {
+			
+			if (strcmp(buffer, "exit\r\n") == 0) {
 				close(newsockfd);
 				break;
 			}
 
-			if (!strcmp(buffer, "shutdown\r\n")) {
+			if (strcmp(buffer, "shutdown\r\n") == 0) {
+				mq_send(mboxControl, STOP_APP, sizeof (STOP_APP), 1);
 				close(newsockfd);
 				close(sockfd);
 				return 0;
