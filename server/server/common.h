@@ -50,8 +50,9 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
-#define ERR_MSG_PRIORITY 2
-#define LOG_MSG_PRIORITY 1 //@TODO Check that 1 is lower than 2, in terms of mq messages priorities
+#define MSG_HIGH_PRIORITY 3 //for errors
+#define MSG_MEDIUM_PRIORITY 2 // for normal message such as logs
+#define MSG_LOW_PRIORITY 1 // for stop message
 
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 #define STOP_APP "QUIT"

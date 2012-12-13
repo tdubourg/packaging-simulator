@@ -80,7 +80,11 @@ void *doControl(void *p)
 				break;
 			// Stop app
 			case 'Q':
+				
 				stopApplication();
+				//stopping this thread;
+				return;
+				
 				break;
 		}
 	}
@@ -94,16 +98,16 @@ static void stopApplication(){
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 	needToStop = TRUE;
 	
-	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), 1);
+	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 	
 	// waiting for simulation threads to end
 	sleep(1);
 	
 	// closing Log thread;
-	mq_send(mboxLogs,STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), 1);
+	mq_send(mboxLogs,STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE),MSG_LOW_PRIORITY);
 	
 	// closing Communication thread;
-	mq_send(mboxCom,STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), 1);
+	mq_send(mboxCom,STOP_MESSAGE_QUEUE, sizeof(STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 	
 	//TODO: close control thread
 	
