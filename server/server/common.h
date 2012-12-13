@@ -52,6 +52,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR_PALETTEQUEUE "EQ"
 //* In case the refused rate of the currently packaging box is higher than the limit:
 #define ERR_BOX_REFUSED_RATE "ER"
+#define PRODUCTION_IS_OVER_MSG "GAME OVER"
 
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
@@ -95,6 +96,10 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
 				perror("Error while sending the error to the Control Thread");\
+			}
+
+#define CONTROL_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_MEDIUM_PRIORITY)) {\
+				perror("Error while sending the message to the Control Thread");\
 			}
 
 //* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return)

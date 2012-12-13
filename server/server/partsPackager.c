@@ -63,22 +63,22 @@ void* partsPackager(void*a) {
 		CHECK_FOR_APP_END_AND_STOP("Box");
 		DBG("partsPackager", "Main", "Task is unlocked.");
 		
-		bool missing = TRUE;
+		bool boxIsMissing = TRUE;
 #ifdef SIMU_MODE
-		missing = simu_missing_box();
+		boxIsMissing = simu_missing_box();
 #endif
 		
-		if(missing) {
+		if(boxIsMissing) {
 			//* Closing the valve
-				SET(Valve, TRUE);
-				DBG("doControl", "Main", "Closing valve.");
-				LOG("partsPackager: Missing box, ERROR.");
-				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
-				
-				// Sending error message
-				ERR_MSG(ERR_BOX);
-				// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
-				continue;
+			SET(Valve, TRUE);
+			DBG("partsPackager", "Main", "Closing valve.");
+			LOG("partsPackager: Missing box, ERROR.");
+			SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+			
+			// Sending error message
+			ERR_MSG(ERR_BOX);
+			// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
+			continue;
 		}
 		
 		//* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
@@ -105,6 +105,12 @@ void* partsPackager(void*a) {
 				DBG("partsPackager", "Main", "The box is full");
 				refusedPartsCount = 0; //* Reset refused parts by box counter
 
+				if ((CurrentProducedBoxes / BOXES_BY_PALETTE) >= CurrentBatchProdMax)
+				{
+					//* The current batch is over, so close the valve
+					SET(Valve, TRUE);
+					LOG(PRODUCTION_IS_OVER_MSG);
+				}
 				//**** "READY TO GO TO PRINTER" SEMAPHORE CHECK
 				sem_wait(&SemSyncBoxImp);
 				sem_post(&SemPushBoxImp);
