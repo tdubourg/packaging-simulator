@@ -18,6 +18,7 @@
 
 #define SIMU_BOX_FILE_NAME "missingBox.txt"
 #define SIMU_PRINT_FILE_NAME "printerError.txt"
+#define SIMU_PALETTE_FILE_NAME "missingPalette.txt"
 
 #define MBOXCOMMUNICATION "/MboxCommunication"
 #define MBOXCONTROL "/MboxControl"
@@ -42,6 +43,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #endif
 
 //@TODO: Write a bit of documentation to explain what those constants actually stand for
+//@TODO: handle the new error case "EB"
 #define ERR_BOX "EB"
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
@@ -66,6 +68,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define EMERGENCY_STOP_OCCURED "EMERGENCY_STOP_OCCURED"
 
 /* Set a value (S: bool) to a variable condtion (V) */
+//* @TODO This is not clear at all, replace this macro by two macros : LOCK(V) and UNLOCK(V)
 #define SET(V, S) pthread_mutex_lock(&Lock ## V);\
        Lock ## V ## Value = S;\
        pthread_cond_signal(&Cond ## V);\
@@ -97,6 +100,14 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
 				perror("Error while sending the error to the Control Thread");\
 			}
+
+//* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return)
+#define CHECK_FOR_APP_END_AND_STOP(V); if (TRUE == needToStop)\
+				{\
+					DBG(V, "Main", "Ending current task");\
+					return;\
+				}
+#define INIT_CHECK_FOR_APP_END(); extern bool needToStop;
 
 #endif	/* COMMON_H */
 

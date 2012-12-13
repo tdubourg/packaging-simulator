@@ -29,17 +29,18 @@ void *doPrint(void *p) {
 	INCLUDE_INTEGER(PrintPaletteQueue)
 	INIT_LOGGER();
 	INIT_CONTROL();
+	INIT_CHECK_FOR_APP_END();
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
 	extern int MAX_BOXES_QUEUE;
 	for(;;) {
 		CHECK_WAIT_BOOL(Imp);
-		
+		CHECK_FOR_APP_END_AND_STOP("Imp");
 		bool printerError = TRUE;
+
 #ifdef SIMU_MODE
 		printerError = simu_printer_error();
 #endif
-		
 		if(printerError) {
 			//* Closing the valve
 				SET(Valve, TRUE);

@@ -44,6 +44,7 @@ void* partsPackager(void*a) {
 	INCLUDE(Valve)
 	INIT_LOGGER();
 	INIT_CONTROL();
+	INIT_CHECK_FOR_APP_END();
 	extern int PARTS_BY_BOX;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern sem_t SemSyncBoxImp;
@@ -58,8 +59,8 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-
 		CHECK_WAIT_BOOL(Box);
+		CHECK_FOR_APP_END_AND_STOP("Box");
 		DBG("partsPackager", "Main", "Task is unlocked.");
 		
 		bool missing = TRUE;

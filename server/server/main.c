@@ -31,6 +31,7 @@ bool LockValveValue;
 int PrintPaletteQueueValue = 0;
 int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
 batch_type CurrentBatchType;
+int CurrentBatchProdMax = 0;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 5;
@@ -39,7 +40,7 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 int MAX_BOXES_QUEUE = 10;
 
 
-bool needToStop = TRUE;//@TODO rename this variable (global should start with a capital letter, and a better name might be useful as well)
+bool needToStop = FALSE;//@TODO rename this variable (global should start with a capital letter, and a better name might be useful as well)
 static mqd_t mboxControl;
 
 #include "partsPackager.h"
