@@ -195,30 +195,43 @@ public class ParametersFrame extends javax.swing.JFrame {
 		rebusErrorLabel.setVisible(false);
 		boxErrorLabel.setVisible(false);
 		palErrorLabel.setVisible(false);
-               
+                int rebus;
+                int box;
+                int pal;
                 
-		if (rebusTextField.getText().isEmpty())
-		{
+                try 
+                {
+                    rebus = Integer.parseInt(rebusTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
                     correct = false;
                     rebusErrorLabel.setVisible(true);
-		}
-		if (boxTextField.getText().isEmpty())
-		{
+                }
+                try 
+                {
+                    box = Integer.parseInt(boxTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
                     correct = false;
-                    boxErrorLabel.setVisible(true);
-		}
-		if (palTextField.getText().isEmpty())
-		{
+                    rebusErrorLabel.setVisible(true);
+                }
+                try 
+                {
+                    pal = Integer.parseInt(this.palTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
                     correct = false;
-                    palErrorLabel.setVisible(true);
-		}
-		
-		if (correct == true)
-		{
-                    int rebus = Integer.parseInt(rebusTextField.getText());
-                    int box = Integer.parseInt(boxTextField.getText());
-                    int pal = Integer.parseInt(this.palTextField.getText());
+                    rebusErrorLabel.setVisible(true);
+                }
                     
+		if (correct == true)
+		{       
+                    rebus = Integer.parseInt(rebusTextField.getText());
+                    box = Integer.parseInt(boxTextField.getText());
+                    pal = Integer.parseInt(this.palTextField.getText());
                     //envoi au serveur des infos de paramétrage
                     threadCmd.sendParameters(rebus, box, pal);
                     
