@@ -50,8 +50,9 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
-#define ERR_MSG_PRIORITY 2
-#define LOG_MSG_PRIORITY 1 //@TODO Check that 1 is lower than 2, in terms of mq messages priorities
+#define MSG_HIGH_PRIORITY 3 //for errors
+#define MSG_MEDIUM_PRIORITY 2 // for normal message such as logs
+#define MSG_LOW_PRIORITY 1 // for stop message
 
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 #define STOP_APP "QUIT"
@@ -81,11 +82,11 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define INIT_LOGGER(); mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
 #define INIT_CONTROL(); mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_NONBLOCK);
-#define LOG(M); if (mq_send(mboxLogger, M, MAX_MSG_LEN, LOG_MSG_PRIORITY)) {\
+#define LOG(M); if (mq_send(mboxLogger, M, MAX_MSG_LEN, MSG_MEDIUM_PRIORITY)) {\
 					perror("Error while pushing a new log message");\
 				}
 
-#define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, ERR_MSG_PRIORITY)) {\
+#define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
 				perror("Error while sending the error to the Control Thread");\
 			}
 
