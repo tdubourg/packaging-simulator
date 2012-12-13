@@ -45,9 +45,9 @@ public class ThreadCommand {
 //	boolean openSocket = true;
 //	while (openSocket){
 		try {
-			toSend = rebus + "-" + box + "-" + pal;
+			toSend = rebus + "-" + box + "-" + pal+ "\r\n";
 			out = new PrintWriter(socketCommand.getOutputStream());
-			out.println(toSend);
+			out.print(toSend);
 			out.flush();
 		} catch (IOException ex) {
 			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,7 +61,6 @@ public class ThreadCommand {
 			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
 		}
 //	}
-        System.out.println("message envoyé");
         return true;
     }
 }
