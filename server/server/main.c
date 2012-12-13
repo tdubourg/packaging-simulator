@@ -146,18 +146,20 @@ int main(int argc, char** argv) {
 
 static void handler_alert(int n)
 {
-	#ifdef DBG
-	static bool s = FALSE;
-	s = !s;
-	if (!s)
-	{
-		mq_send(mboxControl, "R", 2, 5);
-		return;
-	}
-	printf("Alert\n");
-	#endif
+//	#ifdef DBG
+//	static bool s = FALSE;
+//	s = !s;
+//	if (!s)
+//	{
+//		mq_send(mboxControl, "R", 2, 5);
+//		return;
+//	}
+//	printf("Alert\n");
+//	#endif
 	SET(Box, TRUE);
 	SET(Palette, TRUE);
 	SET(Imp, TRUE);
 	SET(Valve, TRUE);
+	mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
+	LOG(EMERGENCY_STOP_OCCURED);
 }

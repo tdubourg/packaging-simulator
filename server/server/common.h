@@ -63,6 +63,8 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 #define STOP_APP "QUIT"
 
+#define EMERGENCY_STOP_OCCURED "EMERGENCY_STOP_OCCURED"
+
 /* Set a value (S: bool) to a variable condtion (V) */
 #define SET(V, S) pthread_mutex_lock(&Lock ## V);\
        Lock ## V ## Value = S;\
