@@ -94,7 +94,7 @@ public class ManagementFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newCmdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCmdButtonActionPerformed
-        NewCmdFrame newCmd = new NewCmdFrame(this);
+        NewCmdFrame newCmd = new NewCmdFrame(this, this.threadCmd);
     }//GEN-LAST:event_newCmdButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -63,4 +63,37 @@ public class ThreadCommand {
 //	}
         return true;
     }
+    
+    public Boolean sendCommand(int A, int B)
+    {
+	//écriture commande
+	BufferedReader in;
+	PrintWriter out;
+	String toSend;
+	
+//	InputStreamReader isr=new InputStreamReader(System.in);
+//	BufferedReader keyboardInput=new BufferedReader(isr);
+	
+//	boolean openSocket = true;
+//	while (openSocket){
+		try {
+			toSend = "cmd-" + A + "-" + B + "\r\n";
+			out = new PrintWriter(socketCommand.getOutputStream());
+			out.print(toSend);
+			out.flush();
+		} catch (IOException ex) {
+			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			//écoute réponse
+			in = new BufferedReader (new InputStreamReader (socketCommand.getInputStream()));
+			String message_distant = in.readLine();
+			System.out.println(message_distant);
+		} catch (IOException ex) {
+			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+		}
+//	}
+        return true;
+    }
+    
 }

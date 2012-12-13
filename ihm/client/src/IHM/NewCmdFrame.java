@@ -4,6 +4,7 @@
  */
 package IHM;
 
+import client.ThreadCommand;
 import java.awt.Color;
 
 /**
@@ -12,10 +13,12 @@ import java.awt.Color;
  */
 public class NewCmdFrame extends javax.swing.JFrame {
     ManagementFrame management;
+    ThreadCommand threadCmd;
+    
     /**
      * Creates new form NewCmdFrame
      */
-    public NewCmdFrame(ManagementFrame management) {
+    public NewCmdFrame(ManagementFrame management, ThreadCommand threadCmd) {
         initComponents();
         aErrorLabel.setForeground(Color.red);
         aErrorLabel.setVisible(false);
@@ -191,9 +194,8 @@ public class NewCmdFrame extends javax.swing.JFrame {
             }
             if (dispo == true)
             {
-
                 //envoie message au serveur...
-                // TODO
+                threadCmd.sendCommand(nbA, nbB);
 
                 //fermeture fenêtre
                 this.dispose();
