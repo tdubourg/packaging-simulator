@@ -47,6 +47,8 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 //* In case the refused rate of the currently packaging box is higher than the limit:
 #define ERR_BOX_REFUSED_RATE "ER"
 
+#define RESTART_AFTER_EMERGENCY_STOP "R"
+
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"

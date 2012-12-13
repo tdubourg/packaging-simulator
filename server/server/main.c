@@ -101,19 +101,19 @@ int main(int argc, char** argv) {
 
 	// Wait
 	//@TODO : Remove those lines that are used for testing purposes
-	// usleep(7 * 1000 * 1000);
-	// DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
-	// SET(Box, FALSE);
+	 usleep(7 * 1000 * 1000);
+	 DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
+	 SET(Box, FALSE);
 
-	// usleep(5 * 1000 * 1000);
-	// CurrentBatchType = BATCH_TYPE_A;
-	// DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
-	// SET(Valve, FALSE)
-	// SET(Palette, FALSE);
-	// SET(Imp, FALSE);
-	// SET(Valve, FALSE);
+	 usleep(5 * 1000 * 1000);
+	 CurrentBatchType = BATCH_TYPE_A;
+	 DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
+	 SET(Valve, FALSE)
+	 SET(Palette, FALSE);
+	 SET(Imp, FALSE);
+	 SET(Valve, FALSE);
 
-	mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
+	//mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
 	
 	// Wait for end of threads
 	pthread_join(tCommunication, NULL);
@@ -156,8 +156,8 @@ static void handler_alert(int n)
 	}
 	printf("Alert\n");
 	#endif
-	SET(Box, FALSE);
-	SET(Palette, FALSE);
-	SET(Imp, FALSE);
-	SET(Valve, FALSE);
+	SET(Box, TRUE);
+	SET(Palette, TRUE);
+	SET(Imp, TRUE);
+	SET(Valve, TRUE);
 }

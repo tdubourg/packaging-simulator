@@ -73,10 +73,10 @@ void *doControl(void *p)
 				break;
 			// Relaunch all tasks (after an urgent stop)
 			case 'R':
-				SET(Box, TRUE);
-				SET(Palette, TRUE);
-				SET(Imp, TRUE);
-				SET(Valve, TRUE);
+				SET(Box, FALSE);
+				SET(Palette, FALSE);
+				SET(Imp, FALSE);
+				SET(Valve, FALSE);
 				break;
 			// Stop app
 			case 'Q':
