@@ -19,9 +19,12 @@ void error(const char *msg) {
 
 void *doPush(void *p) {
 
+	/*Mise en place du buffer de logs*/
 	char logsBuffer[MAX_MSG_LEN + 1];
+	/*Mise en place de la boite aux lettres*/
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
+	/*Création des sockets*/
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
 	char buffer[256];
@@ -42,6 +45,7 @@ void *doPush(void *p) {
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0)
 		error("ERROR on binding");
 
+	/*Boucle d'attente de connexion*/
 	for (;;) {
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
@@ -50,6 +54,8 @@ void *doPush(void *p) {
 		if (newsockfd < 0)
 			error("ERROR on accept");
 
+		/*Boucle d'envoie en push lors de reception de logs
+		 *dans la boite aux lettres*/
 		for (;;) {
 			
 			int bytes_read = mq_receive(mboxCom, logsBuffer, MAX_MSG_LEN, NULL);
@@ -70,10 +76,12 @@ void *doPush(void *p) {
 }
 
 void *doCommunication(void *p) {
+	
+	/*Lancement du thread de push*/
 	pthread_t tPush;
-
 	pthread_create(&tPush, NULL, doPush, NULL);
 
+	/*Création des sockets et mise en place du buffer de communication*/
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
 	char buffer[256];
@@ -95,6 +103,7 @@ void *doCommunication(void *p) {
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0)
 		error("ERROR on binding");
 
+	/*Boucle d'attente de connection*/
 	for (;;) {
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
@@ -103,7 +112,8 @@ void *doCommunication(void *p) {
 		if (newsockfd < 0)
 			error("ERROR on accept");
 
-		while (1) {
+		/*Boucle de communication en pull pour les commandes du client*/
+		for(;;) {
 			bzero(buffer, 256);
 			n = read(newsockfd, buffer, 255);
 			if (n < 0) error("ERROR reading from socket");
