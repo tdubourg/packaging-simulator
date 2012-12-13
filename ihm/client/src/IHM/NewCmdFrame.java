@@ -194,7 +194,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
             }
             if (dispo == true)
             {
-                //envoie message au serveur...
+                //envoie message au serveur pour décrémenter le stock
                 threadCmd.sendCommand(nbA, nbB);
 
                 //fermeture fenêtre
