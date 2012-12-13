@@ -38,7 +38,7 @@ void *doPalette(void *p)
 	//***** MAIN LOOP
 	for(;;) {
 		CHECK_WAIT_BOOL(Palette);
-		CHECK_FOR_APP_END_AND_STOP(Palette);
+		CHECK_FOR_APP_END_AND_STOP("Palette");
 		
 		bool missingPalette = TRUE;
 #ifdef SIMU_MODE

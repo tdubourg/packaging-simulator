@@ -35,7 +35,7 @@ void *doPrint(void *p) {
 	extern int MAX_BOXES_QUEUE;
 	for(;;) {
 		CHECK_WAIT_BOOL(Imp);
-		CHECK_FOR_APP_END_AND_STOP(Imp);
+		CHECK_FOR_APP_END_AND_STOP("Imp");
 		bool printerError = TRUE;
 
 #ifdef SIMU_MODE

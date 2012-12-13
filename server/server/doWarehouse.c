@@ -17,7 +17,7 @@ void *doWarehouse(void *p)
 	for(;;) {
 		DBG("doWarehouse", "Main", "is unlocked.");
 		sem_wait(&SemWarehouse);
-		CHECK_FOR_APP_END_AND_STOP(Warehouse);
+		CHECK_FOR_APP_END_AND_STOP("Warehouse");
 		DBG("doWarehouse", "Main", "New palette to store somwhere");
 		LOG("doWarehouse: New palette to store somewhere");
 		storageId++;
