@@ -100,7 +100,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 //* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return)
 #define CHECK_FOR_APP_END_AND_STOP(V); if (TRUE == needToStop)\
 				{\
-					DBG("## V ##", "Main", "Ending current task");\
+					DBG(V, "Main", "Ending current task");\
 					return;\
 				}
 #define INIT_CHECK_FOR_APP_END(); extern bool needToStop;
