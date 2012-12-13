@@ -27,7 +27,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="descriptionLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="545" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace pref="230" max="32767" attributes="0"/>
+              <Component id="newCmdButton" min="-2" pref="147" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="218" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -36,7 +41,9 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="descriptionLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="405" max="32767" attributes="0"/>
+              <EmptySpace pref="334" max="32767" attributes="0"/>
+              <Component id="newCmdButton" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -46,6 +53,14 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Etat de fabrication du lot"/>
       </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="newCmdButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Nouvelle commande"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="newCmdButtonActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
