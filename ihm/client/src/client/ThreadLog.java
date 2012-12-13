@@ -44,7 +44,7 @@ public class ThreadLog extends Thread {
 					openedSocket = false;
 				}
             } catch (IOException ex) {
-                Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 				openedSocket = false;
             }
         }
