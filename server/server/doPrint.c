@@ -29,6 +29,7 @@ void *doPrint(void *p) {
 	INCLUDE_INTEGER(PrintPaletteQueue)
 	INIT_LOGGER();
 	INIT_CONTROL();
+	INIT_CHECK_FOR_APP_END();
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
 	extern int MAX_BOXES_QUEUE;

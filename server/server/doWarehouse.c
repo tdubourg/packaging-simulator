@@ -5,6 +5,7 @@ void *doWarehouse(void *p)
 {
 	//**** INIT
 	INIT_LOGGER();
+	INIT_CHECK_FOR_APP_END();
 	extern sem_t SemWarehouse;
 	extern batch_type CurrentBatchType;
 	extern int AStock, BStock;

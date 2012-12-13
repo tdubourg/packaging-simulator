@@ -8,6 +8,7 @@ void *doPalette(void *p)
 	INCLUDE_INTEGER(PrintPaletteQueue)
 	INIT_LOGGER();
 	INIT_CONTROL();
+	INIT_CHECK_FOR_APP_END();
 	extern int BOXES_BY_PALETTE;
 	extern sem_t SemSyncImpPalette;
 	extern sem_t SemWarehouse;
