@@ -50,7 +50,6 @@ public class NewCmdFrame extends javax.swing.JFrame {
         setTitle("Nouvelle commande");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
-        setType(java.awt.Window.Type.POPUP);
 
         descriptionLabel.setText("Veuillez spécifier le nombre de palettes commandées :");
 
