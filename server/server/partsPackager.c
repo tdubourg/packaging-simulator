@@ -11,15 +11,28 @@
 #include "time.h"
 
 static bool simu_refusal() {
+	
 	static bool init = FALSE;
-
-	if (!init) {
+	int rate;
+	
+	if(!init) {
 		init = TRUE;
 		srand(1024);
 	}
-
-	//* 30% probability to fail, 70 to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
-	return (rand() % 100) < 30;
+	FILE * fileRefusalRate = fopen(REFUSAL_RATE_FILE_NAME, "rb");
+	if (fileRefusalRate == NULL) { // By default, refusal rate = 30
+		rate = 30;
+	} else {
+		char read[4];
+		fgets(read, sizeof(read), fileRefusalRate);
+		fclose(fileRefusalRate);
+		rate = atoi(read) % 100;
+	}
+#ifdef DBG
+	printf("Refusal rate : %d\n", rate);
+#endif
+	//* "rate" probability to fail, 100-"rate" to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
+	return (rand() % 100) < rate;
 }
 
 static bool simu_missing_box() {

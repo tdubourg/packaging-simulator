@@ -16,6 +16,7 @@
 
 #define LOG_FILE_NAME "log.txt" 
 
+#define REFUSAL_RATE_FILE_NAME "refusalRate.txt"
 #define SIMU_BOX_FILE_NAME "missingBox.txt"
 #define SIMU_PRINT_FILE_NAME "printerError.txt"
 #define SIMU_PALETTE_FILE_NAME "missingPalette.txt"
