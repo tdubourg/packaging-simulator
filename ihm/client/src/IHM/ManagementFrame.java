@@ -6,6 +6,7 @@ package IHM;
 
 import client.Command;
 import client.ThreadLog;
+import java.awt.Dialog;
 
 /**
  *
@@ -95,6 +96,7 @@ public class ManagementFrame extends javax.swing.JFrame {
 
     private void newCmdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCmdButtonActionPerformed
         NewCmdFrame newCmd = new NewCmdFrame(this, this.threadCmd);
+        newCmd.setVisible(true);
     }//GEN-LAST:event_newCmdButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
