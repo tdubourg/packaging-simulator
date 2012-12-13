@@ -4,6 +4,8 @@
  */
 package IHM;
 
+import client.ThreadCommand;
+import client.ThreadLog;
 import java.awt.Color;
 
 /**
@@ -12,10 +14,13 @@ import java.awt.Color;
  */
 public class ParametersFrame extends javax.swing.JFrame {
 
+    ThreadCommand threadCmd;
+    ThreadLog threadLog;
+    
 	/**
 	 * Creates new form ManagerFrame
 	 */
-	public ParametersFrame() {
+	public ParametersFrame(ThreadCommand threadCmd, ThreadLog threadLog) {
 		initComponents();
 		rebusErrorLabel.setVisible(false);
 		rebusErrorLabel.setForeground(Color.red);
@@ -23,6 +28,8 @@ public class ParametersFrame extends javax.swing.JFrame {
 		boxErrorLabel.setForeground(Color.red);
 		palErrorLabel.setVisible(false);
 		palErrorLabel.setForeground(Color.red);
+                this.threadCmd = threadCmd;
+                this.threadLog = threadLog;
 	}
 
 	/**
@@ -188,27 +195,37 @@ public class ParametersFrame extends javax.swing.JFrame {
 		rebusErrorLabel.setVisible(false);
 		boxErrorLabel.setVisible(false);
 		palErrorLabel.setVisible(false);
+               
+                
 		if (rebusTextField.getText().isEmpty())
 		{
-			correct = false;
-			rebusErrorLabel.setVisible(true);
+                    correct = false;
+                    rebusErrorLabel.setVisible(true);
 		}
 		if (boxTextField.getText().isEmpty())
 		{
-			correct = false;
-			boxErrorLabel.setVisible(true);
+                    correct = false;
+                    boxErrorLabel.setVisible(true);
 		}
 		if (palTextField.getText().isEmpty())
 		{
-			correct = false;
-			palErrorLabel.setVisible(true);
+                    correct = false;
+                    palErrorLabel.setVisible(true);
 		}
 		
 		if (correct == true)
 		{
-			ManagementFrame managementFrame = new ManagementFrame();
-			this.setVisible(false);
-			managementFrame.setVisible(true);
+                    int rebus = Integer.parseInt(rebusTextField.getText());
+                    int box = Integer.parseInt(boxTextField.getText());
+                    int pal = Integer.parseInt(this.palTextField.getText());
+                    
+                    //envoi au serveur des infos de paramétrage
+                    threadCmd.sendParameters(rebus, box, pal);
+                    
+                    //ouverture de la fenêtre de suivi
+                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog);
+                    this.setVisible(false);
+                    managementFrame.setVisible(true);
 		}
 
 	}//GEN-LAST:event_ValidateButtonActionPerformed

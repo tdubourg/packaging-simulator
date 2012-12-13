@@ -87,10 +87,9 @@ public class WelcomeFrame extends javax.swing.JFrame {
 			ThreadCommand threadCmd = new ThreadCommand();
 			ThreadLog threadLog = new ThreadLog();
 			// activation des threads
-			threadCmd.start();
 			threadLog.start();
 			
-			ParametersFrame managerFrame = new ParametersFrame();
+			ParametersFrame managerFrame = new ParametersFrame(threadCmd, threadLog);
 			managerFrame.setVisible(true);
 		}
 		catch (IOException e)
