@@ -30,21 +30,23 @@ void *doControl(void *p)
 		switch (msg[0])
 		{
 			// Error case
-			case 'E': //* @TODO (bt td): manage the new/missing error cases (see common.h, beginning at line 45)
+			case 'E':
+				// Stop the valve
+				SET(Valve, TRUE);
 				switch (msg[1])
 				{
 					// Print
-					case 'A':
+					case ERR_PRINT[1]:
 						// Block parts packager
 						SET(Box, TRUE);
 						break;
 					// Palette maker
-					case 'P':
+					case ERR_PALETTE[1]:
 						// Block print
 						SET(Imp, TRUE);
 						break;
 					// Warehouse
-					case 'W':
+					case ERR_WAREHOUSE[1]:
 						// Block palette maker
 						SET(Palette, TRUE);
 						break;
@@ -55,17 +57,17 @@ void *doControl(void *p)
 				switch (msg[1])
 				{
 					// Print
-					case 'A':
+					case SOLVE_PRINT[1]:
 						// Block parts packager
 						SET(Box, FALSE);
 						break;
 					// Palette maker
-					case 'P':
+					case SOLVE_PALETTE[1]:
 						// Block print
 						SET(Imp, FALSE);
 						break;
 					// Warehouse
-					case 'W':
+					case SOLVE_WAREHOUSE[1]:
 						// Block palette maker
 						SET(Palette, FALSE);
 						break;
@@ -80,7 +82,7 @@ void *doControl(void *p)
 				break;
 			// Stop app
 			case 'Q':
-				
+				SET(Valve, TRUE);
 				stopApplication();
 				//stopping this thread;
 				return;
