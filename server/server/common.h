@@ -64,6 +64,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define STOP_APP "QUIT"
 
 /* Set a value (S: bool) to a variable condtion (V) */
+//* @TODO This is not clear at all, replace this macro by two macros : LOCK(V) and UNLOCK(V)
 #define SET(V, S) pthread_mutex_lock(&Lock ## V);\
        Lock ## V ## Value = S;\
        pthread_cond_signal(&Cond ## V);\
@@ -95,6 +96,13 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
 				perror("Error while sending the error to the Control Thread");\
 			}
+
+//* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return)
+#define CHECK_FOR_APP_END_AND_STOP(V); if (TRUE == needToStop)\
+				{\
+					DBG(V, "Main", "Ending current task");\
+					return;\
+				}\
 
 #endif	/* COMMON_H */
 

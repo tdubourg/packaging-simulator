@@ -37,6 +37,7 @@ void *doPalette(void *p)
 	//***** MAIN LOOP
 	for(;;) {
 		CHECK_WAIT_BOOL(Palette);
+		CHECK_FOR_APP_END_AND_STOP(Palette);
 		
 		bool missingPalette = TRUE;
 #ifdef SIMU_MODE
@@ -55,7 +56,7 @@ void *doPalette(void *p)
 				// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
 				continue;
 		}
-		
+
 		sem_wait(&SemSyncImpPalette);
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		//@TODO Here check that there actually is a palette (sensor simulation)

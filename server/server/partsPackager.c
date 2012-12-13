@@ -58,8 +58,8 @@ void* partsPackager(void*a) {
 
 	//**** MAIN LOOP
 	for (;;) {
-
 		CHECK_WAIT_BOOL(Box);
+		CHECK_FOR_APP_END_AND_STOP(Box);
 		DBG("partsPackager", "Main", "Task is unlocked.");
 		
 		bool missing = TRUE;
