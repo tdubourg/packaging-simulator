@@ -4,7 +4,7 @@
  */
 package IHM;
 
-import client.ThreadCommand;
+import client.Command;
 import java.awt.Color;
 
 /**
@@ -13,12 +13,12 @@ import java.awt.Color;
  */
 public class NewCmdFrame extends javax.swing.JFrame {
     ManagementFrame management;
-    ThreadCommand threadCmd;
+    Command threadCmd;
     
     /**
      * Creates new form NewCmdFrame
      */
-    public NewCmdFrame(ManagementFrame management, ThreadCommand threadCmd) {
+    public NewCmdFrame(ManagementFrame management, Command threadCmd) {
         initComponents();
         aErrorLabel.setForeground(Color.red);
         aErrorLabel.setVisible(false);

@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Elodie
  */
-public class ThreadCommand {
+public class Command {
 
     InetAddress serverAddress;
     Socket socketCommand;
@@ -25,7 +25,7 @@ public class ThreadCommand {
     int nbA;
     int nbB;
     
-    public ThreadCommand() throws IOException {
+    public Command() throws IOException {
 		serverAddress = InetAddress.getLocalHost();
 		serverPort = 13003;
 		//creation socket
@@ -50,7 +50,7 @@ public class ThreadCommand {
 			out.print(toSend);
 			out.flush();
 		} catch (IOException ex) {
-			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		try {
 			//écoute réponse
@@ -58,7 +58,7 @@ public class ThreadCommand {
 			String message_distant = in.readLine();
 			System.out.println(message_distant);
 		} catch (IOException ex) {
-			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 		}
 //	}
         return true;
@@ -82,7 +82,7 @@ public class ThreadCommand {
 			out.print(toSend);
 			out.flush();
 		} catch (IOException ex) {
-			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 		}
 		try {
 			//écoute réponse
@@ -90,7 +90,7 @@ public class ThreadCommand {
 			String message_distant = in.readLine();
 			System.out.println(message_distant);
 		} catch (IOException ex) {
-			Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 		}
 //	}
         return true;

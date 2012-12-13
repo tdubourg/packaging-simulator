@@ -5,7 +5,7 @@
 package IHM;
 
 import client.Client;
-import client.ThreadCommand;
+import client.Command;
 import client.ThreadLog;
 import java.awt.Color;
 
@@ -15,13 +15,13 @@ import java.awt.Color;
  */
 public class ParametersFrame extends javax.swing.JFrame {
 
-    ThreadCommand threadCmd;
+    Command threadCmd;
     ThreadLog threadLog;
     
 	/**
 	 * Creates new form ManagerFrame
 	 */
-	public ParametersFrame(ThreadCommand threadCmd, ThreadLog threadLog) {
+	public ParametersFrame(Command threadCmd, ThreadLog threadLog) {
 		initComponents();
 		rebusErrorLabel.setVisible(false);
 		rebusErrorLabel.setForeground(Color.red);
