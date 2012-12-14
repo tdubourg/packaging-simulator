@@ -60,7 +60,7 @@ void *doPrint(void *p) {
 			//* Error : The queue is full and we have to push a box to it
 			SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 			// Sending error message (priority 2)
-			ERR_MSG(ERR_PALETTEQUEUE);
+			ERR_MSG(ERR_PALETTE_QUEUE);
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
 		DBG("doPrint", "Main", "Printing");

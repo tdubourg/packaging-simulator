@@ -42,20 +42,38 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define DBG(A, B, C);  
 #endif
 
+/* Kind of messages *********************************/
+/* The message is an error, it will block something */
+#define ERR 'E'
+/* The message is a solve, it will unlock something */
+#define SOLVE 'S'
+/****************************************************/
+
+/* Subjects *****************************************/
+#define BOX 'B'
+#define PALETTE 'P'
+#define PRINT 'A'
+#define WAREHOUSE 'W'
+/* Inside the the doPalette task queue, where doPrint push something */
+#define PALETTE_QUEUE 'Q'
+/* Box rate */
+#define BOX_RATE 'R'
+/****************************************************/
+
 //@TODO: Write a bit of documentation to explain what those constants actually stand for
-//@TODO: handle the new error case "EB"
 #define ERR_BOX "EB"
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
 #define ERR_WAREHOUSE "EW"
-//* The following error is in the case the doPalette task queue is full and the doPrint one wants to push somthing to it
-#define ERR_PALETTEQUEUE "EQ"
-//* In case the refused rate of the currently packaging box is higher than the limit:
-#define ERR_BOX_REFUSED_RATE "ER"
+/* The following error is in the case the doPalette task queue is full and the doPrint one wants to push somthing to it */
+#define ERR_PALETTE_QUEUE "EQ"
+/* In case the refused rate of the currently packaging box is higher than the limit: */
+#define ERR_BOX_RATE "ER"
 
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
+
 #define MSG_HIGH_PRIORITY 3 //for errors
 #define MSG_MEDIUM_PRIORITY 2 // for normal message such as logs
 #define MSG_LOW_PRIORITY 1 // for stop message

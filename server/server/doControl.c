@@ -30,44 +30,44 @@ void *doControl(void *p)
 		switch (msg[0])
 		{
 			// Error case
-			case 'E':
+			case ERR:
 				// Stop the valve
 				SET(Valve, TRUE);
 				switch (msg[1])
 				{
 					// Print
-					case ERR_PRINT[1]:
+					case PRINT:
 						// Block parts packager
 						SET(Box, TRUE);
 						break;
 					// Palette maker
-					case ERR_PALETTE[1]:
+					case PALETTE:
 						// Block print
 						SET(Imp, TRUE);
 						break;
 					// Warehouse
-					case ERR_WAREHOUSE[1]:
+					case WAREHOUSE:
 						// Block palette maker
 						SET(Palette, TRUE);
 						break;
 				}
 				break;
 			// Solving errors
-			case 'S':
+			case SOLVE:
 				switch (msg[1])
 				{
 					// Print
-					case SOLVE_PRINT[1]:
+					case PRINT:
 						// Block parts packager
 						SET(Box, FALSE);
 						break;
 					// Palette maker
-					case SOLVE_PALETTE[1]:
+					case PALETTE:
 						// Block print
 						SET(Imp, FALSE);
 						break;
 					// Warehouse
-					case SOLVE_WAREHOUSE[1]:
+					case WAREHOUSE:
 						// Block palette maker
 						SET(Palette, FALSE);
 						break;
