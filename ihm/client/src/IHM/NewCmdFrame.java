@@ -4,6 +4,7 @@
  */
 package IHM;
 
+import client.Command;
 import java.awt.Color;
 
 /**
@@ -12,10 +13,12 @@ import java.awt.Color;
  */
 public class NewCmdFrame extends javax.swing.JFrame {
     ManagementFrame management;
+    Command threadCmd;
+    
     /**
      * Creates new form NewCmdFrame
      */
-    public NewCmdFrame(ManagementFrame management) {
+    public NewCmdFrame(ManagementFrame management, Command threadCmd) {
         initComponents();
         aErrorLabel.setForeground(Color.red);
         aErrorLabel.setVisible(false);
@@ -47,7 +50,6 @@ public class NewCmdFrame extends javax.swing.JFrame {
         setTitle("Nouvelle commande");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
-        setType(java.awt.Window.Type.POPUP);
 
         descriptionLabel.setText("Veuillez spécifier le nombre de palettes commandées :");
 
@@ -191,9 +193,8 @@ public class NewCmdFrame extends javax.swing.JFrame {
             }
             if (dispo == true)
             {
-
-                //envoie message au serveur...
-                // TODO
+                //envoie message au serveur pour décrémenter le stock
+                threadCmd.sendCommand(nbA, nbB);
 
                 //fermeture fenêtre
                 this.dispose();

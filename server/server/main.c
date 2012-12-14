@@ -32,6 +32,7 @@ int PrintPaletteQueueValue = 0;
 int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
 batch_type CurrentBatchType;
 int CurrentBatchProdMax = 0;
+int CurrentProducedBoxes = 0;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 5;
@@ -66,10 +67,12 @@ int main(int argc, char** argv) {
 	#endif
 	signal(SIGINT, handler_alert);
 	
-	SET(Box, TRUE);
-	SET(Palette, TRUE);
-	SET(Imp, TRUE);
-	SET(Valve, TRUE);
+	//* No need to block everything, anyway everything will be hanging on until there is parts coming in
+	SET(Box, FALSE);
+	SET(Palette, FALSE);
+	SET(Imp, FALSE);
+	//* THe valve, though, has to be closed, at the start of the app
+	SET(Valve, FALSE);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
