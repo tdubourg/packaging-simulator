@@ -178,4 +178,8 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                 addLog(log);
             }
 	}
+	
+	public void onReceiveError(String ErrComponent) {
+		
+	}
 }
