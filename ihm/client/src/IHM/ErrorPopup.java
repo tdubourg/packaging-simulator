@@ -4,6 +4,7 @@
  */
 package IHM;
 
+import client.Command;
 import javax.swing.JLabel;
 
 /**
@@ -12,6 +13,7 @@ import javax.swing.JLabel;
  * troll
  */
 public class ErrorPopup extends javax.swing.JFrame {
+	private Command command;
 
 	/**
 	 * Creates
@@ -59,19 +61,19 @@ public class ErrorPopup extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
+        jB_RestartProd = new javax.swing.JButton();
         jL_WildError = new javax.swing.JLabel();
         JL_ErrorName = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setBackground(new java.awt.Color(238, 0, 0));
-        jButton1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("REPRENDRE LA PRODUCTION");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jB_RestartProd.setBackground(new java.awt.Color(238, 0, 0));
+        jB_RestartProd.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jB_RestartProd.setForeground(new java.awt.Color(255, 255, 255));
+        jB_RestartProd.setText("REPRENDRE LA PRODUCTION");
+        jB_RestartProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jB_RestartProdActionPerformed(evt);
             }
         });
 
@@ -90,7 +92,7 @@ public class ErrorPopup extends javax.swing.JFrame {
                         .addComponent(JL_ErrorName, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jB_RestartProd, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(61, 61, 61)
                         .addComponent(jL_WildError, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -104,17 +106,20 @@ public class ErrorPopup extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(JL_ErrorName, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
+                .addComponent(jB_RestartProd, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jB_RestartProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_RestartProdActionPerformed
+		this.command.sendRestartProd();
+    }//GEN-LAST:event_jB_RestartProdActionPerformed
 
+	public void setCommand(Command c) {
+		this.command = c;
+	}
 	public JLabel getErrorNameLabel() {
 		return this.JL_ErrorName;
 	}
@@ -159,7 +164,7 @@ public class ErrorPopup extends javax.swing.JFrame {
 	}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JL_ErrorName;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jB_RestartProd;
     private javax.swing.JLabel jL_WildError;
     // End of variables declaration//GEN-END:variables
 }
