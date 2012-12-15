@@ -49,6 +49,7 @@ public class Command {
 //	while (openSocket){
 		try {
 			toSend = INIT_MSG_PREFIX + "-" + lot + "-" + rebus + "-" + box + "-" + pal+ "-" + qte + "\r\n";
+			//toSend = "DISCONNECT\r\n";
 			out = new PrintWriter(socketCommand.getOutputStream());
 			out.print(toSend);
 			out.flush();
