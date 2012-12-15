@@ -84,6 +84,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         logScrollPane = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         lotProgressBar = new javax.swing.JProgressBar();
+        currentBox = new javax.swing.JLabel();
+        currentBin = new javax.swing.JLabel();
+        currentPal = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Suivi de la chaine de production");
@@ -102,26 +105,42 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         jTextArea1.setRows(5);
         logScrollPane.setViewportView(jTextArea1);
 
+        currentBox.setText("Carton en cours de remplissage : ");
+
+        currentBin.setText("Taux de rebus dans le carton en cours :");
+
+        currentPal.setText("currentPal");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(230, Short.MAX_VALUE)
-                .addComponent(newCmdButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(218, 218, 218))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(logScrollPane)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(descriptionLabel)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(22, 22, 22)
+                        .addComponent(lotProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(currentPal, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(currentBox))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(currentBin)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(logScrollPane)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(descriptionLabel)
+                                    .addComponent(newCmdButton, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(lotProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -129,9 +148,15 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                 .addContainerGap()
                 .addComponent(descriptionLabel)
                 .addGap(18, 18, 18)
-                .addComponent(lotProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
-                .addComponent(logScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lotProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(currentPal))
+                .addGap(35, 35, 35)
+                .addComponent(currentBox)
+                .addGap(18, 18, 18)
+                .addComponent(currentBin)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(logScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newCmdButton)
                 .addContainerGap())
@@ -145,6 +170,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		newCmd.setVisible(true);
     }//GEN-LAST:event_newCmdButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel currentBin;
+    private javax.swing.JLabel currentBox;
+    private javax.swing.JLabel currentPal;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JScrollPane logScrollPane;
@@ -159,11 +187,16 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                 //update the data
                 //the server has sent : STATE-NBA-NBB-NbBoitesProduite-NbPiecesRefusées
                 this.nbCurrentBin = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
-                log = log.substring(0, log.lastIndexOf("-"));
+                log = log.substring(0, log.lastIndexOf("-")); 
+                this.currentBin.setText("Taux de rebus dans le carton en cours : " + nbCurrentBin);
+                
                 this.nbCurrentBox = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
                 log = log.substring(0, log.lastIndexOf("-"));
+                this.currentBin.setText("Carton en cours de remplissage : n°" + nbCurrentBox);
+                
                 this.palBWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
                 log = log.substring(0, log.lastIndexOf("-"));
+                
                 this.palAWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
                 if(currentLot.equalsIgnoreCase("A"))
                 {
