@@ -23,14 +23,7 @@ public class ThreadLog extends Thread {
 	InetAddress serverAddress;
 	Socket socketCommand;
 	int serverPort;
-//	#define BOX 'B'
-//#define PALETTE 'P'
-//#define PRINT 'A'
-//#define WAREHOUSE 'W'
-///* Inside the the doPalette task queue, where doPrint push something */
-//#define PALETTE_QUEUE 'Q'
-///* Box rate */
-//#define BOX_REFUSED_RATE 'R'
+
 	private final static String ERROR_BOX = "ERROR B";
 	private final static String ERROR_PALETTE = "ERROR P";
 	private final static String ERROR_PRINT = "ERROR A";
@@ -107,11 +100,6 @@ public class ThreadLog extends Thread {
 						}
 					}
 				}
-				/*if (message_distant != null){
-				 System.out.println(message_distant);
-				 }else{
-				 openedSocket = false;
-				 }*/
 			} catch (IOException ex) {
 				Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 				openedSocket = false;

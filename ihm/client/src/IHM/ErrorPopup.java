@@ -5,6 +5,7 @@
 package IHM;
 
 import client.Command;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -13,6 +14,7 @@ import javax.swing.JLabel;
  * troll
  */
 public class ErrorPopup extends javax.swing.JFrame {
+
 	private Command command;
 
 	/**
@@ -115,17 +117,27 @@ public class ErrorPopup extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+	private ManagementFrame mgFrame;
+
+	public void setMgFrame(ManagementFrame j) {
+		this.mgFrame = j;
+	}
 
     private void jB_RestartProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_RestartProdActionPerformed
 		this.command.sendRestartProd();
+		this.mgFrame.setCurrentErrorState(false);
+		this.mgFrame.show();
+		this.hide();
     }//GEN-LAST:event_jB_RestartProdActionPerformed
 
 	public void setCommand(Command c) {
 		this.command = c;
 	}
+
 	public JLabel getErrorNameLabel() {
 		return this.JL_ErrorName;
 	}
+
 	/**
 	 * @param
 	 * args

@@ -187,7 +187,7 @@ static void parseInitMessage(char* buffer) {
 	//initializing compters
 	CurrentProducedBoxes = 0;
 	CurrentBatchRefusedPartsNumber=0;
-	// staring production
+	// starting production
 	SET(Box, FALSE);
 	SET(Palette, FALSE);
 	SET(Imp, FALSE);
