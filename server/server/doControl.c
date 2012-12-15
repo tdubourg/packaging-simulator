@@ -7,6 +7,7 @@
 #endif
 
 static void stopApplication();
+static void parseInitMessage(char* buffer);
 
 /*
  * Control thread
@@ -75,10 +76,10 @@ void *doControl(void *p)
 				break;
 			// Relaunch all tasks (after an urgent stop)
 			case 'R':
-				SET(Box, TRUE);
-				SET(Palette, TRUE);
-				SET(Imp, TRUE);
-				SET(Valve, TRUE);
+				SET(Box, FALSE);
+				SET(Palette, FALSE);
+				SET(Imp, FALSE);
+				SET(Valve, FALSE);
 				break;
 			// Stop app
 			case 'Q':
@@ -88,8 +89,25 @@ void *doControl(void *p)
 				return;
 				
 				break;
+				
+			case 'I':
+				parseInitMessage(msg);
+				break;
+			
 		}
 	}
+}
+
+static void parseInitMessage(char* buffer){
+	char* ptr,res;
+	res = strtok_r(buffer,'-',ptr);
+	printf("%s :\n",res);
+	printf("lolilol\n");
+	while(res!=NULL){
+		printf("%s :\n",res);
+		res = strtok_r(buffer,'-',ptr);
+	}
+	return;
 }
 
 static void stopApplication(){
