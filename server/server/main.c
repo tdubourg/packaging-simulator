@@ -102,27 +102,9 @@ int main(int argc, char** argv) {
 #ifdef SIMU_MODE
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);
 #endif
-
-
-	// Wait
-	//@TODO : Remove those lines that are used for testing purposes
 	
-	char* msg = "INIT-A-3-40-8-1";
-	mq_send(mboxControl,msg,strlen(msg),MSG_HIGH_PRIORITY);
-	
-//	 usleep(7 * 1000 * 1000);
-//	 DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
-//	 SET(Box, FALSE);
-//
-//	 usleep(5 * 1000 * 1000);
-//	 CurrentBatchType = BATCH_TYPE_A;
-//	 DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
-//	 SET(Valve, FALSE)
-//	 SET(Palette, FALSE);
-//	 SET(Imp, FALSE);
-//	 SET(Valve, FALSE);
-
-	//mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
+	//char* msg = "INIT-A-3-40-8-1";
+	//mq_send(mboxControl,msg,strlen(msg),MSG_HIGH_PRIORITY);
 	
 	// Wait for end of threads
 	pthread_join(tCommunication, NULL);

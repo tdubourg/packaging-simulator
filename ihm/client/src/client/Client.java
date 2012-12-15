@@ -6,12 +6,13 @@ package client;
 
 import IHM.WelcomeFrame;
 import java.io.IOException;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
  * @author pierre
  */
-public class Client {   
+public class Client {
     
     /**
      * @param args the command line arguments

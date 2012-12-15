@@ -4,44 +4,49 @@
  */
 package IHM;
 
+import client.Client;
 import client.Command;
 import client.ThreadLog;
-import java.awt.Dialog;
 
 /**
  *
  * @author Elodie
  */
-public class ManagementFrame extends javax.swing.JFrame {
+public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.LogReceiver {
 
-    Command threadCmd;
-    ThreadLog threadLog;
-    String lot;
-    
-    //disponibilité warehouse
-    int palA;
-    int palB;
+	Command threadCmd;
+	ThreadLog threadLog;
+	String lot;
+	//disponibilité warehouse
+	int palA;
+	int palB;
 
-    public int getPalA() {
-        return palA;
-    }
+	public int getPalA() {
+		return palA;
+	}
 
-    public int getPalB() {
-        return palB;
-    }
-    
-    /**
-     * Creates new form ManagementFrame
-     */
-    public ManagementFrame(Command threadCmd, ThreadLog threadLog, String lot) {
-            initComponents();
-            this.threadCmd = threadCmd;
-            this.threadLog = threadLog;
-            this.lot = lot;
-            this.descriptionLabel.setText("Etat de fabrication du lot" + lot);
-            this.palA=0;
-            this.palB=0;
-    }
+	public int getPalB() {
+		return palB;
+	}
+
+	/**
+	 * Creates new form ManagementFrame
+	 */
+	public ManagementFrame(Command threadCmd, ThreadLog threadLog, String lot) {
+		initComponents();
+		this.threadCmd = threadCmd;
+		this.threadLog = threadLog;
+		this.lot = lot;
+		this.descriptionLabel.setText("Etat de fabrication du lot" + lot);
+		this.palA = 0;
+		this.palB = 0;
+		threadLog.setLogReceiver(this);
+	}
+
+	public void addLog(String log) {
+		System.out.println(log);
+		jTextArea1.append(log + "\r\n");
+	}
 
 	/**
 	 * This method is called from within the constructor to initialize the form.
@@ -54,6 +59,8 @@ public class ManagementFrame extends javax.swing.JFrame {
 
         descriptionLabel = new javax.swing.JLabel();
         newCmdButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Suivi de la chaine de production");
@@ -68,25 +75,35 @@ public class ManagementFrame extends javax.swing.JFrame {
             }
         });
 
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane2.setViewportView(jTextArea1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(descriptionLabel)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(230, Short.MAX_VALUE)
                 .addComponent(newCmdButton, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(218, 218, 218))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(descriptionLabel)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(descriptionLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 334, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 228, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newCmdButton)
                 .addContainerGap())
         );
@@ -95,12 +112,18 @@ public class ManagementFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newCmdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCmdButtonActionPerformed
-        NewCmdFrame newCmd = new NewCmdFrame(this, this.threadCmd);
-        newCmd.setVisible(true);
+		NewCmdFrame newCmd = new NewCmdFrame(this, this.threadCmd);
+		newCmd.setVisible(true);
     }//GEN-LAST:event_newCmdButtonActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel descriptionLabel;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton newCmdButton;
     // End of variables declaration//GEN-END:variables
+
+	@Override
+	public void onReveiveLog(String log) {
+		addLog(log);
+	}
 }
