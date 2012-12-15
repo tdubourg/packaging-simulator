@@ -213,7 +213,4 @@ static void stopApplication() {
 
 	// closing Communication thread;
 	mq_send(mboxCom, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
-
-	//TODO: close control thread
-
 }
