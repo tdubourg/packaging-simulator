@@ -40,6 +40,10 @@ void *doPalette(void *p)
 		CHECK_WAIT_BOOL(Palette);
 		CHECK_FOR_APP_END_AND_STOP("Palette");
 		
+#ifdef TEST_PALETTE_QUEUE_ERROR
+		usleep(100 * 1000 * 1000);
+#endif
+		
 		bool missingPalette = TRUE;
 #ifdef SIMU_MODE
 		missingPalette = simu_missing_palette();

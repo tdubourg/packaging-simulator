@@ -35,6 +35,8 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define DBG
 
+// Uncomment to get a palette queue error
+// #define TEST_PALETTE_QUEUE_ERROR
 #define SIMU_MODE
 
 #ifdef DBG
