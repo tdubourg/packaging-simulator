@@ -43,15 +43,15 @@ void *doPrint(void *p) {
 #endif
 		if(printerError) {
 			//* Closing the valve
-				SET(Valve, TRUE);
-				DBG("doControl", "Main", "Closing valve.");
-				LOG("doPrint: Printer error, ERROR.");
-				SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+			SET(Valve, TRUE);
+			DBG("doPrint", "Main", "Closing valve.");
+			LOG("doPrint: Printer error, ERROR.");
+			SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
-				// Sending error message
-				ERR_MSG(ERR_PRINT);
-				// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
-				continue;
+			// Sending error message
+			ERR_MSG(ERR_PRINT);
+			// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
+			continue;
 		}
 		sem_wait(&SemPushBoxImp);
 		
@@ -60,7 +60,7 @@ void *doPrint(void *p) {
 			//* Error : The queue is full and we have to push a box to it
 			SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 			// Sending error message (priority 2)
-			ERR_MSG(ERR_PALETTEQUEUE);
+			ERR_MSG(ERR_PALETTE_QUEUE);
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
 		DBG("doPrint", "Main", "Printing");

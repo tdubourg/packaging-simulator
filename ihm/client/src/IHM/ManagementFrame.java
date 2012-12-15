@@ -4,8 +4,9 @@
  */
 package IHM;
 
-import client.ThreadCommand;
+import client.Command;
 import client.ThreadLog;
+import java.awt.Dialog;
 
 /**
  *
@@ -13,7 +14,7 @@ import client.ThreadLog;
  */
 public class ManagementFrame extends javax.swing.JFrame {
 
-    ThreadCommand threadCmd;
+    Command threadCmd;
     ThreadLog threadLog;
     String lot;
     
@@ -32,7 +33,7 @@ public class ManagementFrame extends javax.swing.JFrame {
     /**
      * Creates new form ManagementFrame
      */
-    public ManagementFrame(ThreadCommand threadCmd, ThreadLog threadLog, String lot) {
+    public ManagementFrame(Command threadCmd, ThreadLog threadLog, String lot) {
             initComponents();
             this.threadCmd = threadCmd;
             this.threadLog = threadLog;
@@ -94,7 +95,8 @@ public class ManagementFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void newCmdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCmdButtonActionPerformed
-        NewCmdFrame newCmd = new NewCmdFrame(this);
+        NewCmdFrame newCmd = new NewCmdFrame(this, this.threadCmd);
+        newCmd.setVisible(true);
     }//GEN-LAST:event_newCmdButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

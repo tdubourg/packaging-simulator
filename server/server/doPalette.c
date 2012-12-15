@@ -47,15 +47,15 @@ void *doPalette(void *p)
 		
 		if(missingPalette) {
 			//* Closing the valve
-				SET(Valve, TRUE);
-				DBG("doControl", "Main", "Closing valve.");
-				LOG("doPalette: Missing palette, ERROR.");
-				SET(Palette, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+			SET(Valve, TRUE);
+			DBG("doPalette", "Main", "Closing valve.");
+			LOG("doPalette: Missing palette, ERROR.");
+			SET(Palette, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
-				// Sending error message
-				ERR_MSG(ERR_PALETTE);
-				// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
-				continue;
+			// Sending error message
+			ERR_MSG(ERR_PALETTE);
+			// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
+			continue;
 		}
 
 		sem_wait(&SemSyncImpPalette);

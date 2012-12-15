@@ -16,6 +16,7 @@
 
 #define LOG_FILE_NAME "log.txt" 
 
+#define REFUSAL_RATE_FILE_NAME "refusalRate.txt"
 #define SIMU_BOX_FILE_NAME "missingBox.txt"
 #define SIMU_PRINT_FILE_NAME "printerError.txt"
 #define SIMU_PALETTE_FILE_NAME "missingPalette.txt"
@@ -42,22 +43,42 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define DBG(A, B, C);  
 #endif
 
+/* Kind of messages *********************************/
+/* The message is an error, it will block something */
+#define ERR 'E'
+/* The message is a solve, it will unlock something */
+#define SOLVE 'S'
+/****************************************************/
+
+/* Subjects *****************************************/
+#define BOX 'B'
+#define PALETTE 'P'
+#define PRINT 'A'
+#define WAREHOUSE 'W'
+/* Inside the the doPalette task queue, where doPrint push something */
+#define PALETTE_QUEUE 'Q'
+/* Box rate */
+#define BOX_RATE 'R'
+/****************************************************/
+
 //@TODO: Write a bit of documentation to explain what those constants actually stand for
-//@TODO: handle the new error case "EB"
 #define ERR_BOX "EB"
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
 #define ERR_WAREHOUSE "EW"
-//* The following error is in the case the doPalette task queue is full and the doPrint one wants to push somthing to it
-#define ERR_PALETTEQUEUE "EQ"
-//* In case the refused rate of the currently packaging box is higher than the limit:
+/* The following error is in the case the doPalette task queue is full and the doPrint one wants to push something to it */
+#define ERR_PALETTE_QUEUE "EQ"
+/* In case the refused rate of the currently packaging box is higher than the limit: */
+#define ERR_BOX_RATE "ER"
 #define ERR_BOX_REFUSED_RATE "ER"
+#define PRODUCTION_IS_OVER_MSG "GAME OVER"
 
 #define RESTART_AFTER_EMERGENCY_STOP "R"
 
 #define SOLVE_PALETTE "SP"
 #define SOLVE_PRINT "SA"
 #define SOLVE_WAREHOUSE "SW"
+
 #define MSG_HIGH_PRIORITY 3 //for errors
 #define MSG_MEDIUM_PRIORITY 2 // for normal message such as logs
 #define MSG_LOW_PRIORITY 1 // for stop message
@@ -100,6 +121,10 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
 				perror("Error while sending the error to the Control Thread");\
+			}
+
+#define CONTROL_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_MEDIUM_PRIORITY)) {\
+				perror("Error while sending the message to the Control Thread");\
 			}
 
 //* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return)

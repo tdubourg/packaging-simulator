@@ -23,10 +23,10 @@ void *doLog(void *p) {
 	for(;;) {
 		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); //@TODO add comment/documentation for this line
 		if (bytes_read == -1) {
-			perror("[LogThread] Failed to recieve");
+			perror("doLog: Failed to receive");
 		} else {
 			if (!strcmp(buffer, STOP_MESSAGE_QUEUE)) {
-				printf("Receiving stop message");
+				DBG("doLog", "Main", "Receiving stop message");
 			} else {
 
 				printf("[LogThread] Data: %s %d\n", buffer, bytes_read);
