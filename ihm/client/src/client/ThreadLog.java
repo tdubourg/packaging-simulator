@@ -78,24 +78,31 @@ public class ThreadLog extends Thread {
 						switch (message_distant) {
 							case ERROR_BOX: {
 								listener.get().onReceiveError(ERROR.BOX);
+								break;
 							}
 							case ERROR_PALETTE: {
 								listener.get().onReceiveError(ERROR.PALETTE);
+								break;
 							}
 							case ERROR_PALETTE_QUEUE: {
 								listener.get().onReceiveError(ERROR.PALETTE_QUEUE);
+								break;
 							}
 							case ERROR_PRINT: {
 								listener.get().onReceiveError(ERROR.PRINT);
+								break;
 							}
 							case ERROR_BOX_REFUSED: {
 								listener.get().onReceiveError(ERROR.BOX_REFUSED);
+								break;
 							}
 							case ERROR_GAME_OVER: {
 								listener.get().onGameOver();
+								break;
 							}
 							default: {
 								listener.get().onReveiveLog(message_distant);
+								break;
 							}
 						}
 					}
