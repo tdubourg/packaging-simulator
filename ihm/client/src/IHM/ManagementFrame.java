@@ -22,12 +22,12 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	int palAWarehouse;
 	int palBWarehouse;
         // number of pallets to produce
-        int nbPalA;
-        int nbPalB;
-        //current situation
-        int nbCurrentBox;
-        int nbCurrentBin;
-        String currentLot;
+	int nbPalA;
+	int nbPalB;
+	//current situation
+	int nbCurrentBox;
+	int nbCurrentBin;
+	String currentLot;
 
 	public int getPalAWarehouse() {
 		return palAWarehouse;
@@ -204,12 +204,14 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		}
 		
 		this.ep.getErrorNameLabel().setText(err);
+		this.hide();
 		this.ep.show();
 	}
 
 	JFrame goPopup = new GameOverPopup();
 	@Override
 	public void onGameOver() {
+		this.hide();
 		this.goPopup.show();
 	}
 }
