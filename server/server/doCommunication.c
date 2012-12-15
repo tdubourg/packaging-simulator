@@ -16,16 +16,17 @@
 #define SHUTDOWN_CMD "SHUTDOWN\r\n"
 #define DISCONNECT_CMD "DISCONNECT\r\n"
 #define ACK_MSG "ACK\r\n"
+#define RESTART_CMD "RESTART\r\n"
 
 void error(const char *msg) {
 	perror(msg);
 }
 
 void *doPush(void *p) {
-	
+
 	extern int AStock, BStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber;
 	extern pthread_mutex_t LockWarehouseStorageData;
-	
+
 	int sentAStock, sentBStock;
 	char stockBuffer[MAX_MSG_LEN + 1];
 
@@ -81,18 +82,18 @@ void *doPush(void *p) {
 				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
 				if (n < 0)
 					error("ERROR writing to socket");
-				
+
 				pthread_mutex_lock(&LockWarehouseStorageData);
 				sentAStock = AStock;
 				sentBStock = BStock;
 				pthread_mutex_unlock(&LockWarehouseStorageData);
-				
-				bzero(stockBuffer, sizeof(stockBuffer));
+
+				bzero(stockBuffer, sizeof (stockBuffer));
 				sprintf(stockBuffer, "%s-%d-%d-%d-%d\r\n", STATE_MSG_PREFIX, sentAStock, sentBStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber);
-				
+
 				n = write(newsockfd, stockBuffer, strlen(stockBuffer));
 				if (n < 0)
-					error("ERROR writing to socket");				
+					error("ERROR writing to socket");
 			}
 		}
 	}
@@ -101,10 +102,13 @@ void *doPush(void *p) {
 
 void *doCommunication(void *p) {
 
+	extern int AStock, BStock;
+	extern pthread_mutex_t LockWarehouseStorageData;
+
 	/*Starting the pushing thread*/
 	pthread_t tPush;
 	pthread_create(&tPush, NULL, doPush, NULL);
-	
+
 	/*Set the letter box with the controler*/
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
@@ -144,20 +148,53 @@ void *doCommunication(void *p) {
 			bzero(buffer, 256);
 			n = read(newsockfd, buffer, 255);
 			if (n < 0) error("ERROR reading from socket");
-			
+
+			/*When client want to disconnect from the server*/
 			if (strcmp(buffer, DISCONNECT_CMD) == 0) {
 				close(newsockfd);
 				break;
+
+				/*When client want to shutdown the server*/
 			} else if (strcmp(buffer, SHUTDOWN_CMD) == 0) {
 				mq_send(mboxControl, STOP_APP, sizeof (STOP_APP), MSG_HIGH_PRIORITY);
 				close(newsockfd);
 				close(sockfd);
-				return 0;
+				return;
+
+				/*When client restart production after a failure*/
+			} else if (strcmp(buffer, RESTART_CMD) == 0) {
+				mq_send(mboxControl, SOLVE, sizeof (SOLVE), MSG_HIGH_PRIORITY);
 			} else {
-				mq_send(mboxControl, buffer, sizeof(buffer), MSG_HIGH_PRIORITY);
+				/*Pointer used in strtok_r function*/
+				char * saveptr1;
+
+				/*Buffer used for strtok_r function, which is the actual copy
+				 *of the socket buffer.*/
+				char tokenBuffer[256];
+				strcpy(tokenBuffer, buffer);
+
+				char * token = strtok_r(tokenBuffer, "-", &saveptr1);
+
+				/*If the message sent by the client is a stock command*/
+				if (!strcmp(token, "CMD")) {
+					token = strtok_r(NULL, "-", &saveptr1);
+					int cmdA = atoi(token);
+					token = strtok_r(NULL, "-", &saveptr1);
+					int cmdB = atoi(token);
+
+					pthread_mutex_lock(&LockWarehouseStorageData);
+					AStock = AStock - cmdA;
+					BStock = BStock - cmdB;
+					pthread_mutex_unlock(&LockWarehouseStorageData);
+
+					/*If it's not one of the cases above, the message is sent to
+					 *the controler*/
+				} else {
+					mq_send(mboxControl, buffer, sizeof (buffer), MSG_HIGH_PRIORITY);
+				}
 			}
 
-			n = write(newsockfd, ACK_MSG, sizeof(ACK_MSG));
+			n = write(newsockfd, ACK_MSG, sizeof (ACK_MSG));
 			if (n < 0)
 				error("ERROR writing to socket");
 		}

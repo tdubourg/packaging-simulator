@@ -37,6 +37,7 @@ void *doControl(void *p) {
 			{
 				/* Stop the valve */
 				char* errMsg = (char*)malloc(strlen(ERR_LOG_PREFIX) + 2);
+				errMsg[0] = '\0';
 				strcat(errMsg, ERR_LOG_PREFIX);
 				strcat(errMsg, msg+1 /* skip the first char of the char[] */);
 				LOG_ERR(errMsg);
