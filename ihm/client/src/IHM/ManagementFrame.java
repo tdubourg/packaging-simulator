@@ -44,7 +44,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.threadCmd = threadCmd;
 		this.threadLog = threadLog;
 		this.currentLot = lot;
-		this.descriptionLabel.setText("Etat de fabrication du lot" + lot);
+		this.descriptionLabel.setText("Etat de fabrication du lot " + lot);
                 this.currentLot = lot;
                 //initialization of data
                 if ( currentLot.equalsIgnoreCase("A") )
@@ -66,7 +66,6 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	}
 
 	public void addLog(String log) {
-		System.out.println(log);
 		logTextArea.append(log + "\r\n");
 	}
 
@@ -188,7 +187,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                 //the server has sent : STATE-NBA-NBB-NbBoitesProduite-NbPiecesRefusées
                 this.nbCurrentBin = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
                 log = log.substring(0, log.lastIndexOf("-")); 
-                this.currentBin.setText("Taux de rebus dans le carton en cours : " + nbCurrentBin);
+                this.currentBin.setText("Nombre de pièces dans le rebus : " + nbCurrentBin);
                 
                 this.nbCurrentBox = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
                 log = log.substring(0, log.lastIndexOf("-"));
