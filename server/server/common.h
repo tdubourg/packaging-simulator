@@ -62,6 +62,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 /****************************************************/
 
 //@TODO: Write a bit of documentation to explain what those constants actually stand for
+#define ERR_LOG_PREFIX "ERROR "
 #define ERR_BOX "EB"
 /* No palette */
 #define ERR_PALETTE "EP"
@@ -74,10 +75,6 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define PRODUCTION_IS_OVER_MSG "GAME OVER"
 
 #define RESTART_AFTER_EMERGENCY_STOP "R"
-
-#define SOLVE_PALETTE "SP"
-#define SOLVE_PRINT "SA"
-#define SOLVE_WAREHOUSE "SW"
 
 #define MSG_HIGH_PRIORITY 3 //for errors
 #define MSG_MEDIUM_PRIORITY 2 // for normal message such as logs
@@ -117,6 +114,10 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define INIT_CONTROL(); mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_NONBLOCK);
 #define LOG(M); if (mq_send(mboxLogger, M, MAX_MSG_LEN, MSG_MEDIUM_PRIORITY)) {\
 					perror("Error while pushing a new log message");\
+				}
+
+#define LOG_ERR(M); if (mq_send(mboxLogger, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
+					perror("Error while pushing an error log message");\
 				}
 
 #define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
