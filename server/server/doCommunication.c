@@ -17,6 +17,7 @@
 #define DISCONNECT_CMD "DISCONNECT\r\n"
 #define ACK_MSG "ACK\r\n"
 #define RESTART_CMD "RESTART\r\n"
+#define CMD_MSG_PREFIXE "CMD"
 
 void error(const char *msg) {
 	perror(msg);
@@ -74,6 +75,11 @@ void *doPush(void *p) {
 				close(sockfd);
 				return 0;
 			}
+			
+			if (strcmp(logsBuffer, DISCONNECT_CMD) == 0) {
+				close(newsockfd);
+				break;
+			}
 
 			if (bytes_read == -1) {
 				perror("[CommunicationThread] Failed to recieve from LogThread");
@@ -111,6 +117,9 @@ void *doCommunication(void *p) {
 
 	/*Set the letter box with the controler*/
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
+	
+	/*Set the letterBox with push thread*/
+	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
 	/*Set sockets and buffer*/
 	int sockfd, newsockfd, portno;
@@ -151,6 +160,7 @@ void *doCommunication(void *p) {
 
 			/*When client want to disconnect from the server*/
 			if (strcmp(buffer, DISCONNECT_CMD) == 0) {
+				mq_send(mboxCom, DISCONNECT_CMD, sizeof (DISCONNECT_CMD), MSG_HIGH_PRIORITY);
 				close(newsockfd);
 				break;
 
@@ -176,7 +186,7 @@ void *doCommunication(void *p) {
 				char * token = strtok_r(tokenBuffer, "-", &saveptr1);
 
 				/*If the message sent by the client is a stock command*/
-				if (!strcmp(token, "CMD")) {
+				if (!strcmp(token, CMD_MSG_PREFIXE)) {
 					token = strtok_r(NULL, "-", &saveptr1);
 					int cmdA = atoi(token);
 					token = strtok_r(NULL, "-", &saveptr1);
