@@ -31,7 +31,7 @@ bool LockValveValue;
 int PrintPaletteQueueValue = 0;
 int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
 batch_type CurrentBatchType;
-int CurrentBatchProdMax = 0;
+int CurrentBatchProdMax = 100;
 int CurrentProducedBoxes = 0;
 
 int STOCKS = 0;
