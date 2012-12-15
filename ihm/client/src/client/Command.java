@@ -21,6 +21,7 @@ public class Command {
 	
 	final static String INIT_MSG_PREFIX = "INIT";
 	final static String CMD_MSG_PREFIX = "CMD";
+	final static String RESTART_MSG_PREFIX = "CMD";
 
     InetAddress serverAddress;
     Socket socketCommand;
@@ -105,7 +106,7 @@ public class Command {
 		String toSend;
 		BufferedReader in;
 		try {
-			toSend = "R\r\n";
+			toSend = RESTART_MSG_PREFIX + "\r\n";
 			out = new PrintWriter(socketCommand.getOutputStream());
 			out.print(toSend);
 			out.flush();
