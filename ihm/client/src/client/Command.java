@@ -98,6 +98,10 @@ public class Command {
 //	}
         return true;
     }
+
+	public void sendRestartProd() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
     
 	public void restart(){
 		PrintWriter out;
