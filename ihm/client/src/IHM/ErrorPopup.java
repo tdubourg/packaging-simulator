@@ -115,6 +115,7 @@ public class ErrorPopup extends javax.swing.JFrame {
 
     private void jB_RestartProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_RestartProdActionPerformed
 		this.command.sendRestartProd();
+		this.hide();
     }//GEN-LAST:event_jB_RestartProdActionPerformed
 
 	public void setCommand(Command c) {

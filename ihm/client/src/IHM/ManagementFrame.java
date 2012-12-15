@@ -7,6 +7,7 @@ package IHM;
 import client.Client;
 import client.Command;
 import client.ThreadLog;
+import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
 /**
@@ -206,8 +207,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.ep.show();
 	}
 
+	JFrame goPopup = new GameOverPopup();
 	@Override
 	public void onGameOver() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		this.goPopup.show();
 	}
 }
