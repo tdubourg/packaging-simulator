@@ -227,7 +227,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 			//the server has sent : STATE-NBA-NBB-NbBoitesProduite-NbPiecesRefusées
 			this.nbCurrentBin = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			log = log.substring(0, log.lastIndexOf("-"));			
-			this.currentBin.setText("Nombre de pièces dans le rebus : " + nbCurrentBin);
+			this.currentBin.setText("Nombre de pièces dans le rebut : " + nbCurrentBin);
 			
 			this.nbCurrentBox = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			log = log.substring(0, log.lastIndexOf("-"));
