@@ -121,7 +121,7 @@ void* partsPackager(void*a) {
 			{
 				DBG("partsPackager", "Main", "The box is full");
 				refusedPartsCount = 0; //* Reset refused parts by box counter
-
+				CurrentProducedBoxes++;
 				if ((CurrentProducedBoxes / BOXES_BY_PALETTE) >= CurrentBatchProdMax)
 				{
 					//* The current batch is over, so close the valve
