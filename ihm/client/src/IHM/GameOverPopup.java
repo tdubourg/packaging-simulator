@@ -12,7 +12,9 @@ import javax.swing.JFrame;
  * troll
  */
 public class GameOverPopup extends javax.swing.JFrame {
+
 	private ManagementFrame mgFrame;
+
 	public void setMgFrame(ManagementFrame j) {
 		this.mgFrame = j;
 	}
@@ -121,13 +123,13 @@ public class GameOverPopup extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jB_NewProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_NewProdActionPerformed
-        this.mgFrame.setCurrentErrorState(false);
+		this.mgFrame.setCurrentErrorState(false);
 		this.mgFrame.show();
 		this.hide();
     }//GEN-LAST:event_jB_NewProdActionPerformed
 
     private void jB_ShutdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_ShutdownActionPerformed
-        // TODO add your handling code here:
+		// TODO add your handling code here:
     }//GEN-LAST:event_jB_ShutdownActionPerformed
 
 	/**
