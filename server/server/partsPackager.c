@@ -147,7 +147,7 @@ void* partsPackager(void*a) {
 				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
 				// Sending error message
-				ERR_MSG(ERR_BOX_RATE);
+				ERR_MSG(ERR_BOX_REFUSED_RATE);
 			}
 		}
 	}
