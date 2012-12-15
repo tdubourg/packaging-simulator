@@ -37,7 +37,7 @@ public class ThreadLog extends Thread {
 	private final static String ERROR_WAREHOUSE = "ERROR W";
 	private final static String ERROR_PALETTE_QUEUE = "ERROR Q";
 	private final static String ERROR_BOX_REFUSED = "ERROR R";
-	private final static String ERROR_GAME_OVER = "GAME_OVER";
+	private final static String ERROR_GAME_OVER = "GAME OVER";
 
 	public enum ERROR {
 		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED
