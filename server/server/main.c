@@ -71,8 +71,8 @@ int main(int argc, char** argv) {
 	SET(Box, FALSE);
 	SET(Palette, FALSE);
 	SET(Imp, FALSE);
-	//* THe valve, though, has to be closed, at the start of the app
-	SET(Valve, FALSE);
+	//* Te valve, though, has to be closed, at the start of the app
+	SET(Valve, TRUE);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
