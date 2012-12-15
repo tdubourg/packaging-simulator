@@ -66,6 +66,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define STOP_APP "QUIT"
 
 #define EMERGENCY_STOP_OCCURED "EMERGENCY_STOP_OCCURED"
+#define INIT_BATCH "INIT"
 
 /* Set a value (S: bool) to a variable condtion (V) */
 //* @TODO This is not clear at all, replace this macro by two macros : LOCK(V) and UNLOCK(V)

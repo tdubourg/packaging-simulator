@@ -7,6 +7,7 @@
 #endif
 
 static void stopApplication();
+static void parseInitMessage(char* buffer);
 
 /*
  * Control thread
@@ -86,8 +87,25 @@ void *doControl(void *p)
 				return;
 				
 				break;
+				
+			case 'I':
+				parseInitMessage(msg);
+				break;
+			
 		}
 	}
+}
+
+static void parseInitMessage(char* buffer){
+	char* ptr,res;
+	res = strtok_r(buffer,'-',ptr);
+	printf("%s :\n",res);
+	printf("lolilol\n");
+	while(res!=NULL){
+		printf("%s :\n",res);
+		res = strtok_r(buffer,'-',ptr);
+	}
+	return;
 }
 
 static void stopApplication(){

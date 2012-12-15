@@ -30,8 +30,8 @@ bool LockPaletteValue;
 bool LockValveValue;
 int PrintPaletteQueueValue = 0;
 int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
-batch_type CurrentBatchType;
-int CurrentBatchProdMax = 0;
+batch_type CurrentBatchType; 
+int CurrentBatchProdMax = 0;//Number of pallet for the current batch
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 5;
@@ -102,17 +102,21 @@ int main(int argc, char** argv) {
 
 	// Wait
 	//@TODO : Remove those lines that are used for testing purposes
-	 usleep(7 * 1000 * 1000);
-	 DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
-	 SET(Box, FALSE);
-
-	 usleep(5 * 1000 * 1000);
-	 CurrentBatchType = BATCH_TYPE_A;
-	 DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
-	 SET(Valve, FALSE)
-	 SET(Palette, FALSE);
-	 SET(Imp, FALSE);
-	 SET(Valve, FALSE);
+	
+	char* msg = "INIT-A-3-40-8-1";
+	mq_send(mboxControl,msg,strlen(msg),MSG_HIGH_PRIORITY);
+	
+//	 usleep(7 * 1000 * 1000);
+//	 DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
+//	 SET(Box, FALSE);
+//
+//	 usleep(5 * 1000 * 1000);
+//	 CurrentBatchType = BATCH_TYPE_A;
+//	 DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
+//	 SET(Valve, FALSE)
+//	 SET(Palette, FALSE);
+//	 SET(Imp, FALSE);
+//	 SET(Valve, FALSE);
 
 	//mq_send(mboxLogs,"Je PUSH depuis une boite aux lettres",36,1);
 	
