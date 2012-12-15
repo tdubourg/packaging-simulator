@@ -4,6 +4,9 @@
  */
 package IHM;
 
+import client.Command;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -122,6 +125,12 @@ public class GameOverPopup extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+	private Command command;
+
+	public void setCommand(Command c) {
+		this.command = c;
+	}
+	
     private void jB_NewProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_NewProdActionPerformed
 		this.mgFrame.setCurrentErrorState(false);
 		this.mgFrame.show();
@@ -129,7 +138,13 @@ public class GameOverPopup extends javax.swing.JFrame {
     }//GEN-LAST:event_jB_NewProdActionPerformed
 
     private void jB_ShutdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_ShutdownActionPerformed
-		// TODO add your handling code here:
+		this.command.sendShutdown();
+		try {
+			Thread.sleep(10 * 1000);//* Wait for server to shutdown...
+		} catch (InterruptedException ex) {
+			Logger.getLogger(ErrorPopup.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		System.exit(0);//* Shutdown the client app
     }//GEN-LAST:event_jB_ShutdownActionPerformed
 
 	/**

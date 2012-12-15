@@ -284,11 +284,13 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	public void setCurrentErrorState(boolean errorState) {
 		this.currentErrorState = errorState;
 	}
-	JFrame goPopup = new GameOverPopup();
+	GameOverPopup goPopup = new GameOverPopup();
 	
 	@Override
 	public void onGameOver() {
 		this.hide();
+		this.goPopup.setCommand(threadCmd);
+		this.goPopup.setMgFrame(this);
 		this.goPopup.show();
 	}
 }
