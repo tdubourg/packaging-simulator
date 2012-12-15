@@ -58,18 +58,18 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 /* Inside the the doPalette task queue, where doPrint push something */
 #define PALETTE_QUEUE 'Q'
 /* Box rate */
-#define BOX_RATE 'R'
+#define BOX_REFUSED_RATE 'R'
 /****************************************************/
 
 //@TODO: Write a bit of documentation to explain what those constants actually stand for
 #define ERR_BOX "EB"
+/* No palette */
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
 #define ERR_WAREHOUSE "EW"
 /* The following error is in the case the doPalette task queue is full and the doPrint one wants to push something to it */
 #define ERR_PALETTE_QUEUE "EQ"
 /* In case the refused rate of the currently packaging box is higher than the limit: */
-#define ERR_BOX_RATE "ER"
 #define ERR_BOX_REFUSED_RATE "ER"
 #define PRODUCTION_IS_OVER_MSG "GAME OVER"
 

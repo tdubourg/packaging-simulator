@@ -18,65 +18,79 @@ void *doControl(void *p) {
 	INCLUDE(Valve)
 	INCLUDE(Box)
 
-			char msg[MAX_MSG_LEN + 1];
+	char msg[MAX_MSG_LEN + 1];
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
-	for (;;) {
-		// Wait for a command
+	for (;;)
+	{
+		/* Wait for a command */
 		mq_receive(mboxControl, msg, MAX_MSG_LEN, NULL);
 		DBG("doControl", "Main", "Received a message");
 		DBG("doControl", "Main", msg);
-		switch (msg[0]) {
-				// Error case
+		switch (msg[0])
+		{
+			/* Error case */
 			case ERR:
-				// Stop the valve
+				/* Stop the valve */
 				SET(Valve, TRUE);
-				switch (msg[1]) {
-						// Print
+				switch (msg[1])
+				{
+					/* Print */
 					case PRINT:
-						// Block parts packager
+						/* Block parts packager */
 						SET(Box, TRUE);
 						break;
-						// Palette maker
+					/* Palette maker : palette is not here */
 					case PALETTE:
-						// Block print
+						/* Block print */
+						SET(Palette, TRUE);
+						break;
+					/* Palette maker : queue is full */
+					case PALETTE_QUEUE:
+						/* Block print */
 						SET(Imp, TRUE);
 						break;
-						// Warehouse
+					/* Warehouse */
 					case WAREHOUSE:
-						// Block palette maker
+						/* Block palette maker */
 						SET(Palette, TRUE);
+						break;
+					/* Box maker : the refused rate is too high */
+					case BOX_REFUSED_RATE:
+						/* Block box maker */
+						SET(Box, TRUE);
 						break;
 				}
 				break;
-				// Solving errors
+			/* Solving errors */
 			case SOLVE:
-				switch (msg[1]) {
-						// Print
+				switch (msg[1])
+				{
+					/* Print */
 					case PRINT:
-						// Block parts packager
+						/* Block parts packager */
 						SET(Box, FALSE);
 						break;
-						// Palette maker
+					/* Palette maker */
 					case PALETTE:
-						// Block print
+						/* Block print */
 						SET(Imp, FALSE);
 						break;
-						// Warehouse
+					/* Warehouse */
 					case WAREHOUSE:
-						// Block palette maker
+						/* Block palette maker */
 						SET(Palette, FALSE);
 						break;
 				}
 				break;
-				// Relaunch all tasks (after an urgent stop)
+			/* Relaunch all tasks (after an urgent stop) */
 			case 'R':
 				SET(Box, FALSE);
 				SET(Palette, FALSE);
 				SET(Imp, FALSE);
 				SET(Valve, FALSE);
 				break;
-				// Stop app
+			/* Stop app */
 			case 'Q':
 				SET(Valve, TRUE);
 				stopApplication();

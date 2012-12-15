@@ -29,12 +29,12 @@ void *doPush(void *p) {
 	int sentAStock, sentBStock;
 	char stockBuffer[MAX_MSG_LEN + 1];
 
-	/*Mise en place du buffer de logs*/
+	/*Set the log buffer*/
 	char logsBuffer[MAX_MSG_LEN + 1];
 	/*Mise en place de la boite aux lettres*/
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
-	/*Création des sockets*/
+	/*set the sockets*/
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
 	struct sockaddr_in serv_addr, cli_addr;
@@ -54,7 +54,7 @@ void *doPush(void *p) {
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0)
 		error("ERROR on binding");
 
-	/*Boucle d'attente de connexion*/
+	/*Waiting connection loop*/
 	for (;;) {
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
@@ -63,8 +63,7 @@ void *doPush(void *p) {
 		if (newsockfd < 0)
 			error("ERROR on accept");
 
-		/*Boucle d'envoie en push lors de reception de logs
-		 *dans la boite aux lettres*/
+		/*Pushing loop whenever there is a log in the letterbox*/
 		for (;;) {
 
 			int bytes_read = mq_receive(mboxCom, logsBuffer, MAX_MSG_LEN, NULL);
@@ -102,16 +101,14 @@ void *doPush(void *p) {
 
 void *doCommunication(void *p) {
 
-	/*Lancement du thread de push*/
+	/*Starting the pushing thread*/
 	pthread_t tPush;
 	pthread_create(&tPush, NULL, doPush, NULL);
-
-	/*Mise en place du buffer de commandes*/
-	char logsControl[MAX_MSG_LEN + 1];
-	/*Mise en place de la boite aux lettres avec le controler*/
+	
+	/*Set the letter box with the controler*/
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
-	/*Création des sockets et mise en place du buffer de communication*/
+	/*Set sockets and buffer*/
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
 	char buffer[256];
@@ -133,7 +130,7 @@ void *doCommunication(void *p) {
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0)
 		error("ERROR on binding");
 
-	/*Boucle d'attente de connection*/
+	/*Waiting connection loop*/
 	for (;;) {
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
@@ -142,7 +139,7 @@ void *doCommunication(void *p) {
 		if (newsockfd < 0)
 			error("ERROR on accept");
 
-		/*Boucle de communication en pull pour les commandes du client*/
+		/*Client communication loop*/
 		for (;;) {
 			bzero(buffer, 256);
 			n = read(newsockfd, buffer, 255);
