@@ -4,7 +4,8 @@
  */
 package IHM;
 
-import client.ThreadCommand;
+import client.Client;
+import client.Command;
 import client.ThreadLog;
 import java.awt.Color;
 
@@ -14,13 +15,13 @@ import java.awt.Color;
  */
 public class ParametersFrame extends javax.swing.JFrame {
 
-    ThreadCommand threadCmd;
+    Command threadCmd;
     ThreadLog threadLog;
     
 	/**
 	 * Creates new form ManagerFrame
 	 */
-	public ParametersFrame(ThreadCommand threadCmd, ThreadLog threadLog) {
+	public ParametersFrame(Command threadCmd, ThreadLog threadLog) {
 		initComponents();
 		rebusErrorLabel.setVisible(false);
 		rebusErrorLabel.setForeground(Color.red);
@@ -28,6 +29,8 @@ public class ParametersFrame extends javax.swing.JFrame {
 		boxErrorLabel.setForeground(Color.red);
 		palErrorLabel.setVisible(false);
 		palErrorLabel.setForeground(Color.red);
+                qteErrorLabel.setVisible(false);
+		qteErrorLabel.setForeground(Color.red);
                 this.threadCmd = threadCmd;
                 this.threadLog = threadLog;
 	}
@@ -51,7 +54,11 @@ public class ParametersFrame extends javax.swing.JFrame {
         rebusErrorLabel = new javax.swing.JLabel();
         boxErrorLabel = new javax.swing.JLabel();
         palErrorLabel = new javax.swing.JLabel();
+        qteLabel = new javax.swing.JLabel();
+        qteTextField = new javax.swing.JTextField();
+        qteErrorLabel = new javax.swing.JLabel();
         ValidateButton = new javax.swing.JButton();
+        lotComboBox = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Saisie des paramètres");
@@ -91,6 +98,16 @@ public class ParametersFrame extends javax.swing.JFrame {
 
         palErrorLabel.setText("Donnée invalide");
 
+        qteLabel.setText("Nombre de palettes à produire :");
+
+        qteTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                qteTextFieldActionPerformed(evt);
+            }
+        });
+
+        qteErrorLabel.setText("Donnée invalide");
+
         javax.swing.GroupLayout panelALayout = new javax.swing.GroupLayout(panelA);
         panelA.setLayout(panelALayout);
         panelALayout.setHorizontalGroup(
@@ -112,7 +129,12 @@ public class ParametersFrame extends javax.swing.JFrame {
                     .addGroup(panelALayout.createSequentialGroup()
                         .addComponent(palTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(palErrorLabel)))
+                        .addComponent(palErrorLabel))
+                    .addComponent(qteLabel)
+                    .addGroup(panelALayout.createSequentialGroup()
+                        .addComponent(qteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(qteErrorLabel)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelALayout.setVerticalGroup(
@@ -136,7 +158,13 @@ public class ParametersFrame extends javax.swing.JFrame {
                 .addGroup(panelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(palTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(palErrorLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(qteLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panelALayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(qteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(qteErrorLabel))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         ValidateButton.setText("Valider");
@@ -146,33 +174,46 @@ public class ParametersFrame extends javax.swing.JFrame {
             }
         });
 
+        lotComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "A", "B" }));
+        lotComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lotComboBoxActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(panelA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(10, 10, 10)
+                                    .addComponent(lotComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(parametersLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(ValidateButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(parametersLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(panelA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(130, 130, 130)
+                        .addComponent(ValidateButton)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(parametersLabel)
-                .addGap(18, 18, 18)
-                .addComponent(panelA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(3, 3, 3)
+                .addComponent(lotComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ValidateButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -195,51 +236,93 @@ public class ParametersFrame extends javax.swing.JFrame {
 		rebusErrorLabel.setVisible(false);
 		boxErrorLabel.setVisible(false);
 		palErrorLabel.setVisible(false);
-               
+                int rebus;
+                int box;
+                int pal;
+                int qte;
+                String lot;
                 
-		if (rebusTextField.getText().isEmpty())
-		{
+                try 
+                {
+                    rebus = Integer.parseInt(rebusTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
                     correct = false;
                     rebusErrorLabel.setVisible(true);
-		}
-		if (boxTextField.getText().isEmpty())
-		{
+                }
+                
+                try 
+                {
+                    box = Integer.parseInt(boxTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
                     correct = false;
                     boxErrorLabel.setVisible(true);
-		}
-		if (palTextField.getText().isEmpty())
-		{
+                }
+                
+                try 
+                {
+                    pal = Integer.parseInt(this.palTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
                     correct = false;
                     palErrorLabel.setVisible(true);
-		}
-		
+                }
+                
+                try 
+                {
+                    qte = Integer.parseInt(this.qteTextField.getText());
+                }
+                catch (NumberFormatException e)
+                {
+                    correct = false;
+                    qteErrorLabel.setVisible(true);
+                }                
+                    
 		if (correct == true)
-		{
-                    int rebus = Integer.parseInt(rebusTextField.getText());
-                    int box = Integer.parseInt(boxTextField.getText());
-                    int pal = Integer.parseInt(this.palTextField.getText());
+		{       
+                    rebus = Integer.parseInt(rebusTextField.getText());
+                    box = Integer.parseInt(boxTextField.getText());
+                    pal = Integer.parseInt(this.palTextField.getText());
+                    lot = (String)lotComboBox.getSelectedItem();
+                    qte = Integer.parseInt(this.qteTextField.getText());
                     
                     //envoi au serveur des infos de paramétrage
-                    threadCmd.sendParameters(rebus, box, pal);
+                    threadCmd.sendParameters(lot, rebus, box, pal, qte);
                     
                     //ouverture de la fenêtre de suivi
-                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog);
+                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog, lot);
                     this.setVisible(false);
                     managementFrame.setVisible(true);
 		}
 
 	}//GEN-LAST:event_ValidateButtonActionPerformed
 
+    private void lotComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lotComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lotComboBoxActionPerformed
+
+    private void qteTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qteTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_qteTextFieldActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ValidateButton;
     private javax.swing.JLabel boxErrorLabel;
     private javax.swing.JLabel boxLabel;
     private javax.swing.JTextField boxTextField;
+    private javax.swing.JComboBox lotComboBox;
     private javax.swing.JLabel palErrorLabel;
     private javax.swing.JLabel palLabel;
     private javax.swing.JTextField palTextField;
     private javax.swing.JPanel panelA;
     private javax.swing.JLabel parametersLabel;
+    private javax.swing.JLabel qteErrorLabel;
+    private javax.swing.JLabel qteLabel;
+    private javax.swing.JTextField qteTextField;
     private javax.swing.JLabel rebusErrorLabel;
     private javax.swing.JLabel rebusLabel;
     private javax.swing.JTextField rebusTextField;

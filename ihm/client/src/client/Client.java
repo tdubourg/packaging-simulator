@@ -11,8 +11,8 @@ import java.io.IOException;
  *
  * @author pierre
  */
-public class Client {
-
+public class Client {   
+    
     /**
      * @param args the command line arguments
      */

@@ -4,7 +4,7 @@
  */
 package IHM;
 
-import client.ThreadCommand;
+import client.Command;
 import client.ThreadLog;
 import java.io.IOException;
 import java.net.ConnectException;
@@ -84,7 +84,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
 	private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
 		try {
 			// création des threads
-			ThreadCommand threadCmd = new ThreadCommand();
+			Command threadCmd = new Command();
 			ThreadLog threadLog = new ThreadLog();
 			// activation des threads
 			threadLog.start();
