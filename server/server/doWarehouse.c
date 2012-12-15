@@ -1,5 +1,7 @@
 #include "doWarehouse.h"
 #include "common.h"
+#include <string.h>
+#include <stdlib.h>
 
 void *doWarehouse(void *p)
 {
@@ -15,10 +17,10 @@ void *doWarehouse(void *p)
 
 	//***** MAIN LOOP
 	for(;;) {
-		DBG("doWarehouse", "Main", "is unlocked.");
+		DBGPRINT("doWarehouse", "Main", "is unlocked.");
 		sem_wait(&SemWarehouse);
 		CHECK_FOR_APP_END_AND_STOP("Warehouse");
-		DBG("doWarehouse", "Main", "New palette to store somwhere");
+		DBGPRINT("doWarehouse", "Main", "New palette to store somwhere");
 		LOG("doWarehouse: New palette to store somewhere");
 		storageId++;
 
@@ -33,10 +35,10 @@ void *doWarehouse(void *p)
 		pthread_mutex_unlock(&LockWarehouseStorageData);
 
 #define LOG_MSG "doWarehouse: Stored at storageId= %d"
-		char* logMessage = (char*)malloc(strlen(LOG_MSG) + 5);
+		char* logMessage = (char*)malloc(sizeof(LOG_MSG) + 5);
 		sprintf(logMessage, LOG_MSG, storageId);
 		LOG(logMessage);
-		DBG("doWarehouse", "Main", "End");
+		DBGPRINT("doWarehouse", "Main", "End");
 		free(logMessage);
 #undef LOG_MSG
 		

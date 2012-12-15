@@ -28,8 +28,8 @@ void *doControl(void *p) {
 	{
 		/* Wait for a command */
 		mq_receive(mboxControl, msg, MAX_MSG_LEN, NULL);
-		DBG("doControl", "Main", "Received a message");
-		DBG("doControl", "Main", msg);
+		DBGPRINT("doControl", "Main", "Received a message");
+		DBGPRINT("doControl", "Main", msg);
 		switch (msg[0])
 		{
 			/* Error case */

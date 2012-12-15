@@ -44,7 +44,7 @@ void *doPrint(void *p) {
 		if(printerError) {
 			//* Closing the valve
 			SET(Valve, TRUE);
-			DBG("doPrint", "Main", "Closing valve.");
+			DBGPRINT("doPrint", "Main", "Closing valve.");
 			LOG("doPrint: Printer error, ERROR.");
 			SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
@@ -63,11 +63,11 @@ void *doPrint(void *p) {
 			ERR_MSG(ERR_PALETTE_QUEUE);
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
-		DBG("doPrint", "Main", "Printing");
+		DBGPRINT("doPrint", "Main", "Printing");
 		LOG("doPrint: Printing.");
         PrintPaletteQueueValue++;
 		pthread_cond_signal(&CondPrintPaletteQueue);
-		DBG("doPrint", "Main", "Pushing a new box to the doPalette queue");
+		DBGPRINT("doPrint", "Main", "Pushing a new box to the doPalette queue");
 		LOG("doPrint: Pushing a new box to the doPalette queue");
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
 		sem_post(&SemSyncBoxImp);
