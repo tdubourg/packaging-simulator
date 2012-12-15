@@ -94,7 +94,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
 			
 			ParametersFrame managerFrame = new ParametersFrame(threadCmd, threadLog);
 			managerFrame.setVisible(true);
-			this.hide();
+			this.dispose();
 		}
 		catch (IOException e)
 		{

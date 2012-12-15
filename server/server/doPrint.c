@@ -7,7 +7,7 @@
 #ifdef SIMU_MODE
 
 static bool simu_printer_error() {
-	static bool printerError = TRUE;
+	bool printerError = TRUE;
 	FILE * filePrinterError = fopen(SIMU_PRINT_FILE_NAME, "rb");
 
 	if (filePrinterError == NULL) { // If the file is not found, it means that the printer works correctly
