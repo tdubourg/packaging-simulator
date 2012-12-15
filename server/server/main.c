@@ -30,6 +30,7 @@ bool LockPaletteValue;
 bool LockValveValue;
 int PrintPaletteQueueValue = 0;
 int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
+
 batch_type CurrentBatchType;
 int CurrentBatchProdMax = 100;//* number of palettes we have to produce for the current batch
 int CurrentProducedBoxes = 0;
@@ -101,21 +102,9 @@ int main(int argc, char** argv) {
 #ifdef SIMU_MODE
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);
 #endif
-
-
-	// Wait
-	//@TODO : Remove those lines that are used for testing purposes
-	 usleep(7 * 1000 * 1000);
-	 DBG("main", "Main", "======= NOW UNLOCKING THE partsPackager task =======");
-	 SET(Box, FALSE);
 	
-	 usleep(5 * 1000 * 1000);
-	 CurrentBatchType = BATCH_TYPE_A;
-	 DBG("main", "Main", "======= NOW All the rest! THE newpart task =======");
-	 SET(Valve, FALSE)
-	 SET(Palette, FALSE);
-	 SET(Imp, FALSE);
-	 SET(Valve, FALSE);
+	//char* msg = "INIT-A-3-40-8-1";
+	//mq_send(mboxControl,msg,strlen(msg),MSG_HIGH_PRIORITY);
 	
 	// Wait for end of threads
 	pthread_join(tCommunication, NULL);
@@ -148,18 +137,20 @@ int main(int argc, char** argv) {
 
 static void handler_alert(int n)
 {
-	#ifdef DBG
-	static bool s = FALSE;
-	s = !s;
-	if (!s)
-	{
-		mq_send(mboxControl, "R", 2, 5);
-		return;
-	}
-	printf("Alert\n");
-	#endif
-	SET(Box, FALSE);
-	SET(Palette, FALSE);
-	SET(Imp, FALSE);
-	SET(Valve, FALSE);
+//	#ifdef DBG
+//	static bool s = FALSE;
+//	s = !s;
+//	if (!s)
+//	{
+//		mq_send(mboxControl, "R", 2, 5);
+//		return;
+//	}
+//	printf("Alert\n");
+//	#endif
+	SET(Box, TRUE);
+	SET(Palette, TRUE);
+	SET(Imp, TRUE);
+	SET(Valve, TRUE);
+	mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
+	LOG(EMERGENCY_STOP_OCCURED);
 }
