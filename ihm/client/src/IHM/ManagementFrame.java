@@ -154,7 +154,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 
 	@Override
 	public void onReveiveLog(String log) {
-            if ( log.substring(0, 5).equalsIgnoreCase("STATE") )
+       if ( log.substring(0, 5).equalsIgnoreCase("STATE") )
             {
                 //update the data
                 //the server has sent : STATE-NBA-NBB-NbBoitesProduite-NbPiecesRefusées
@@ -204,5 +204,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		
 		this.ep.getErrorNameLabel().setText(err);
 		this.ep.show();
+	}
+
+	@Override
+	public void onGameOver() {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
