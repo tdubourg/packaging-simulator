@@ -99,5 +99,28 @@ public class Command {
 //	}
         return true;
     }
+
+	public void sendRestartProd() {
+		PrintWriter out;
+		String toSend;
+		BufferedReader in;
+		try {
+			toSend = "R\r\n";
+			out = new PrintWriter(socketCommand.getOutputStream());
+			out.print(toSend);
+			out.flush();
+		} catch (IOException ex) {
+			Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		try {
+			//écoute réponse
+			in = new BufferedReader (new InputStreamReader (socketCommand.getInputStream()));
+			String message_distant = in.readLine();
+			System.out.println(message_distant);
+		} catch (IOException ex) {
+			Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
+		}
+	}
     
+	
 }

@@ -87,14 +87,9 @@ void *doControl(void *p) {
 				stopApplication();
 				//stopping this thread;
 				return;
-
-				break;
-
 			case 'I':
-
 				parseInitMessage(msg);
 				break;
-
 		}
 	}
 }

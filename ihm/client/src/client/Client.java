@@ -21,6 +21,5 @@ public class Client {
         //System.out.println("Hello World !!!");
         WelcomeFrame frame = new WelcomeFrame();
         frame.setVisible(true);
-
     }
 }
