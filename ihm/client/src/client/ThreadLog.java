@@ -37,6 +37,7 @@ public class ThreadLog extends Thread {
 	private final static String ERROR_WAREHOUSE = "ERROR W";
 	private final static String ERROR_PALETTE_QUEUE = "ERROR Q";
 	private final static String ERROR_BOX_REFUSED = "ERROR R";
+	private final static String ERROR_GAME_OVER = "GAME_OVER";
 
 	public enum ERROR {
 
@@ -60,6 +61,8 @@ public class ThreadLog extends Thread {
 		public void onReveiveLog(String log);
 
 		public void onReceiveError(ERROR error);
+		
+		public void onGameOver();
 	}
 
 	@Override
@@ -92,6 +95,9 @@ public class ThreadLog extends Thread {
 							}
 							case ERROR_WAREHOUSE: {
 								listener.get().onReceiveError(ERROR.WAREHOUSE);
+							}
+							case ERROR_GAME_OVER: {
+								listener.get().onGameOver();
 							}
 							default: {
 								listener.get().onReveiveLog(message_distant);
