@@ -10,6 +10,8 @@ import client.ThreadLog;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
+
+
 /**
  *
  * @author Elodie
@@ -37,17 +39,13 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		return palBWarehouse;
 	}
 
-	/**
-	 * Creates new form ManagementFrame
-	 */
-	public ManagementFrame(Command threadCmd, ThreadLog threadLog, String lot, int qte) {
-		initComponents();
-		this.threadCmd = threadCmd;
-		this.threadLog = threadLog;
-		this.currentLot = lot;
-		this.descriptionLabel.setText("Etat de fabrication du lot" + lot);
-                this.currentLot = lot;
-                //initialization of data
+	public void setParameters(String lot, int qte) {
+				lotProgressBar.setMaximum(qte);
+                lotProgressBar.setValue(0);
+				this.currentLot = lot;
+                lotProgressBar.setStringPainted(true);
+				this.descriptionLabel.setText("État de fabrication du lot" + lot);
+				//initialization of data
                 if ( currentLot.equalsIgnoreCase("A") )
                 {
                     this.palAWarehouse = 0;
@@ -60,10 +58,26 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                     this.palBWarehouse = 0;
                     this.nbPalB = qte;
                 }
+}
+	
+	/**
+	 * Creates new form ManagementFrame
+	 */
+	public ManagementFrame(Command threadCmd, ThreadLog threadLog) {
+		initComponents();
+		this.threadCmd = threadCmd;
+		this.threadLog = threadLog;
 		threadLog.setLogReceiver(this);
-                lotProgressBar.setMaximum(qte);
-                lotProgressBar.setValue(0);
-                lotProgressBar.setStringPainted(true);
+	}
+	
+	boolean currentErrorState = false;
+	
+	@Override
+	public void setVisible(boolean visibility) {
+		if (currentErrorState) {
+			visibility = false;
+		}
+		super.setVisible(visibility);
 	}
 
 	public void addLog(String log) {
@@ -202,10 +216,16 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 				err = "L'imprimante.";
 				break;
 		}
-		
+		this.ep.setCommand(threadCmd);
+		this.ep.setMgFrame(this);
 		this.ep.getErrorNameLabel().setText(err);
-		this.hide();
-		this.ep.show();
+		this.currentErrorState = true;
+		this.setVisible(false);
+		this.ep.setVisible(true);
+	}
+	
+	public void setCurrentErrorState(boolean errorState) {
+		this.currentErrorState = errorState;
 	}
 
 	JFrame goPopup = new GameOverPopup();

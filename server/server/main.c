@@ -69,10 +69,10 @@ int main(int argc, char** argv) {
 	#endif
 	signal(SIGINT, handler_alert);
 	
-	//* No need to block everything, anyway everything will be hanging on until there is parts coming in
-	SET(Box, FALSE);
-	SET(Palette, FALSE);
-	SET(Imp, FALSE);
+	//* We block everything at the beginning in order to receive potential errors later and be able to send them to the client
+	SET(Box, TRUE);
+	SET(Palette, TRUE);
+	SET(Imp, TRUE);
 	//* Te valve, though, has to be closed, at the start of the app
 	SET(Valve, TRUE);
 

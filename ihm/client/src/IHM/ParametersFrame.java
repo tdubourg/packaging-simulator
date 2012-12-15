@@ -17,6 +17,7 @@ public class ParametersFrame extends javax.swing.JFrame {
 
     Command threadCmd;
     ThreadLog threadLog;
+	private final ManagementFrame managementFrame;
     
 	/**
 	 * Creates new form ManagerFrame
@@ -30,9 +31,10 @@ public class ParametersFrame extends javax.swing.JFrame {
 		palErrorLabel.setVisible(false);
 		palErrorLabel.setForeground(Color.red);
                 qteErrorLabel.setVisible(false);
-		qteErrorLabel.setForeground(Color.red);
+			qteErrorLabel.setForeground(Color.red);
                 this.threadCmd = threadCmd;
                 this.threadLog = threadLog;
+				this.managementFrame = new ManagementFrame(this.threadCmd, this.threadLog);
 	}
 
 	/**
@@ -291,12 +293,12 @@ public class ParametersFrame extends javax.swing.JFrame {
                     qte = Integer.parseInt(this.qteTextField.getText());
                     
                     //envoi au serveur des infos de paramétrage
-                    threadCmd.sendParameters(lot, rebus, box, pal, qte);
+					threadCmd.sendParameters(lot, rebus, box, pal, qte);
                     
-                    //ouverture de la fenêtre de suivi
-                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog, lot, qte);
+                    //ouverture de la fenêtre de suivi                    
+					this.managementFrame.setParameters(lot, qte);
                     this.setVisible(false);
-                    managementFrame.setVisible(true);
+                    this.managementFrame.setVisible(true);
 		}
 
 	}//GEN-LAST:event_ValidateButtonActionPerformed
