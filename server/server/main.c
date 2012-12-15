@@ -34,6 +34,7 @@ int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B pal
 batch_type CurrentBatchType;
 int CurrentBatchProdMax = 100;//* number of palettes we have to produce for the current batch
 int CurrentProducedBoxes = 0;
+int CurrentBatchRefusedPartsNumber = 0;
 
 int STOCKS = 0;
 int PARTS_BY_BOX = 5;

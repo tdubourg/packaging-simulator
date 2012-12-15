@@ -12,13 +12,18 @@
 #define PUSH_PORT 30035
 #define PULL_PORT 13003
 
+#define STATE_MSG_PREFIX "STATE"
+#define SHUTDOWN_CMD "SHUTDOWN\r\n"
+#define DISCONNECT_CMD "DISCONNECT\r\n"
+#define ACK_MSG "ACK\r\n"
+
 void error(const char *msg) {
 	perror(msg);
 }
 
 void *doPush(void *p) {
 	
-	extern int AStock, BStock;
+	extern int AStock, BStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber;
 	extern pthread_mutex_t LockWarehouseStorageData;
 	
 	int sentAStock, sentBStock;
@@ -84,7 +89,7 @@ void *doPush(void *p) {
 				pthread_mutex_unlock(&LockWarehouseStorageData);
 				
 				bzero(stockBuffer, sizeof(stockBuffer));
-				sprintf(stockBuffer, "A-%d-B-%d\r\n", sentAStock, sentBStock);
+				sprintf(stockBuffer, "%s-%d-%d-%d-%d\r\n", STATE_MSG_PREFIX, sentAStock, sentBStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber);
 				
 				n = write(newsockfd, stockBuffer, strlen(stockBuffer));
 				if (n < 0)
@@ -143,10 +148,10 @@ void *doCommunication(void *p) {
 			n = read(newsockfd, buffer, 255);
 			if (n < 0) error("ERROR reading from socket");
 			
-			if (strcmp(buffer, "exit\r\n") == 0) {
+			if (strcmp(buffer, DISCONNECT_CMD) == 0) {
 				close(newsockfd);
 				break;
-			} else if (strcmp(buffer, "shutdown\r\n") == 0) {
+			} else if (strcmp(buffer, SHUTDOWN_CMD) == 0) {
 				mq_send(mboxControl, STOP_APP, sizeof (STOP_APP), MSG_HIGH_PRIORITY);
 				close(newsockfd);
 				close(sockfd);
@@ -155,7 +160,7 @@ void *doCommunication(void *p) {
 				mq_send(mboxControl, buffer, sizeof(buffer), MSG_HIGH_PRIORITY);
 			}
 
-			n = write(newsockfd, "I got your message\r\n", 20);
+			n = write(newsockfd, ACK_MSG, sizeof(ACK_MSG));
 			if (n < 0)
 				error("ERROR writing to socket");
 		}
