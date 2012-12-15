@@ -18,6 +18,12 @@ void error(const char *msg) {
 }
 
 void *doPush(void *p) {
+	
+	extern int AStock, BStock;
+	extern pthread_mutex_t LockWarehouseStorageData;
+	
+	int sentAStock, sentBStock;
+	char stockBuffer[MAX_MSG_LEN + 1];
 
 	/*Mise en place du buffer de logs*/
 	char logsBuffer[MAX_MSG_LEN + 1];
@@ -27,7 +33,6 @@ void *doPush(void *p) {
 	/*Création des sockets*/
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
-	char buffer[256];
 	struct sockaddr_in serv_addr, cli_addr;
 	int n;
 
@@ -70,10 +75,21 @@ void *doPush(void *p) {
 				perror("[CommunicationThread] Failed to recieve from LogThread");
 			} else {
 				strcat(logsBuffer, "\r\n");
-				bzero(buffer, 256);
 				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
 				if (n < 0)
 					error("ERROR writing to socket");
+				
+				pthread_mutex_lock(&LockWarehouseStorageData);
+				sentAStock = AStock;
+				sentBStock = BStock;
+				pthread_mutex_unlock(&LockWarehouseStorageData);
+				
+				bzero(stockBuffer, sizeof(stockBuffer));
+				sprintf(stockBuffer, "A-%d-B-%d\r\n", sentAStock, sentBStock);
+				
+				n = write(newsockfd, stockBuffer, strlen(stockBuffer));
+				if (n < 0)
+					error("ERROR writing to socket");				
 			}
 		}
 	}
@@ -131,13 +147,13 @@ void *doCommunication(void *p) {
 			if (strcmp(buffer, "exit\r\n") == 0) {
 				close(newsockfd);
 				break;
-			}
-
-			if (strcmp(buffer, "shutdown\r\n") == 0) {
-				mq_send(mboxControl, STOP_APP, sizeof (STOP_APP), 1);
+			} else if (strcmp(buffer, "shutdown\r\n") == 0) {
+				mq_send(mboxControl, STOP_APP, sizeof (STOP_APP), MSG_HIGH_PRIORITY);
 				close(newsockfd);
 				close(sockfd);
 				return 0;
+			} else {
+				mq_send(mboxControl, buffer, sizeof(buffer), MSG_HIGH_PRIORITY);
 			}
 
 			n = write(newsockfd, "I got your message\r\n", 20);

@@ -31,18 +31,21 @@ public class ThreadLog extends Thread {
     @Override
     public void run() {
         //écoute sur socket
-        BufferedReader in;
+        InputStreamReader in;
 		boolean openedSocket = true;
         while (openedSocket)
         {
+			char[] buffer = new char[256];
             try {
-                in = new BufferedReader (new InputStreamReader (socketCommand.getInputStream()));
-                String message_distant = in.readLine();
-				if (message_distant != null){
-					System.out.println(message_distant);
+                in = new InputStreamReader (socketCommand.getInputStream());
+                in.read(buffer);
+				/*if (buffer != null){
+					System.out.println(buffer);
 				}else{
 					openedSocket = false;
-				}
+				}*/
+				System.out.println("_");
+				System.out.println(buffer);
             } catch (IOException ex) {
                 Logger.getLogger(ThreadCommand.class.getName()).log(Level.SEVERE, null, ex);
 				openedSocket = false;
