@@ -105,6 +105,7 @@ static void parseInitMessage(char* buffer) {
 	extern int BOXES_BY_PALETTE;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern int CurrentProducedBoxes;
+	extern int CurrentBatchRefusedPartsNumber;
 
 	INCLUDE(Imp)
 	INCLUDE(Palette)
@@ -185,6 +186,7 @@ static void parseInitMessage(char* buffer) {
 	MAX_REFUSED_PARTS_BY_BOX = nbRefusedPart;
 	//initializing compters
 	CurrentProducedBoxes = 0;
+	CurrentBatchRefusedPartsNumber=0;
 	// staring production
 	SET(Box, FALSE);
 	SET(Palette, FALSE);
