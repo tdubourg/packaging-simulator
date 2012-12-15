@@ -294,7 +294,7 @@ public class ParametersFrame extends javax.swing.JFrame {
                     threadCmd.sendParameters(lot, rebus, box, pal, qte);
                     
                     //ouverture de la fenêtre de suivi
-                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog, lot);
+                    ManagementFrame managementFrame = new ManagementFrame(this.threadCmd, this.threadLog, lot, qte);
                     this.setVisible(false);
                     managementFrame.setVisible(true);
 		}
