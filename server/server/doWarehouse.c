@@ -32,11 +32,13 @@ void *doWarehouse(void *p)
 
 		pthread_mutex_unlock(&LockWarehouseStorageData);
 
-
-		LOG("doWarehouse: Stored at storageId=");
-		LOG(storageId);
+#define LOG_MSG "doWarehouse: Stored at storageId= %d"
+		char* logMessage = (char*)malloc(strlen(LOG_MSG) + 5);
+		sprintf(logMessage, LOG_MSG, storageId);
+		LOG(logMessage);
 		DBG("doWarehouse", "Main", "End");
-
+		free(logMessage);
+#undef LOG_MSG
 		
 	}	
 }
