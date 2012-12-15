@@ -8,7 +8,6 @@ sem_t SemSyncBoxImp;
 sem_t SemPushBoxImp;
 sem_t SemSyncImpPalette;
 sem_t SemSocket;
-sem_t SemStock;
 sem_t SemNewPart;
 sem_t SemWarehouse;
 
@@ -81,7 +80,6 @@ int main(int argc, char** argv) {
 	sem_init(&SemPushBoxImp, 0, 0);
 	sem_init(&SemSyncImpPalette, 0, 1);
 	sem_init(&SemSocket, 0, 1);
-	sem_init(&SemStock, 0, 1);
 
 
 	sem_init(&SemNewPart, 0, 0);
@@ -129,7 +127,6 @@ int main(int argc, char** argv) {
 	mq_close(mboxPalletStore);
 
 	// Deleting sems
-	sem_destroy(&SemStock);
 	sem_destroy(&SemSocket);
 	sem_destroy(&SemSyncImpPalette);
 	sem_destroy(&SemSyncBoxImp);
