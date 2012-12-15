@@ -53,6 +53,7 @@ void *doPrint(void *p) {
 			// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
 			continue;
 		}
+		//* Waiting for a box to come from the parts packager
 		sem_wait(&SemPushBoxImp);
 		
 		pthread_mutex_lock(&LockPrintPaletteQueue);

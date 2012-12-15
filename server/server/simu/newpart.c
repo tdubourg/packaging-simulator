@@ -8,6 +8,7 @@ void *newpart(void* a) {
 
 	for(;;) {
 		CHECK_WAIT_BOOL(Valve);
+		CHECK_FOR_APP_END_AND_STOP("Valve");
 		DBGPRINT("newpart", "Main", "Pushing new part");
 		sem_post(&SemNewPart);
 		usleep(200 * 1000);

@@ -198,7 +198,15 @@ static void parseInitMessage(char* buffer) {
 static void stopApplication() {
 	// stopping simulation threads
 	extern bool needToStop;
+	INCLUDE(Box);
+	INCLUDE(Imp);
+	INCLUDE(Palette);
 	INCLUDE(Valve);
+	extern sem_t SemSyncBoxImp;
+	extern sem_t SemPushBoxImp;
+	extern sem_t SemSyncImpPalette;
+	extern sem_t SemNewPart;
+	extern sem_t SemWarehouse;
 	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR);
 	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
@@ -209,10 +217,25 @@ static void stopApplication() {
 	// waiting for simulation threads to end
 	SET(Valve, FALSE);
 	sleep(1);
+	
+	// Unlocking other tasks
+	//* Warehouse...
+	sem_post(&SemWarehouse);
+	//* Pallet...
+	sem_post(&SemSyncImpPalette);
+	SET(Palette, FALSE);
+	//* Printer...
+	sem_post(&SemPushBoxImp);
+	SET(Imp, FALSE);
+	//* Parts packager...
+	sem_post(&SemSyncBoxImp);
+	sem_post(&SemNewPart);
+	SET(Box, FALSE);
 
 	// closing Log thread;
 	mq_send(mboxLogs, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
-	// closing Communication thread;
-	mq_send(mboxCom, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
+	//* Note : No need to terminate doCommunication as it terminates by itself on shutdown order.
+	
+	
 }
