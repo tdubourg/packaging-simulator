@@ -31,7 +31,7 @@ bool LockValveValue;
 int PrintPaletteQueueValue = 0;
 int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
 batch_type CurrentBatchType;
-int CurrentBatchProdMax = 100;
+int CurrentBatchProdMax = 100;//* number of palettes we have to produce for the current batch
 int CurrentProducedBoxes = 0;
 
 int STOCKS = 0;
@@ -71,8 +71,8 @@ int main(int argc, char** argv) {
 	SET(Box, FALSE);
 	SET(Palette, FALSE);
 	SET(Imp, FALSE);
-	//* THe valve, though, has to be closed, at the start of the app
-	SET(Valve, FALSE);
+	//* Te valve, though, has to be closed, at the start of the app
+	SET(Valve, TRUE);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
