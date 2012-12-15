@@ -45,7 +45,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 
 	public void addLog(String log) {
 		System.out.println(log);
-		jTextArea1.append(log);
+		jTextArea1.append(log + "\r\n");
 	}
 
 	/**
