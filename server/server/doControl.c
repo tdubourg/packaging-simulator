@@ -198,6 +198,7 @@ static void parseInitMessage(char* buffer) {
 static void stopApplication() {
 	// stopping simulation threads
 	extern bool needToStop;
+	INCLUDE(Valve);
 	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR);
 	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
@@ -206,6 +207,7 @@ static void stopApplication() {
 	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
 	// waiting for simulation threads to end
+	SET(Valve, FALSE);
 	sleep(1);
 
 	// closing Log thread;
