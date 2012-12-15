@@ -211,7 +211,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
             {
                 //it is a log, we add it in the TextArea
                 addLog(log);
-                logTextArea.setCaretPosition(1000);
+                logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
             }
 	}
 	
