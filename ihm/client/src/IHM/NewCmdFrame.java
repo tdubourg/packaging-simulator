@@ -175,8 +175,8 @@ public class NewCmdFrame extends javax.swing.JFrame {
             nbA = Integer.parseInt(aTextField.getText());
             nbB = Integer.parseInt(bTextField.getText());
 
-            int aWarehouse = management.getPalA();
-            int bWarehouse = management.getPalB();
+            int aWarehouse = management.getPalAWarehouse();
+            int bWarehouse = management.getPalBWarehouse();
             
             //vérification que les palettes demandées sont dipo
             if (nbA > aWarehouse)
