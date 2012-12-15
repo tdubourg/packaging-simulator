@@ -6,7 +6,7 @@
 #ifdef SIMU_MODE
 
 static bool simu_missing_palette() {
-	static bool missingPalette = TRUE;
+	bool missingPalette = TRUE;
 	FILE * fileMissingPalette = fopen(SIMU_PALETTE_FILE_NAME, "rb");
 
 	if (fileMissingPalette == NULL) { // If the file is not found, it means that the palette is here
