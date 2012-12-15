@@ -19,7 +19,8 @@ public class Client {
      */
     public static void main(String[] args) throws IOException {
         //System.out.println("Hello World !!!");
-		WelcomeFrame frame = new WelcomeFrame();
-		frame.setVisible(true);
+        WelcomeFrame frame = new WelcomeFrame();
+        frame.setVisible(true);
+
     }
 }

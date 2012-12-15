@@ -7,6 +7,7 @@ package IHM;
 import client.Client;
 import client.Command;
 import client.ThreadLog;
+import javax.swing.JProgressBar;
 
 /**
  *
@@ -16,31 +17,52 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 
 	Command threadCmd;
 	ThreadLog threadLog;
-	String lot;
-	//disponibilité warehouse
-	int palA;
-	int palB;
+	//warehouse disponibility 
+	int palAWarehouse;
+	int palBWarehouse;
+        // number of pallets to produce
+        int nbPalA;
+        int nbPalB;
+        //current situation
+        int nbCurrentBox;
+        int nbCurrentBin;
+        String currentLot;
 
-	public int getPalA() {
-		return palA;
+	public int getPalAWarehouse() {
+		return palAWarehouse;
 	}
 
-	public int getPalB() {
-		return palB;
+	public int getPalBWarehouse() {
+		return palBWarehouse;
 	}
 
 	/**
 	 * Creates new form ManagementFrame
 	 */
-	public ManagementFrame(Command threadCmd, ThreadLog threadLog, String lot) {
+	public ManagementFrame(Command threadCmd, ThreadLog threadLog, String lot, int qte) {
 		initComponents();
 		this.threadCmd = threadCmd;
 		this.threadLog = threadLog;
-		this.lot = lot;
+		this.currentLot = lot;
 		this.descriptionLabel.setText("Etat de fabrication du lot" + lot);
-		this.palA = 0;
-		this.palB = 0;
+                this.currentLot = lot;
+                //initialization of data
+                if ( currentLot.equalsIgnoreCase("A") )
+                {
+                    this.palAWarehouse = 0;
+                    this.palBWarehouse = 0;
+                    this.nbPalA = qte;
+                }
+                else 
+                { //lot == "B"
+                    this.palAWarehouse = 0;
+                    this.palBWarehouse = 0;
+                    this.nbPalB = qte;
+                }
 		threadLog.setLogReceiver(this);
+                lotProgressBar.setMaximum(qte);
+                lotProgressBar.setValue(0);
+                lotProgressBar.setStringPainted(true);
 	}
 
 	public void addLog(String log) {
@@ -59,8 +81,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 
         descriptionLabel = new javax.swing.JLabel();
         newCmdButton = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        logScrollPane = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        lotProgressBar = new javax.swing.JProgressBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Suivi de la chaine de production");
@@ -77,7 +100,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        logScrollPane.setViewportView(jTextArea1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,19 +113,25 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(logScrollPane)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(descriptionLabel)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(lotProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(descriptionLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 228, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lotProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                .addComponent(logScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(newCmdButton)
                 .addContainerGap())
@@ -117,13 +146,36 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
     }//GEN-LAST:event_newCmdButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel descriptionLabel;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JScrollPane logScrollPane;
+    private javax.swing.JProgressBar lotProgressBar;
     private javax.swing.JButton newCmdButton;
     // End of variables declaration//GEN-END:variables
 
 	@Override
 	public void onReveiveLog(String log) {
-		addLog(log);
+            if ( log.substring(0, 5).equalsIgnoreCase("STATE") )
+            {
+                //update the data
+                //the server has sent : STATE-NBA-NBB-NbBoitesProduite-NbPiecesRefusées
+                this.nbCurrentBin = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
+                log = log.substring(0, log.lastIndexOf("-"));
+                this.nbCurrentBox = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
+                log = log.substring(0, log.lastIndexOf("-"));
+                this.palBWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
+                log = log.substring(0, log.lastIndexOf("-"));
+                this.palAWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
+                if(currentLot.equalsIgnoreCase("A"))
+                {
+                    this.lotProgressBar.setValue(palAWarehouse);
+                } else {
+                    this.lotProgressBar.setValue(palBWarehouse);
+                }              
+            }
+            else
+            {
+                //it is a log, we add it in the TextArea
+                addLog(log);
+            }
 	}
 }

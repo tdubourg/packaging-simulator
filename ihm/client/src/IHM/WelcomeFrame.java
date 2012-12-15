@@ -8,6 +8,7 @@ import client.Command;
 import client.ThreadLog;
 import java.io.IOException;
 import java.net.ConnectException;
+import javax.swing.JProgressBar;
 
 /**
  *
@@ -20,6 +21,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
 	 */
 	public WelcomeFrame() {
 		initComponents();
+                waitingMessage.setVisible(false);
 	}
 
 	/**
@@ -49,6 +51,9 @@ public class WelcomeFrame extends javax.swing.JFrame {
             }
         });
 
+        waitingMessage.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        waitingMessage.setText("Connexion impossible : le serveur ne répond pas.");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -60,11 +65,9 @@ public class WelcomeFrame extends javax.swing.JFrame {
                         .addComponent(connectMessage))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(114, 114, 114)
-                        .addComponent(connectButton))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(waitingMessage)))
+                        .addComponent(connectButton)))
                 .addContainerGap(77, Short.MAX_VALUE))
+            .addComponent(waitingMessage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -73,9 +76,9 @@ public class WelcomeFrame extends javax.swing.JFrame {
                 .addComponent(connectMessage)
                 .addGap(18, 18, 18)
                 .addComponent(connectButton)
-                .addGap(18, 18, 18)
-                .addComponent(waitingMessage)
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(waitingMessage, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                .addGap(18, 18, 18))
         );
 
         pack();
@@ -94,7 +97,7 @@ public class WelcomeFrame extends javax.swing.JFrame {
 		}
 		catch (IOException e)
 		{
-			this.waitingMessage.setText("Connection impossible.");
+                    this.waitingMessage.setVisible(true);
 		}
 		
 

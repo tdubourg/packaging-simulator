@@ -1,5 +1,7 @@
 #include "doControl.h"
 #include "common.h"
+#include "string.h"
+#include "stdlib.h"
 
 #ifdef DBG
 #include "time.h"
@@ -17,6 +19,7 @@ void *doControl(void *p) {
 	INCLUDE(Palette)
 	INCLUDE(Valve)
 	INCLUDE(Box)
+	INIT_LOGGER();
 
 	char msg[MAX_MSG_LEN + 1];
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
@@ -31,7 +34,12 @@ void *doControl(void *p) {
 		{
 			/* Error case */
 			case ERR:
+			{
 				/* Stop the valve */
+				char* errMsg = (char*)malloc(strlen(ERR_LOG_PREFIX) + 2);
+				strcat(errMsg, ERR_LOG_PREFIX);
+				strcat(errMsg, msg+1 /* skip the first char of the char[] */);
+				LOG_ERR(errMsg);
 				SET(Valve, TRUE);
 				switch (msg[1])
 				{
@@ -61,27 +69,16 @@ void *doControl(void *p) {
 						SET(Box, TRUE);
 						break;
 				}
+				free(errMsg);
+			}
 				break;
 			/* Solving errors */
+			/* Relaunch all tasks (tasks that were not blocked will not see anything) */
 			case SOLVE:
-				switch (msg[1])
-				{
-					/* Print */
-					case PRINT:
-						/* Block parts packager */
-						SET(Box, FALSE);
-						break;
-					/* Palette maker */
-					case PALETTE:
-						/* Block print */
-						SET(Imp, FALSE);
-						break;
-					/* Warehouse */
-					case WAREHOUSE:
-						/* Block palette maker */
-						SET(Palette, FALSE);
-						break;
-				}
+				SET(Box, FALSE);
+				SET(Palette, FALSE);
+				SET(Imp, FALSE);
+				SET(Valve, FALSE);
 				break;
 			/* Relaunch all tasks (after an urgent stop) */
 			case 'R':
