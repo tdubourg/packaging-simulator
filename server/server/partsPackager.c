@@ -62,6 +62,7 @@ void* partsPackager(void*a) {
 	extern int MAX_REFUSED_PARTS_BY_BOX;
 	extern int CurrentBatchProdMax;
 	extern int CurrentProducedBoxes;
+	extern int CurrentBatchRefusedPartsNumber;
 	extern int BOXES_BY_PALETTE;
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
@@ -136,11 +137,12 @@ void* partsPackager(void*a) {
 			LOG("partsPackager: New REFUSED part.");
 
 			refusedPartsCount++;
+			CurrentBatchRefusedPartsNumber++;
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 			{
 				//* Closing the valve
 				SET(Valve, TRUE);
-				DBG("doControl", "Main", "Closing valve.");
+				DBG("partsPackager", "Main", "Closing valve.");
 				LOG("partsPackager: Refused rate is too high, ERROR.");
 				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
