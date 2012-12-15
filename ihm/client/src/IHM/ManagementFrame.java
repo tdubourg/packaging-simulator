@@ -179,7 +179,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
             }
 	}
 	
-	public void onReceiveError(String ErrComponent) {
-		
+
+	@Override
+	public void onReceiveError(ThreadLog.ERROR error) {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 }
