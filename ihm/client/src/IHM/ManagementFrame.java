@@ -67,7 +67,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 
 	public void addLog(String log) {
 		System.out.println(log);
-		jTextArea1.append(log + "\r\n");
+		logTextArea.append(log + "\r\n");
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         descriptionLabel = new javax.swing.JLabel();
         newCmdButton = new javax.swing.JButton();
         logScrollPane = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        logTextArea = new javax.swing.JTextArea();
         lotProgressBar = new javax.swing.JProgressBar();
         currentBox = new javax.swing.JLabel();
         currentBin = new javax.swing.JLabel();
@@ -101,9 +101,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        logScrollPane.setViewportView(jTextArea1);
+        logTextArea.setColumns(20);
+        logTextArea.setRows(5);
+        logScrollPane.setViewportView(logTextArea);
 
         currentBox.setText("Carton en cours de remplissage : ");
 
@@ -174,8 +174,8 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
     private javax.swing.JLabel currentBox;
     private javax.swing.JLabel currentPal;
     private javax.swing.JLabel descriptionLabel;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JScrollPane logScrollPane;
+    private javax.swing.JTextArea logTextArea;
     private javax.swing.JProgressBar lotProgressBar;
     private javax.swing.JButton newCmdButton;
     // End of variables declaration//GEN-END:variables
@@ -192,7 +192,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                 
                 this.nbCurrentBox = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
                 log = log.substring(0, log.lastIndexOf("-"));
-                this.currentBin.setText("Carton en cours de remplissage : n°" + nbCurrentBox);
+                this.currentBox.setText("Carton en cours de remplissage : n°" + nbCurrentBox);
                 
                 this.palBWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-")+1));
                 log = log.substring(0, log.lastIndexOf("-"));
@@ -201,14 +201,17 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                 if(currentLot.equalsIgnoreCase("A"))
                 {
                     this.lotProgressBar.setValue(palAWarehouse);
+                    this.currentPal.setText(palAWarehouse + "/" + nbPalA);
                 } else {
                     this.lotProgressBar.setValue(palBWarehouse);
+                    this.currentPal.setText(palBWarehouse + "/" + nbPalB);
                 }              
             }
             else
             {
                 //it is a log, we add it in the TextArea
                 addLog(log);
+                logTextArea.setCaretPosition(1000);
             }
 	}
 	
