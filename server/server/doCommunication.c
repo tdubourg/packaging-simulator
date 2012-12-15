@@ -14,7 +14,6 @@
 
 void error(const char *msg) {
 	perror(msg);
-	return 0;
 }
 
 void *doPush(void *p) {

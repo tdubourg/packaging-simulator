@@ -12,9 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *
  * @author pierre
  */
-public class Client { 
-	
-	public static ConcurrentLinkedQueue<String> logCLQ = new ConcurrentLinkedQueue<String>();
+public class Client {
     
     /**
      * @param args the command line arguments

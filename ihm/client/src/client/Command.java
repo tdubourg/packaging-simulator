@@ -18,6 +18,9 @@ import java.util.logging.Logger;
  * @author Elodie
  */
 public class Command {
+	
+	final static String INIT_MSG_PREFIX = "INIT";
+	final static String CMD_MSG_PREFIX = "CMD";
 
     InetAddress serverAddress;
     Socket socketCommand;
@@ -45,7 +48,7 @@ public class Command {
 //	boolean openSocket = true;
 //	while (openSocket){
 		try {
-			toSend = "init-" + lot + "-" + rebus + "-" + box + "-" + pal+ "-" + qte + "\r\n";
+			toSend = INIT_MSG_PREFIX + "-" + lot + "-" + rebus + "-" + box + "-" + pal+ "-" + qte + "\r\n";
 			out = new PrintWriter(socketCommand.getOutputStream());
 			out.print(toSend);
 			out.flush();
@@ -77,7 +80,7 @@ public class Command {
 //	boolean openSocket = true;
 //	while (openSocket){
 		try {
-			toSend = "cmd-" + A + "-" + B + "\r\n";
+			toSend = CMD_MSG_PREFIX + "-" + A + "-" + B + "\r\n";
 			out = new PrintWriter(socketCommand.getOutputStream());
 			out.print(toSend);
 			out.flush();
