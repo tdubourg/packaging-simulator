@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <mqueue.h>
 #include "common.h"
 
 sem_t SemSyncBoxImp;
@@ -140,20 +141,10 @@ int main(int argc, char** argv) {
 
 static void handler_alert(int n)
 {
-//	#ifdef DBG
-//	static bool s = FALSE;
-//	s = !s;
-//	if (!s)
-//	{
-//		mq_send(mboxControl, "R", 2, 5);
-//		return;
-//	}
-//	printf("Alert\n");
-//	#endif
 	SET(Box, TRUE);
 	SET(Palette, TRUE);
 	SET(Imp, TRUE);
 	SET(Valve, TRUE);
-	mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
+	INIT_LOGGER();
 	LOG(EMERGENCY_STOP_OCCURED);
 }
