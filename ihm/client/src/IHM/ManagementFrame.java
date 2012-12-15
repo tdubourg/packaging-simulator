@@ -63,6 +63,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
                 lotProgressBar.setMaximum(qte);
                 lotProgressBar.setValue(0);
                 lotProgressBar.setStringPainted(true);
+                logTextArea.setEditable(false);
 	}
 
 	public void addLog(String log) {
