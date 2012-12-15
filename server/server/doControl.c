@@ -104,6 +104,7 @@ static void parseInitMessage(char* buffer) {
 	extern int PARTS_BY_BOX;
 	extern int BOXES_BY_PALETTE;
 	extern int MAX_REFUSED_PARTS_BY_BOX;
+	extern int CurrentProducedBoxes;
 
 	INCLUDE(Imp)
 	INCLUDE(Palette)
@@ -141,7 +142,7 @@ static void parseInitMessage(char* buffer) {
 	if (token == NULL && (nbRefusedPart = atoi(token))!=0) {
 //		errorMsg = "Bad batch initialisation message : ";
 //		strcat(errorMsg, buffer);
-		LOG("Bad batch initialisation message : no refused part number specifyed");
+		LOG("Bad batch initialisation message : missing/malformated refused part number");
 		return;
 	}
 	nbRefusedPart = atoi(token);
@@ -182,6 +183,8 @@ static void parseInitMessage(char* buffer) {
 	PARTS_BY_BOX = partByBox;
 	BOXES_BY_PALETTE = boxByPallet;
 	MAX_REFUSED_PARTS_BY_BOX = nbRefusedPart;
+	//initializing compters
+	CurrentProducedBoxes = 0;
 	// staring production
 	SET(Box, FALSE);
 	SET(Palette, FALSE);
