@@ -39,8 +39,7 @@ public class ThreadLog extends Thread {
 	private final static String ERROR_BOX_REFUSED = "ERROR R";
 
 	public enum ERROR {
-
-		BOX, PALETTE, PRINT, WAREHOUSE, PALETTE_QUEUE, BOX_REFUSED
+		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED
 	};
 	private WeakReference<LogReceiver> listener;
 
@@ -64,7 +63,7 @@ public class ThreadLog extends Thread {
 
 	@Override
 	public void run() {
-		//écoute sur socket
+		//* Listening on socket
 		BufferedReader in;
 		boolean openedSocket = true;
 		while (openedSocket) {
@@ -73,7 +72,6 @@ public class ThreadLog extends Thread {
 				while (in.ready()) {
 					String message_distant = in.readLine();
 					if (listener != null && listener.get() != null) {
-
 						switch (message_distant) {
 							case ERROR_BOX: {
 								listener.get().onReceiveError(ERROR.BOX);
@@ -90,14 +88,10 @@ public class ThreadLog extends Thread {
 							case ERROR_BOX_REFUSED: {
 								listener.get().onReceiveError(ERROR.BOX_REFUSED);
 							}
-							case ERROR_WAREHOUSE: {
-								listener.get().onReceiveError(ERROR.WAREHOUSE);
-							}
 							default: {
 								listener.get().onReveiveLog(message_distant);
 							}
 						}
-
 					}
 				}
 				/*if (message_distant != null){

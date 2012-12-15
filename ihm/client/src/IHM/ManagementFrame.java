@@ -179,9 +179,30 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
             }
 	}
 	
-
+	ErrorPopup ep = new ErrorPopup();
 	@Override
 	public void onReceiveError(ThreadLog.ERROR error) {
-		throw new UnsupportedOperationException("Not supported yet.");
+		String err = "";
+		
+		switch(error) {
+			case BOX:
+				err = "Carton manquant.";
+				break;
+			case BOX_REFUSED:
+				err = "Taux d'erreur trop élevé à la mise en carton.";
+				break;
+			case PALETTE:
+				err = "Palette manquante.";
+				break;
+			case PALETTE_QUEUE:
+				err = "File d'attente de la mise en palette surchargée.";
+				break;
+			case PRINT:
+				err = "L'imprimante.";
+				break;
+		}
+		
+		this.ep.getErrorNameLabel().setText(err);
+		this.ep.show();
 	}
 }
