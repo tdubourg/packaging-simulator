@@ -82,7 +82,7 @@ void *doPush(void *p) {
 			}
 
 			if (bytes_read == -1) {
-				perror("[CommunicationThread] Failed to recieve from LogThread");
+				perror("[CommunicationThread] Failed to receive from LogThread");
 			} else {
 				strcat(logsBuffer, "\r\n");
 				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
