@@ -141,6 +141,7 @@ void* partsPackager(void*a) {
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 			{
 				//* Closing the valve
+				refusedPartsCount = 0; //*Resetting the counter, so that when the error is marked as "solved" we don't go back into error mode
 				SET(Valve, TRUE);
 				DBGPRINT("partsPackager", "Main", "Closing valve.");
 				LOG("partsPackager: Refused rate is too high, ERROR.");
