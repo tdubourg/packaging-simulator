@@ -100,10 +100,6 @@ public class Command {
     }
 
 	public void sendRestartProd() {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
-    
-	public void restart(){
 		PrintWriter out;
 		String toSend;
 		BufferedReader in;
@@ -124,4 +120,6 @@ public class Command {
 			Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
+    
+	
 }
