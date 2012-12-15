@@ -14,15 +14,15 @@ GREP=grep
 NM=nm
 CCADMIN=CCadmin
 RANLIB=ranlib
-CC=gcc
-CCC=g++
-CXX=g++
+CC=gcc.exe
+CCC=g++.exe
+CXX=g++.exe
 FC=gfortran
-AS=as
+AS=as.exe
 
 # Macros
-CND_PLATFORM=GNU-Linux-x86
-CND_DLIB_EXT=so
+CND_PLATFORM=MinGW-Windows
+CND_DLIB_EXT=dll
 CND_CONF=Release
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -63,9 +63,9 @@ LDLIBSOPTIONS=
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server.exe
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server: ${OBJECTFILES}
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.c} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
@@ -115,7 +115,7 @@ ${OBJECTDIR}/partsPackager.o: partsPackager.c
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server
+	${RM} ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/server.exe
 
 # Subprojects
 .clean-subprojects:

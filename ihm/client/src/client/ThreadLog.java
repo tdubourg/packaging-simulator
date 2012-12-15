@@ -32,7 +32,7 @@ public class ThreadLog extends Thread {
     public void run() {
         //écoute sur socket
         BufferedReader in;
-		boolean openedSocket = true;
+        boolean openedSocket = true;
         while (openedSocket)
         {
             try {

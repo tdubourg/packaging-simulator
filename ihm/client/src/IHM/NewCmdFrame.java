@@ -103,9 +103,9 @@ public class NewCmdFrame extends javax.swing.JFrame {
                         .addComponent(aErrorLabel))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(bLabel)
-                        .addGap(10, 10, 10)
-                        .addComponent(bTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(bTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
                         .addComponent(bErrorLabel))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(validationButton)
@@ -188,8 +188,8 @@ public class NewCmdFrame extends javax.swing.JFrame {
             if (nbB > bWarehouse)
             {
                 dispo=false;
-                aErrorLabel.setText("Disponibilité : " + bWarehouse);
-                aErrorLabel.setVisible(true);
+                bErrorLabel.setText("Disponibilité : " + bWarehouse);
+                bErrorLabel.setVisible(true);
             }
             if (dispo == true)
             {
