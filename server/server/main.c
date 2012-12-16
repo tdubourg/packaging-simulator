@@ -143,5 +143,6 @@ static void handler_alert(int n)
 	LOCK(Print);
 	LOCK(Valve);
 	INIT_LOGGER();
+	/* Send a log so that the client knows that we received an emergency stop (important call, not to be deleted or changed) */
 	LOG(EMERGENCY_STOP_MSG);
 }

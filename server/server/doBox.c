@@ -86,6 +86,7 @@ void* doBox(void*a) {
 				{
 					/* The current batch is over, so close the valve */
 					LOCK(Valve);
+					/* And send a log so that the client is able to know that the production of the current batch is over  (important call, not to be deleted or changed) */
 					LOG(PRODUCTION_IS_OVER_MSG);
 				}
 				/* **** "READY TO GO TO PRINTER" SEMAPHORE CHECK */
