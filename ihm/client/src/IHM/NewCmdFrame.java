@@ -299,7 +299,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
             //if available, send the data to server
             if (available == true)
             {
-				//* Clear text fields
+				// Clear text fields
                 clearTextFields();
 
                 //send data to server
@@ -310,10 +310,10 @@ public class NewCmdFrame extends javax.swing.JFrame {
                 {
                     this.setVisible(false);
                 } else {	
-                    //* Refersh labels
+                    // Refersh labels
 					setPalAWarehouse(palAWarehouse - nbA);
                     setPalBWarehouse(palBWarehouse - nbB);
-					//* Display confirmation :
+					// Display confirmation :
 					stateLabel.setText("Commande validée. Pour pouvez en saisir une nouvelle.");
 					stateLabel.setVisible(true);
                 }               

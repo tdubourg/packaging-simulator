@@ -312,29 +312,29 @@ public class ParametersFrame extends javax.swing.JFrame {
 
                 //if data is correct, send data to socket command
 		if (correct == true) {
-            //* The input is correct, so that means we can hide all the errors labels :
+            // The input is correct, so that means we can hide all the errors labels :
             rebusErrorLabel.setVisible(false);
             rebusErrorLabelLessOrEqualTo.setVisible(false);
             boxErrorLabel.setVisible(false);
             palErrorLabel.setVisible(false);
             qteErrorLabel.setVisible(false);
 
-            //* The input is correct so thoses lines should not throw any exception
+            // The input is correct so thoses lines should not throw any exception
 			rebus = Integer.parseInt(rebusTextField.getText());
 			box = Integer.parseInt(boxTextField.getText());
 			pal = Integer.parseInt(this.palTextField.getText());
 			lot = (String) lotComboBox.getSelectedItem();
 			qte = Integer.parseInt(this.qteTextField.getText());
 
-			//* Open the window on production progress monitoring
+			// Open the window on production progress monitoring
 			this.managementFrame.setParameters(lot, qte, pal);
 			this.setVisible(false);
 			this.managementFrame.setVisible(true);
 			
 			
-			//* Send the parameters to the server :
-			//* /!\ IMPORTANT NOTE /!\ Here we send the parameters AFTER having displayed the ManagementFrame, 
-			//* that way, it will receive potential errors after being visible and will thus hide properly
+			// Send the parameters to the server :
+			// /!\ IMPORTANT NOTE /!\ Here we send the parameters AFTER having displayed the ManagementFrame, 
+			// that way, it will receive potential errors after being visible and will thus hide properly
 			threadCmd.sendParameters(lot, rebus, box, pal, qte);
 		}
 

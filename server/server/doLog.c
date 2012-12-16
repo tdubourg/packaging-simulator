@@ -11,7 +11,7 @@
 void *doLog(void *p) {
 
 	/* TODO : define message priority and message format to send to communication Thread. */
-
+	/* INIT *******************************************************************/
 	char buffer[MAX_MSG_LEN + 1];
 	int bytes_read;
 	time_t temps;
@@ -22,6 +22,7 @@ void *doLog(void *p) {
 
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR | O_NONBLOCK);
 
+	/* MAIN LOOP **************************************************************/
 	for(;;) {
 		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); /* @TODO add comment/documentation for this line */
 		if (bytes_read == -1) {
