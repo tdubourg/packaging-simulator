@@ -23,7 +23,8 @@ void *doLog(void *p) {
 
 	/* MAIN LOOP **************************************************************/
 	for(;;) {
-		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); /* @TODO add comment/documentation for this line */
+		/* Wait for Log */
+		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);
 		if (bytes_read == -1) {
 			perror("doLog: Failed to receive");
 		} else {
@@ -54,10 +55,10 @@ void *doLog(void *p) {
 				fclose(f);
 
 				/* Sending the log message to communication thread using the dedicated message queue. */
-				mq_send(mboxCom, buffer, bytes_read, MSG_MEDIUM_PRIORITY); /* @TODO add comment/documentation for this line, especially the use of bytes_read in a *_send() call */
+				mq_send(mboxCom, buffer, bytes_read, MSG_MEDIUM_PRIORITY);
 
 				/* Clearing buffer */
-				memset(buffer, 0, bytes_read + 1); /* @TODO comment this line */
+				memset(buffer, 0, bytes_read + 1);
 			}
 		}
 	}
