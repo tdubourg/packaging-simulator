@@ -22,7 +22,7 @@ void *doLog(void *p) {
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR | O_NONBLOCK);
 
 	/* MAIN LOOP **************************************************************/
-	for(;;) {
+	for (;;) {
 		/* Wait for Log */
 		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL);
 		if (bytes_read == -1) {

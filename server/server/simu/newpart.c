@@ -6,7 +6,7 @@ extern sem_t SemNewPart;
 void *newpart(void* a) {
 	INCLUDE(Valve)
 
-	for(;;) {
+	for (;;) {
 		CHECK_WAIT_BOOL(Valve);
 		CHECK_FOR_APP_END_AND_STOP("Valve");
 		DBGPRINT("newpart", "Main", "Pushing new part");

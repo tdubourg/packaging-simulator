@@ -11,8 +11,7 @@ static bool simu_missing_palette();
 /* Main function
  * Fills the palette with boxes and then transmits it to the warehouse
  */
-void *doPalette(void *p)
-{
+void *doPalette(void *p) {
 	/* INIT *******************************************************************/
 	INCLUDE(Palette)
 	INCLUDE(Valve)
@@ -24,28 +23,28 @@ void *doPalette(void *p)
 	extern sem_t SemSyncPrintPalette;
 	extern sem_t SemWarehouse;
 	int currentPaletteBoxesNumber = 0;
-	
+
 	/* MAIN LOOP **************************************************************/
-	for(;;) {
+	for (;;) {
 		CHECK_WAIT_BOOL(Palette);
 		CHECK_FOR_APP_END_AND_STOP("Palette");
-		
+
 #ifdef TEST_PALETTE_QUEUE_ERROR
 		usleep(100 * 1000 * 1000);
 #endif
-		
+
 		bool missingPalette = TRUE;
 #ifdef SIMU_MODE
 		missingPalette = simu_missing_palette();
 #endif
-		
-		if(missingPalette) {
+
+		if (missingPalette) {
 			/* Closing the valve */
 			LOCK(Valve);
 			DBGPRINT("doPalette", "Main", "Closing valve.");
 			LOG("doPalette: Missing palette, ERROR.");
-			LOCK(Palette);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
-			
+			LOCK(Palette); /* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+
 			/* Sending error message */
 			ERR_MSG(ERR_PALETTE);
 			/* Going back to the beginning of the loop and standing still until the doControl thread says otherwise */
@@ -63,8 +62,7 @@ void *doPalette(void *p)
 		LOG("doPalette: New box added in current palette");
 		--PrintPaletteQueueValue;
 		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
-		if (!currentPaletteBoxesNumber)
-		{
+		if (!currentPaletteBoxesNumber) {
 			DBGPRINT("doPalette", "Main", "The palette is full. Pushing it to the warehouse");
 			LOG("doPalette: The palette is full. Pushing it to the warehouse");
 			sem_post(&SemWarehouse);
@@ -77,13 +75,14 @@ void *doPalette(void *p)
 }
 
 #ifdef SIMU_MODE
+
 /* To see if the current palette is missing by looking for the file missingPalette.txt */
 static bool simu_missing_palette() {
 	bool missingPalette = TRUE;
 	FILE * fileMissingPalette = fopen(SIMU_PALETTE_FILE_NAME, "rb");
 
 	if (fileMissingPalette == NULL) { /* If the file is not found, it means that the palette is there */
-		if(errno == ENOENT) {
+		if (errno == ENOENT) {
 			missingPalette = FALSE;
 		}
 	} else {

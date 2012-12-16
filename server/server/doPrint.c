@@ -23,9 +23,9 @@ void *doPrint(void *p) {
 	extern sem_t SemSyncBoxPrint;
 	extern sem_t SemPushBoxPrint;
 	extern int MAX_BOXES_QUEUE;
-	
+
 	/* MAIN LOOP **************************************************************/
-	for(;;) {
+	for (;;) {
 		CHECK_WAIT_BOOL(Print);
 		CHECK_FOR_APP_END_AND_STOP("Print");
 		bool printerError = TRUE;
@@ -33,14 +33,14 @@ void *doPrint(void *p) {
 #ifdef SIMU_MODE
 		printerError = simu_printer_error();
 #endif
-		if(printerError) {
+		if (printerError) {
 			/* Closing the valve */
 			LOCK(Valve);
 			DBGPRINT("doPrint", "Main", "Closing valve.");
 			LOG("doPrint: Printer error, ERROR.");
-			LOCK(Print);/* Forbidding ourself to do another loop before the
+			LOCK(Print); /* Forbidding ourself to do another loop before the
 						 * green light has been set by the doControl thread */
-				
+
 			/* Sending error message */
 			ERR_MSG(ERR_PRINT);
 			/* Going back to the beginning of the loop and standing still until
@@ -49,11 +49,11 @@ void *doPrint(void *p) {
 		}
 		/* Waiting for a box to come from the parts packager */
 		sem_wait(&SemPushBoxPrint);
-		
+
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue >= MAX_BOXES_QUEUE) { /* We're paused */
 			/* Error : The queue is full and we have to push a box to it */
-			LOCK(Print);/* Forbidding ourself to do another loop before the
+			LOCK(Print); /* Forbidding ourself to do another loop before the
 						 * green light has been set by the doControl thread */
 			/* Sending error message (priority 2) */
 			ERR_MSG(ERR_PALETTE_QUEUE);
@@ -62,7 +62,7 @@ void *doPrint(void *p) {
 		}
 		DBGPRINT("doPrint", "Main", "Printing");
 		LOG("doPrint: Printing.");
-        PrintPaletteQueueValue++;
+		PrintPaletteQueueValue++;
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		DBGPRINT("doPrint", "Main", "Pushing a new box to the doPalette queue");
 		LOG("doPrint: Pushing a new box to the doPalette queue");
@@ -72,13 +72,14 @@ void *doPrint(void *p) {
 }
 
 #ifdef SIMU_MODE
+
 /* To see if there is a problem with the printer by looking for the file printerError.txt */
 static bool simu_printer_error() {
 	bool printerError = TRUE;
 	FILE * filePrinterError = fopen(SIMU_PRINT_FILE_NAME, "rb");
 
 	if (filePrinterError == NULL) { /* If the file is not found, it means that the printer works correctly */
-		if(errno == ENOENT) {
+		if (errno == ENOENT) {
 			printerError = FALSE;
 		}
 	} else {

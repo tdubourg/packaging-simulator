@@ -9,8 +9,7 @@
 /* Main function
  * Stores the palette into the warehouse and updates the stock data
  */
-void *doWarehouse(void *p)
-{
+void *doWarehouse(void *p) {
 	/* INIT *******************************************************************/
 	INIT_LOGGER();
 	INIT_CHECK_FOR_APP_END();
@@ -23,7 +22,7 @@ void *doWarehouse(void *p)
 	int storageId = -1;
 
 	/* MAIN LOOP **************************************************************/
-	for(;;) {
+	for (;;) {
 		DBGPRINT("doWarehouse", "Main", "is unlocked.");
 		sem_wait(&SemWarehouse);
 		CHECK_FOR_APP_END_AND_STOP("Warehouse");
@@ -32,8 +31,7 @@ void *doWarehouse(void *p)
 		storageId++;
 
 		pthread_mutex_lock(&LockWarehouseStorageData);
-		if (CurrentBatchType == BATCH_TYPE_A)
-		{
+		if (CurrentBatchType == BATCH_TYPE_A) {
 			AStock++;
 		} else {
 			BStock++;

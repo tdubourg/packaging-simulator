@@ -1,38 +1,43 @@
-
 package IHM;
 
 import client.Command;
 import java.awt.Color;
 
-public class NewCmdFrame extends javax.swing.JFrame {
+public class NewCmdFrame extends javax.swing.JFrame
+{
+
 	ManagementFrame management;
 	private Command threadCmd;
-	
 	int palAWarehouse;
 	int palBWarehouse;
 
 	/**
 	 * Sets the number of pallets A available
+	 *
 	 * @param palAWarehouse number of pallets available
 	 */
-	public void setPalAWarehouse(int palAWarehouse) {
+	public void setPalAWarehouse(int palAWarehouse)
+	{
 		this.palAWarehouse = palAWarehouse;
-		this.productsALabel.setText("Produits A : "+ palAWarehouse);
+		this.productsALabel.setText("Produits A : " + palAWarehouse);
 	}
 
 	/**
 	 * Sets the number of pallets B available
+	 *
 	 * @param palBWarehouse number of pallets available
 	 */
-	public void setPalBWarehouse(int palBWarehouse) {
+	public void setPalBWarehouse(int palBWarehouse)
+	{
 		this.palBWarehouse = palBWarehouse;
-		this.productsBLabel.setText("Produits B : "+ palBWarehouse);
-	}   
-	
+		this.productsBLabel.setText("Produits B : " + palBWarehouse);
+	}
+
 	/**
 	 * Creates new form NewCmdFrame
 	 */
-	public NewCmdFrame(ManagementFrame management, Command threadCmd) {
+	public NewCmdFrame(ManagementFrame management, Command threadCmd)
+	{
 		initComponents();
 		aErrorLabel.setForeground(Color.red);
 		aErrorLabel.setVisible(false);
@@ -40,9 +45,9 @@ public class NewCmdFrame extends javax.swing.JFrame {
 		bErrorLabel.setVisible(false);
 		this.management = management;
 		this.threadCmd = threadCmd;
-		productsALabel.setText("Produits A : "+ management.getPalAWarehouse());
-		productsBLabel.setText("Produits B : "+ management.getPalBWarehouse());
-		
+		productsALabel.setText("Produits A : " + management.getPalAWarehouse());
+		productsBLabel.setText("Produits B : " + management.getPalBWarehouse());
+
 		if (management.getOnProduction() == false)
 		{
 			backButton.setText("Retour");
@@ -192,19 +197,21 @@ public class NewCmdFrame extends javax.swing.JFrame {
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	private void clearTextFields() {
+	private void clearTextFields()
+	{
 		aTextField.setText("");
 		bTextField.setText("");
 	}
-	
 	GameOverPopup goPopup;
-	
-	public void setGoPopup(GameOverPopup p) {
+
+	public void setGoPopup(GameOverPopup p)
+	{
 		goPopup = p;
 	}
-	
+
 	/**
 	 * Close the frame after clicking on cancel button
+	 *
 	 * @param evt click on button "annuler"
 	 */
 	private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
@@ -222,7 +229,9 @@ public class NewCmdFrame extends javax.swing.JFrame {
 	}//GEN-LAST:event_backButtonActionPerformed
 
 	/**
-	 * Check if data is correct and send information to the socket after validation of new command
+	 * Check if data is correct and send information to the socket after
+	 * validation of new command
+	 *
 	 * @param evt click on button "valider"
 	 */
 	private void validationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validationButtonActionPerformed
@@ -230,31 +239,31 @@ public class NewCmdFrame extends javax.swing.JFrame {
 		Boolean available = true;
 		int nbA;
 		int nbB;
-		
+
 		//if nothing is the TextField, puts 0 in it
-		if ( aTextField.getText().isEmpty())
+		if (aTextField.getText().isEmpty())
 		{
 			aTextField.setText("0");
 		}
-		
-		if ( bTextField.getText().isEmpty())
+
+		if (bTextField.getText().isEmpty())
 		{
 			bTextField.setText("0");
 		}
-				
+
 		//checks if data is correct
-		try 
+		try
 		{
 			nbA = Integer.parseInt(aTextField.getText());
 		}
 		catch (NumberFormatException e)
-		{	   
+		{
 			aErrorLabel.setVisible(true);
 			aErrorLabel.setText("Donnée invalide");
 			correct = false;
 		}
-		
-		try 
+
+		try
 		{
 			nbB = Integer.parseInt(bTextField.getText());
 		}
@@ -264,31 +273,35 @@ public class NewCmdFrame extends javax.swing.JFrame {
 			bErrorLabel.setText("Donnée invalide");
 			bErrorLabel.setVisible(true);
 		}
-		
+
 		//if data correct
 		if (correct == true)
 		{
 			nbA = Integer.parseInt(aTextField.getText());
 			nbB = Integer.parseInt(bTextField.getText());
-			
+
 			//checks if pallets are available in the warehouse
 			if (nbA > palAWarehouse)
 			{
-				available=false;
+				available = false;
 				aErrorLabel.setText("Disponibilité : " + palAWarehouse);
 				aErrorLabel.setVisible(true);
-			} else {
+			}
+			else
+			{
 				aErrorLabel.setVisible(false);
 			}
 			if (nbB > palBWarehouse)
 			{
-				available=false;
+				available = false;
 				bErrorLabel.setText("Disponibilité : " + palBWarehouse);
 				bErrorLabel.setVisible(true);
-			} else {
+			}
+			else
+			{
 				bErrorLabel.setVisible(false);
 			}
-			
+
 			//if available, send the data to server
 			if (available == true)
 			{
@@ -302,14 +315,16 @@ public class NewCmdFrame extends javax.swing.JFrame {
 				if (management.getOnProduction() == true)
 				{
 					this.setVisible(false);
-				} else {	
+				}
+				else
+				{
 					// Refersh labels
 					setPalAWarehouse(palAWarehouse - nbA);
 					setPalBWarehouse(palBWarehouse - nbB);
 					// Display confirmation :
 					stateLabel.setText("Commande validée. Pour pouvez en saisir une nouvelle.");
 					stateLabel.setVisible(true);
-				}			   
+				}
 			}
 		}
 	}//GEN-LAST:event_validationButtonActionPerformed
@@ -321,7 +336,6 @@ public class NewCmdFrame extends javax.swing.JFrame {
 	private void bTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTextFieldActionPerformed
 		// nothing to do
 	}//GEN-LAST:event_bTextFieldActionPerformed
-
 	// Variables declaration - do not modify//GEN-BEGIN:variables
 	private javax.swing.JLabel aErrorLabel;
 	private javax.swing.JLabel aLabel;

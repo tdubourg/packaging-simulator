@@ -1,4 +1,3 @@
-
 package IHM;
 
 import client.Client;
@@ -7,8 +6,9 @@ import client.ThreadLog;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
 
-public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.LogReceiver {
-	
+public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.LogReceiver
+{
+
 	Command threadCmd;
 	ThreadLog threadLog;
 	//warehouse disponibility 
@@ -17,95 +17,108 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	// number of pallets and box to produce
 	int nbPalA;
 	int nbPalB;
-		int nbBoxPerPal;
+	int nbBoxPerPal;
 	//current situation
 	int nbCurrentBox;
 	int nbCurrentBin;
 	String currentLot;
-		//previous situation
-		int previousPalAWarehouse;
-		int previousPalBWarehouse;
-		
-		//production state
-		Boolean onProduction = true;
-		
-		//command frame
-		private NewCmdFrame newCmdFrame = null;
-		
+	//previous situation
+	int previousPalAWarehouse;
+	int previousPalBWarehouse;
+	//production state
+	Boolean onProduction = true;
+	//command frame
+	private NewCmdFrame newCmdFrame = null;
 	private ParametersFrame paramsFrame;
-		
-		/**
-		 * Sets frame's parameters
-		 * @param p parameters
-		 */
-	public void setParamsFrame(ParametersFrame p) {
+
+	/**
+	 * Sets frame's parameters
+	 *
+	 * @param p parameters
+	 */
+	public void setParamsFrame(ParametersFrame p)
+	{
 		this.paramsFrame = p;
 		this.goPopup.setParamsFrame(this.paramsFrame);
 	}
-	
-		/**
-		 * Gets the number of pallets A in warehouse
-		 * @return number of pallets A in warehouse
-		 */
-	public int getPalAWarehouse() {
+
+	/**
+	 * Gets the number of pallets A in warehouse
+	 *
+	 * @return number of pallets A in warehouse
+	 */
+	public int getPalAWarehouse()
+	{
 		return palAWarehouse;
 	}
 
-		/**
-		 * Gets the production status
-		 * @return true if production is active, false if not.
-		 */
-		public Boolean getOnProduction() {
-			return onProduction;
-		}
-
-		/**
-		 * Sets the onProduction property
-		 * @param onProduction true if production, false if not.
-		 */
-		public void setOnProduction(Boolean onProduction) {
-			this.onProduction = onProduction;
-		} 
-		
-		/**
-		 * gets the number of pallets B in warehouse
-		 * @return number of pallets B in warehouse
-		 */
-	public int getPalBWarehouse() {
-		return palBWarehouse;
-	}
-			
-		/**
-		 * Sets the parameters of frame
-		 * @param lot A or B
-		 * @param qte Number of pallets for this lot
-		 * @param pal number of box in each pallets
-		 */
-	public void setParameters(String lot, int qte, int pal) {
-		this.currentLot = lot;
-		this.descriptionLabel.setText("État de fabrication du lot" + currentLot);
-				this.nbBoxPerPal = pal;
-		//initialization of data
-		if (currentLot.equalsIgnoreCase("A")) {
-			this.nbPalA = qte;
-		} else { //lot == "B"
-			this.nbPalB = qte;
-		}
-				
-				//progress bar
-				lotProgressBar.setMaximum(qte*pal);
-		lotProgressBar.setValue(0);
-				lotProgressBar.setStringPainted(true);
-				
-				//previous situation
-				previousPalAWarehouse = palAWarehouse;
-				previousPalBWarehouse = palBWarehouse;
+	/**
+	 * Gets the production status
+	 *
+	 * @return true if production is active, false if not.
+	 */
+	public Boolean getOnProduction()
+	{
+		return onProduction;
 	}
 
 	/**
-	 * Creates  new form ManagementFrame
+	 * Sets the onProduction property
+	 *
+	 * @param onProduction true if production, false if not.
 	 */
-	public ManagementFrame(Command threadCmd, ThreadLog threadLog) {
+	public void setOnProduction(Boolean onProduction)
+	{
+		this.onProduction = onProduction;
+	}
+
+	/**
+	 * gets the number of pallets B in warehouse
+	 *
+	 * @return number of pallets B in warehouse
+	 */
+	public int getPalBWarehouse()
+	{
+		return palBWarehouse;
+	}
+
+	/**
+	 * Sets the parameters of frame
+	 *
+	 * @param lot A or B
+	 * @param qte Number of pallets for this lot
+	 * @param pal number of box in each pallets
+	 */
+	public void setParameters(String lot, int qte, int pal)
+	{
+		this.currentLot = lot;
+		this.descriptionLabel.setText("État de fabrication du lot" + currentLot);
+		this.nbBoxPerPal = pal;
+		//initialization of data
+		if (currentLot.equalsIgnoreCase("A"))
+		{
+			this.nbPalA = qte;
+		}
+		else
+		{ //lot == "B"
+			this.nbPalB = qte;
+		}
+
+		//progress bar
+		lotProgressBar.setMaximum(qte * pal);
+		lotProgressBar.setValue(0);
+		lotProgressBar.setStringPainted(true);
+
+		//previous situation
+		previousPalAWarehouse = palAWarehouse;
+		previousPalBWarehouse = palBWarehouse;
+	}
+
+	/**
+	 * Creates new form ManagementFrame
+	 */
+	public ManagementFrame(Command threadCmd, ThreadLog threadLog)
+	{
 		initComponents();
 		this.threadCmd = threadCmd;
 		this.threadLog = threadLog;
@@ -123,30 +136,36 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 
 	}
 	boolean currentErrorState = false;
-	
-		/**
-		 * Sets the visibility property
-		 * @param visibility true or false. Visible if true, hidden if false
-		 */
+
+	/**
+	 * Sets the visibility property
+	 *
+	 * @param visibility true or false. Visible if true, hidden if false
+	 */
 	@Override
-	public void setVisible(boolean visibility) {
-		if (currentErrorState) {// If we currently are in an error state, then ignore any ask for being visible/keeps being hidden
+	public void setVisible(boolean visibility)
+	{
+		if (currentErrorState)
+		{// If we currently are in an error state, then ignore any ask for being visible/keeps being hidden
 			visibility = false;
 		}
 		super.setVisible(visibility);
 	}
-	
-		/**
-		 * Adds a log in the text area
-		 * @param log log to add
-		 */
-	public void addLog(String log) {
+
+	/**
+	 * Adds a log in the text area
+	 *
+	 * @param log log to add
+	 */
+	public void addLog(String log)
+	{
 		logTextArea.append(log + "\r\n");
 	}
 
 	/**
 	 * This method is called from within the constructor to initialize the form.
-	 * WARNING: Do NOT modify this code. The content of this method is always regenerated by the Form Editor.
+	 * WARNING: Do NOT modify this code. The content of this method is always
+	 * regenerated by the Form Editor.
 	 */
 	@SuppressWarnings("unchecked")
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -238,11 +257,11 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		pack();
 	}// </editor-fold>//GEN-END:initComponents
 
-	
-		/**
-		 * Opens the frame for new command
-		 * @param evt click on "nouvelle commande" button
-		 */
+	/**
+	 * Opens the frame for new command
+	 *
+	 * @param evt click on "nouvelle commande" button
+	 */
 	private void newCmdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCmdButtonActionPerformed
 
 		newCmdFrame.setVisible(true);
@@ -258,60 +277,71 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	private javax.swing.JButton newCmdButton;
 	// End of variables declaration//GEN-END:variables
 
-		/**
-		 * update date when receiving a log
-		 * @param log 
-		 */
+	/**
+	 * update date when receiving a log
+	 *
+	 * @param log
+	 */
 	@Override
-	public void onReveiveLog(String log) {
-				// if the log starts with STATE, it contains the current situation.
-		if (log.substring(0, 5).equalsIgnoreCase("STATE")) {
+	public void onReveiveLog(String log)
+	{
+		// if the log starts with STATE, it contains the current situation.
+		if (log.substring(0, 5).equalsIgnoreCase("STATE"))
+		{
 			//update the data
 			//the server has sent : STATE-NBA-NBB-NbBoitesProduite-NbPiecesRefusées
 			this.nbCurrentBin = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
-			log = log.substring(0, log.lastIndexOf("-"));			
+			log = log.substring(0, log.lastIndexOf("-"));
 			this.currentBin.setText("Nombre de pièces dans le rebut : " + nbCurrentBin);
-			
+
 			this.nbCurrentBox = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			log = log.substring(0, log.lastIndexOf("-"));
 			this.currentBox.setText("Carton en cours de remplissage : n°" + nbCurrentBox);
-			
+
 			this.palBWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			log = log.substring(0, log.lastIndexOf("-"));
-			
+
 			this.palAWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
-			if (currentLot.equalsIgnoreCase("A")) {
+			if (currentLot.equalsIgnoreCase("A"))
+			{
 				this.lotProgressBar.setValue(nbCurrentBox);
-				this.currentPal.setText((nbCurrentBox/nbBoxPerPal) + "/" + nbPalA + " palettes");
-			} else {
-				this.lotProgressBar.setValue(nbCurrentBox);
-				this.currentPal.setText((nbCurrentBox/nbBoxPerPal) + "/" + nbPalB + " palettes");
+				this.currentPal.setText((nbCurrentBox / nbBoxPerPal) + "/" + nbPalA + " palettes");
 			}
-						
-						//updates the data of the newCmdFrame
-						if (newCmdFrame != null)
-						{
-							newCmdFrame.setPalAWarehouse(palAWarehouse);
-							newCmdFrame.setPalBWarehouse(palBWarehouse);
-						}
-		} else {
+			else
+			{
+				this.lotProgressBar.setValue(nbCurrentBox);
+				this.currentPal.setText((nbCurrentBox / nbBoxPerPal) + "/" + nbPalB + " palettes");
+			}
+
+			//updates the data of the newCmdFrame
+			if (newCmdFrame != null)
+			{
+				newCmdFrame.setPalAWarehouse(palAWarehouse);
+				newCmdFrame.setPalBWarehouse(palBWarehouse);
+			}
+		}
+		else
+		{
 			//it is a log, we add it in the TextArea
 			addLog(log);
 			logTextArea.setCaretPosition(logTextArea.getDocument().getLength());
 		}
 	}
 	ErrorPopup ep = new ErrorPopup();
-	
-		/**
-		 * When receiving an error, checks what time of error it is
-		 * @param error type of error
-		 */
+
+	/**
+	 * When receiving an error, checks what time of error it is
+	 *
+	 * @param error type of error
+	 */
 	@Override
-	public void onReceiveError(ThreadLog.ERROR error) {
+	public void onReceiveError(ThreadLog.ERROR error)
+	{
 		String err = "";
 		this.currentErrorState = true;
-		
-		switch (error) {
+
+		switch (error)
+		{
 			case BOX:
 				err = "Carton manquant.";
 				break;
@@ -339,22 +369,24 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.ep.setVisible(true);
 		this.setVisible(false);
 	}
-	
-		/**
-		 * Sets current error state
-		 * @param errorState if true, there is an error. If false, everything is ok
-		 */
-	public void setCurrentErrorState(boolean errorState) {
+
+	/**
+	 * Sets current error state
+	 *
+	 * @param errorState if true, there is an error. If false, everything is ok
+	 */
+	public void setCurrentErrorState(boolean errorState)
+	{
 		this.currentErrorState = errorState;
 	}
-		
 	GameOverPopup goPopup = null;
-	
-		/**
-		 * Method after GameOver signal received in the log socket
-		 */
+
+	/**
+	 * Method after GameOver signal received in the log socket
+	 */
 	@Override
-	public void onGameOver() {
+	public void onGameOver()
+	{
 		this.setVisible(false);
 		this.newCmdFrame.setVisible(false);
 		this.goPopup.setVisible(true);

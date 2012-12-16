@@ -26,15 +26,13 @@ void *doControl(void *p) {
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
 	/* MAIN LOOP **************************************************************/
-	for (;;)
-	{
+	for (;;) {
 		/* Wait for a command */
 		mq_receive(mboxControl, msg, MAX_MSG_LEN, NULL);
 		DBGPRINT("doControl", "Main", "Received a message");
 		DBGPRINT("doControl", "Main", msg);
-		switch (msg[0])
-		{
-			/* Error case */
+		switch (msg[0]) {
+				/* Error case */
 			case ERR:
 			{
 				/* Stop the valve on error */
@@ -42,33 +40,32 @@ void *doControl(void *p) {
 				/* Then log the error such a way that the network client can parse it easily (prefix + error) */
 				memset(errMsg, 0, MAX_MSG_LEN);
 				strcat(errMsg, ERR_LOG_PREFIX);
-				strcat(errMsg, msg+1 /* skip the first char of the char[] */);
-				/* Error msg is now ready to be logged */ 
+				strcat(errMsg, msg + 1 /* skip the first char of the char[] */);
+				/* Error msg is now ready to be logged */
 				LOG_ERR(errMsg);
 
-				switch (msg[1])
-				{
-					/* Print */
+				switch (msg[1]) {
+						/* Print */
 					case PRINT:
 						/* Block parts packager */
 						LOCK(Box);
 						break;
-					/* Palette maker : palette is not here */
+						/* Palette maker : palette is not here */
 					case PALETTE:
 						/* Block print */
 						LOCK(Palette);
 						break;
-					/* Palette maker : queue is full */
+						/* Palette maker : queue is full */
 					case PALETTE_QUEUE:
 						/* Block print */
 						LOCK(Print);
 						break;
-					/* Warehouse */
+						/* Warehouse */
 					case WAREHOUSE:
 						/* Block palette maker */
 						LOCK(Palette);
 						break;
-					/* Box maker : the refused rate is too high */
+						/* Box maker : the refused rate is too high */
 					case BOX_REFUSED_RATE:
 						/* Block box maker */
 						LOCK(Box);
@@ -76,15 +73,15 @@ void *doControl(void *p) {
 				}
 			}
 				break;
-			/* Solving errors */
-			/* Relaunch all tasks (tasks that were not blocked will not see anything) */
+				/* Solving errors */
+				/* Relaunch all tasks (tasks that were not blocked will not see anything) */
 			case SOLVE:
 				UNLOCK(Box);
 				UNLOCK(Palette);
 				UNLOCK(Print);
 				UNLOCK(Valve);
 				break;
-			/* Stop app */
+				/* Stop app */
 			case 'Q':
 				LOCK(Valve);
 				stopApplication();
@@ -116,7 +113,7 @@ static void parseInitMessage(char* buffer) {
 	INCLUDE(Box)
 	INIT_LOGGER();
 
-	
+
 	/* Reading init */
 	token = strtok_r(buffer, "-", &saveptr1);
 	if (token == NULL || strcmp(token, INIT_BATCH)) {
@@ -143,7 +140,7 @@ static void parseInitMessage(char* buffer) {
 
 	/* Reading refused part */
 	token = strtok_r(NULL, "-", &saveptr1);
-	if (token == NULL && (nbRefusedPart = atoi(token))!=0) {
+	if (token == NULL && (nbRefusedPart = atoi(token)) != 0) {
 		/* errorMsg = "Bad batch initialisation message : ";
 		strcat(errorMsg, buffer); */
 		LOG("Bad batch initialisation message : missing/malformated refused part number");
@@ -189,7 +186,7 @@ static void parseInitMessage(char* buffer) {
 	MAX_REFUSED_PARTS_BY_BOX = nbRefusedPart;
 	/* Initializing compters */
 	CurrentProducedBoxes = 0;
-	CurrentBatchRefusedPartsNumber=0;
+	CurrentBatchRefusedPartsNumber = 0;
 	/* Starting production */
 	UNLOCK(Box);
 	UNLOCK(Palette);
@@ -219,7 +216,7 @@ static void stopApplication() {
 	/* Waiting for simulation threads to end */
 	UNLOCK(Valve);
 	usleep(300 * 1000); //* 0.3s > 0.2s (interval between each part)
-	
+
 	/* Unlocking other tasks
 	   Warehouse... */
 	sem_post(&SemWarehouse);
@@ -235,6 +232,6 @@ static void stopApplication() {
 	UNLOCK(Box);
 
 	/* Note : No need to terminate doCommunication as it terminates by itself on shutdown order. */
-	
-	
+
+
 }

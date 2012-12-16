@@ -32,7 +32,7 @@ int PrintPaletteQueueValue = 0;
 int AStock = 0, BStock = 0; /* globals for storing the current stock of A/B palettes (integer = number of palettes of A or B that we currently have in stock) */
 
 batch_type CurrentBatchType;
-int CurrentBatchProdMax = 100;/* number of palettes we have to produce for the current batch */
+int CurrentBatchProdMax = 100; /* number of palettes we have to produce for the current batch */
 int CurrentProducedBoxes = 0;
 int CurrentBatchRefusedPartsNumber = 0;
 
@@ -59,7 +59,7 @@ static mqd_t mboxControl;
 #include "time.h"
 #endif
 
- /* To stop everything in case of emergency */
+/* To stop everything in case of emergency */
 static void handler_alert(int);
 
 /* Main function
@@ -68,11 +68,11 @@ static void handler_alert(int);
 int main(int argc, char** argv) {
 	pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
 	mqd_t mboxCommunication, mboxLogs, mboxPalletStore;
-	#ifdef SIMU_MODE
+#ifdef SIMU_MODE
 	pthread_t tSimuNewPart;
-	#endif
+#endif
 	signal(SIGINT, handler_alert);
-	
+
 	/* We block everything at the beginning in order to receive potential errors later and be able to send them to the client */
 	LOCK(Box);
 	LOCK(Palette);
@@ -97,7 +97,7 @@ int main(int argc, char** argv) {
 	mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 
 	/* Wait */
-	
+
 	pthread_create(&tLog, NULL, doLog, NULL);
 	pthread_create(&tControl, NULL, doControl, NULL);
 	pthread_create(&tWarehouse, NULL, doWarehouse, NULL);
@@ -108,10 +108,10 @@ int main(int argc, char** argv) {
 #ifdef SIMU_MODE
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);
 #endif
-	
+
 	/* char* msg = "INIT-A-3-40-8-1";
 	   mq_send(mboxControl,msg,strlen(msg),MSG_HIGH_PRIORITY); */
-	
+
 	/* Wait for end of threads */
 	pthread_join(tCommunication, NULL);
 	pthread_join(tBox, NULL);
@@ -140,9 +140,8 @@ int main(int argc, char** argv) {
 	return (EXIT_SUCCESS);
 }
 
- /* To stop everything in case of emergency */
-static void handler_alert(int n)
-{
+/* To stop everything in case of emergency */
+static void handler_alert(int n) {
 	LOCK(Box);
 	LOCK(Palette);
 	LOCK(Print);

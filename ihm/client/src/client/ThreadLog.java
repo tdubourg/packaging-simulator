@@ -1,4 +1,3 @@
-
 package client;
 
 import IHM.ManagementFrame;
@@ -11,12 +10,12 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ThreadLog extends Thread {
+public class ThreadLog extends Thread
+{
 
 	InetAddress serverAddress;
 	Socket socketCommand;
 	int serverPort;
-
 	private final static String ERROR_BOX = "ERROR B";
 	private final static String ERROR_PALETTE = "ERROR P";
 	private final static String ERROR_PRINT = "ERROR A";
@@ -25,19 +24,21 @@ public class ThreadLog extends Thread {
 	private final static String ERROR_BOX_REFUSED = "ERROR R";
 	private final static String ERROR_GAME_OVER = "GAME OVER";
 	private final static String ERROR_EMERGENCY_STOP = "EMERGENCY_STOP_OCCURED";
-	
-	public enum ERROR {
+
+	public enum ERROR
+	{
+
 		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED, EMERGENCY_STOP
 	};
-		
 	private WeakReference<LogReceiver> logListener;
 
 	/**
-	 * constructor of thread
-	 * creates the command socket
-	 * @throws IOException 
+	 * constructor of thread creates the command socket
+	 *
+	 * @throws IOException
 	 */
-	public ThreadLog() throws IOException {
+	public ThreadLog() throws IOException
+	{
 		serverAddress = InetAddress.getLocalHost();
 		serverPort = 30035;
 		//socket creation
@@ -46,74 +47,93 @@ public class ThreadLog extends Thread {
 
 	/**
 	 * sets the log receiver
+	 *
 	 * @param logListener logListener
 	 */
-	public void setLogReceiver(LogReceiver logListener) {
+	public void setLogReceiver(LogReceiver logListener)
+	{
 		this.logListener = new WeakReference<>(logListener);
 	}
 
-	public interface LogReceiver {
+	public interface LogReceiver
+	{
 
 		public void onReveiveLog(String log);
 
 		public void onReceiveError(ERROR error);
-		
+
 		public void onGameOver();
 	}
 
 	/**
-	 * Listens on the socket, for new logs pushed from the server
-	 * Pushes the logs towards the logReceiver
-	 * If errors are detected in the log, raises errors
+	 * Listens on the socket, for new logs pushed from the server Pushes the
+	 * logs towards the logReceiver If errors are detected in the log, raises
+	 * errors
 	 */
 	@Override
-	public void run() {
+	public void run()
+	{
 		// Listening on socket
 		BufferedReader in;
 		boolean openedSocket = true;
-		while (openedSocket) {
-			try {
+		while (openedSocket)
+		{
+			try
+			{
 				in = new BufferedReader(new InputStreamReader(socketCommand.getInputStream()));
-				while (in.ready()) {
+				while (in.ready())
+				{
 					String message_distant = in.readLine();
-					if (logListener != null && logListener.get() != null) {
-						switch (message_distant) {
-							case ERROR_BOX: {
+					if (logListener != null && logListener.get() != null)
+					{
+						switch (message_distant)
+						{
+							case ERROR_BOX:
+							{
 								logListener.get().onReceiveError(ERROR.BOX);
 								break;
 							}
-							case ERROR_PALETTE: {
+							case ERROR_PALETTE:
+							{
 								logListener.get().onReceiveError(ERROR.PALETTE);
 								break;
 							}
-							case ERROR_PALETTE_QUEUE: {
+							case ERROR_PALETTE_QUEUE:
+							{
 								logListener.get().onReceiveError(ERROR.PALETTE_QUEUE);
 								break;
 							}
-							case ERROR_PRINT: {
+							case ERROR_PRINT:
+							{
 								logListener.get().onReceiveError(ERROR.PRINT);
 								break;
 							}
-							case ERROR_BOX_REFUSED: {
+							case ERROR_BOX_REFUSED:
+							{
 								logListener.get().onReceiveError(ERROR.BOX_REFUSED);
 								break;
 							}
-							case ERROR_GAME_OVER: {
+							case ERROR_GAME_OVER:
+							{
 								logListener.get().onGameOver();
 								break;
 							}
-							case ERROR_EMERGENCY_STOP: {
+							case ERROR_EMERGENCY_STOP:
+							{
 								logListener.get().onReceiveError(ERROR.EMERGENCY_STOP);
 								break;
 							}
-							default: {
+							default:
+							{
 								logListener.get().onReveiveLog(message_distant);
 								break;
 							}
 						}
 					}
 				}
-			} catch (IOException ex) {
+			}
+			catch (IOException ex)
+			{
 				Logger.getLogger(Command.class.getName()).log(Level.SEVERE, null, ex);
 				openedSocket = false;
 			}

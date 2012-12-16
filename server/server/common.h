@@ -19,7 +19,10 @@
 
 /***** Boolean facilities *****************************************************/
 typedef unsigned char bool;
-typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
+
+typedef enum batch_type_e {
+	NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B
+} batch_type;
 
 #define TRUE 1
 #define FALSE 0
@@ -99,7 +102,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define MSG_HIGH_PRIORITY 3 
 /* Message queue priority for normal message such as logs */
 #define MSG_MEDIUM_PRIORITY 2 
- /* Message queue priority for stop message */
+/* Message queue priority for stop message */
 #define MSG_LOW_PRIORITY 1
 
 /* message to send to every message queue to terminate application */
