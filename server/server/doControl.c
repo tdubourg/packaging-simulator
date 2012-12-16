@@ -8,8 +8,8 @@
 #include "stdio.h"
 #endif
 
-static void stopApplication();
 static void parseInitMessage(char* buffer);
+static void stopApplication();
 
 /*
  * Control thread

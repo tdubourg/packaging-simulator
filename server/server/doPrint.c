@@ -5,23 +5,8 @@
 #include <errno.h>
 
 #ifdef SIMU_MODE
-
-static bool simu_printer_error() {
-	bool printerError = TRUE;
-	FILE * filePrinterError = fopen(SIMU_PRINT_FILE_NAME, "rb");
-
-	if (filePrinterError == NULL) { /* If the file is not found, it means that the printer works correctly */
-		if(errno == ENOENT) {
-			printerError = FALSE;
-		}
-	} else {
-		fclose(filePrinterError);
-	}
-	return printerError;
-}
-
+static bool simu_printer_error();
 #endif
-
 
 void *doPrint(void *p) {
 	INCLUDE(Print)
@@ -74,3 +59,19 @@ void *doPrint(void *p) {
 		sem_post(&SemSyncBoxPrint);
 	}
 }
+
+#ifdef SIMU_MODE
+static bool simu_printer_error() {
+	bool printerError = TRUE;
+	FILE * filePrinterError = fopen(SIMU_PRINT_FILE_NAME, "rb");
+
+	if (filePrinterError == NULL) { /* If the file is not found, it means that the printer works correctly */
+		if(errno == ENOENT) {
+			printerError = FALSE;
+		}
+	} else {
+		fclose(filePrinterError);
+	}
+	return printerError;
+}
+#endif
