@@ -234,7 +234,7 @@ static void stopApplication() {
 	/* Closing Log thread */
 	mq_send(mboxLogs, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
-	//* Note : No need to terminate doCommunication as it terminates by itself on shutdown order.
+	/* Note : No need to terminate doCommunication as it terminates by itself on shutdown order. */
 	
 	
 }
