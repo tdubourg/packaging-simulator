@@ -52,7 +52,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
         
         if (management.getOnProduction() == false)
         {
-            cancelButton.setVisible(false);
+            cancelButton.setText("Retour");
         }
     }
 
@@ -207,6 +207,12 @@ public class NewCmdFrame extends javax.swing.JFrame {
         if (management.getOnProduction() == true)
         {
             this.dispose();
+        }
+        else
+        {
+            this.dispose();
+            GameOverPopup gameOver = new GameOverPopup(management, threadCmd);
+            gameOver.setVisible(false);
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
