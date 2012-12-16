@@ -30,6 +30,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	int nbCurrentBox;
 	int nbCurrentBin;
 	String currentLot;
+        //previous situation
+        int previousPalAWarehouse;
+        int previousPalBWarehouse;
+        
 	private ParametersFrame paramsFrame;
 	
 	public void setParamsFrame(ParametersFrame p) {
@@ -47,26 +51,26 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         public int getNbBox() {
                 return nbBox;
         }
-        
-        
-	
+        	
 	public void setParameters(String lot, int qte, int box) {
-		lotProgressBar.setMaximum(qte*box);
-		lotProgressBar.setValue(0);
 		this.currentLot = lot;
                 this.nbBox = box;
-		lotProgressBar.setStringPainted(true);
-		this.descriptionLabel.setText("État de fabrication du lot" + lot);
+		this.descriptionLabel.setText("État de fabrication du lot" + currentLot);
 		//initialization of data
 		if (currentLot.equalsIgnoreCase("A")) {
-			this.palAWarehouse = 0;
-			this.palBWarehouse = 0;
 			this.nbPalA = qte;
 		} else { //lot == "B"
-			this.palAWarehouse = 0;
-			this.palBWarehouse = 0;
 			this.nbPalB = qte;
 		}
+                
+                //progress bar
+                lotProgressBar.setMaximum(qte*box);
+		lotProgressBar.setValue(0);
+                lotProgressBar.setStringPainted(true);
+                
+                //previous situation
+                previousPalAWarehouse = palAWarehouse;
+                previousPalBWarehouse = palBWarehouse;
 	}
 
 	/**
@@ -81,6 +85,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.threadLog = threadLog;
 		threadLog.setLogReceiver(this);
 		this.logTextArea.setEditable(false);
+                //stock initialisation
+                this.palAWarehouse = 0;
+                this.palBWarehouse = 0;
 	}
 	boolean currentErrorState = false;
 	
@@ -252,10 +259,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 			this.palAWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			if (currentLot.equalsIgnoreCase("A")) {
 				this.lotProgressBar.setValue(palAWarehouse*getNbBox());
-				this.currentPal.setText(palAWarehouse + "/" + nbPalA);
+				this.currentPal.setText((palAWarehouse-previousPalAWarehouse) + "/" + nbPalA);
 			} else {
 				this.lotProgressBar.setValue(palBWarehouse*getNbBox());
-				this.currentPal.setText(palBWarehouse + "/" + nbPalB);
+				this.currentPal.setText((palBWarehouse-previousPalBWarehouse) + "/" + nbPalB);
 			}			
 		} else {
 			//it is a log, we add it in the TextArea
