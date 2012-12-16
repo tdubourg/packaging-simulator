@@ -68,9 +68,11 @@ public class ThreadLog extends Thread {
 		public void onGameOver();
 	}
 
-		/**
-		 * the action of the thread
-		 */
+	/**
+	 * Listens on the socket, for new logs pushed from the server
+	 * Pushes the logs towards the logReceiver
+	 * If errors are detected in the log, raises errors
+	 */
 	@Override
 	public void run() {
 		// Listening on socket
