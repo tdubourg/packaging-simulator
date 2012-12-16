@@ -47,10 +47,6 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	public int getPalBWarehouse() {
 		return palBWarehouse;
 	}
-
-        public int getNbBox() {
-                return nbBox;
-        }
         	
 	public void setParameters(String lot, int qte, int box) {
 		this.currentLot = lot;
@@ -258,10 +254,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 			
 			this.palAWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			if (currentLot.equalsIgnoreCase("A")) {
-				this.lotProgressBar.setValue(palAWarehouse*getNbBox());
+				this.lotProgressBar.setValue(nbCurrentBox);
 				this.currentPal.setText((palAWarehouse-previousPalAWarehouse) + "/" + nbPalA);
 			} else {
-				this.lotProgressBar.setValue(palBWarehouse*getNbBox());
+				this.lotProgressBar.setValue(nbCurrentBox);
 				this.currentPal.setText((palBWarehouse-previousPalBWarehouse) + "/" + nbPalB);
 			}			
 		} else {
