@@ -46,7 +46,7 @@ int MAX_BOXES_QUEUE = 10;
 bool needToStop = FALSE;/* @TODO rename this variable (global should start with a capital letter, and a better name might be useful as well) */
 static mqd_t mboxControl;
 
-#include "partsPackager.h"
+#include "doBox.h"
 #include "doCommunication.h"
 #include "doControl.h"
 #include "doLog.h"
