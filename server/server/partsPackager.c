@@ -78,7 +78,7 @@ void* partsPackager(void*a) {
 	for (;;) {
 		CHECK_WAIT_BOOL(Box);
 		CHECK_FOR_APP_END_AND_STOP("Box");
-		DBG("partsPackager", "Main", "Task is unlocked.");
+		DBGPRINT("partsPackager", "Main", "Task is unlocked.");
 		
 		bool boxIsMissing = TRUE;
 #ifdef SIMU_MODE
@@ -88,7 +88,7 @@ void* partsPackager(void*a) {
 		if(boxIsMissing) {
 			//* Closing the valve
 			SET(Valve, TRUE);
-			DBG("partsPackager", "Main", "Closing valve.");
+			DBGPRINT("partsPackager", "Main", "Closing valve.");
 			LOG("partsPackager: Missing box, ERROR.");
 			SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 			
@@ -108,18 +108,18 @@ void* partsPackager(void*a) {
 #endif
 		if (!refused) //* Part is accepted
 		{
-			DBG("partsPackager", "Main", "New accepted part.");
+			DBGPRINT("partsPackager", "Main", "New accepted part.");
 			LOG("partsPackager: New accepted part.");
 			//* There's a new part to put in that freaking box:
 			currentBoxPartsNumber = (currentBoxPartsNumber + 1) % PARTS_BY_BOX;
-			DBG("partsPackager", "Main", "currentBoxPartsNumber=");
+			DBGPRINT("partsPackager", "Main", "currentBoxPartsNumber=");
 #ifdef DBG
 			printf("%d\n", currentBoxPartsNumber);
 #endif
 
 			if (!currentBoxPartsNumber) //* Is the box full?
 			{
-				DBG("partsPackager", "Main", "The box is full");
+				DBGPRINT("partsPackager", "Main", "The box is full");
 				refusedPartsCount = 0; //* Reset refused parts by box counter
 				CurrentProducedBoxes++;
 				if ((CurrentProducedBoxes / BOXES_BY_PALETTE) >= CurrentBatchProdMax)
@@ -133,7 +133,7 @@ void* partsPackager(void*a) {
 				sem_post(&SemPushBoxImp);
 			}
 		} else {
-			DBG("partsPackager", "Main", "New REFUSED part.");
+			DBGPRINT("partsPackager", "Main", "New REFUSED part.");
 			LOG("partsPackager: New REFUSED part.");
 
 			refusedPartsCount++;
@@ -141,8 +141,9 @@ void* partsPackager(void*a) {
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 			{
 				//* Closing the valve
+				refusedPartsCount = 0; //*Resetting the counter, so that when the error is marked as "solved" we don't go back into error mode
 				SET(Valve, TRUE);
-				DBG("partsPackager", "Main", "Closing valve.");
+				DBGPRINT("partsPackager", "Main", "Closing valve.");
 				LOG("partsPackager: Refused rate is too high, ERROR.");
 				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				

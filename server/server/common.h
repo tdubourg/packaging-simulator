@@ -33,14 +33,18 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define FALSE 0
 #define MAX_MSG_LEN 8192
 
+#ifndef DBG
 #define DBG
-
+#endif
+// Uncomment to get a palette queue error
+// #define TEST_PALETTE_QUEUE_ERROR
 #define SIMU_MODE
 
 #ifdef DBG
-#define DBG(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
+#include "stdio.h"
+#define DBGPRINT(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
 #else
-#define DBG(A, B, C);  
+#define DBGPRINT(A, B, C);  
 #endif
 
 /* Kind of messages *********************************/
@@ -48,6 +52,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR 'E'
 /* The message is a solve, it will unlock something */
 #define SOLVE 'S'
+#define SOLVE_MESSAGE "S"
 /****************************************************/
 
 /* Subjects *****************************************/
@@ -131,7 +136,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 //* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return)
 #define CHECK_FOR_APP_END_AND_STOP(V); if (TRUE == needToStop)\
 				{\
-					DBG(V, "Main", "Ending current task");\
+					DBGPRINT(V, "Main", "Ending current task");\
 					return;\
 				}
 #define INIT_CHECK_FOR_APP_END(); extern bool needToStop;

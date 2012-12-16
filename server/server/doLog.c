@@ -26,7 +26,8 @@ void *doLog(void *p) {
 			perror("doLog: Failed to receive");
 		} else {
 			if (!strcmp(buffer, STOP_MESSAGE_QUEUE)) {
-				DBG("doLog", "Main", "Receiving stop message");
+				DBGPRINT("doLog", "Main", "Receiving stop message");
+				return; //* Ending the thread
 			} else {
 
 				printf("[LogThread] Data: %s %d\n", buffer, bytes_read);

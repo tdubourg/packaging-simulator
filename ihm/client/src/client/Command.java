@@ -21,6 +21,8 @@ public class Command {
 	
 	final static String INIT_MSG_PREFIX = "INIT";
 	final static String CMD_MSG_PREFIX = "CMD";
+	final static String RESTART_MSG_PREFIX = "RESTART";
+	final static String SHUTDOWN_MSG_PREFIX = "SHUTDOWN";
 
     InetAddress serverAddress;
     Socket socketCommand;
@@ -101,11 +103,19 @@ public class Command {
     }
 
 	public void sendRestartProd() {
+		this.sendSimpleCommand(RESTART_MSG_PREFIX);
+	}
+
+	public void sendShutdown() {
+		this.sendSimpleCommand(SHUTDOWN_MSG_PREFIX);
+	}
+
+	private void sendSimpleCommand(String commandPrefix) {
 		PrintWriter out;
 		String toSend;
 		BufferedReader in;
 		try {
-			toSend = "R\r\n";
+			toSend = commandPrefix + "\r\n";
 			out = new PrintWriter(socketCommand.getOutputStream());
 			out.print(toSend);
 			out.flush();

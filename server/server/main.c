@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <mqueue.h>
 #include "common.h"
 
 sem_t SemSyncBoxImp;
 sem_t SemPushBoxImp;
 sem_t SemSyncImpPalette;
 sem_t SemSocket;
-sem_t SemStock;
 sem_t SemNewPart;
 sem_t SemWarehouse;
 
@@ -69,10 +69,10 @@ int main(int argc, char** argv) {
 	#endif
 	signal(SIGINT, handler_alert);
 	
-	//* No need to block everything, anyway everything will be hanging on until there is parts coming in
-	SET(Box, FALSE);
-	SET(Palette, FALSE);
-	SET(Imp, FALSE);
+	//* We block everything at the beginning in order to receive potential errors later and be able to send them to the client
+	SET(Box, TRUE);
+	SET(Palette, TRUE);
+	SET(Imp, TRUE);
 	//* Te valve, though, has to be closed, at the start of the app
 	SET(Valve, TRUE);
 
@@ -80,16 +80,17 @@ int main(int argc, char** argv) {
 	sem_init(&SemPushBoxImp, 0, 0);
 	sem_init(&SemSyncImpPalette, 0, 1);
 	sem_init(&SemSocket, 0, 1);
-	sem_init(&SemStock, 0, 1);
 
 
 	sem_init(&SemNewPart, 0, 0);
 
 	// Open message queues
-	mboxCommunication = mq_open(MBOXCOMMUNICATION, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
-	mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
-	mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
-	mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
+	struct mq_attr attr;
+	attr.mq_maxmsg = 1000;
+	mboxCommunication = mq_open(MBOXCOMMUNICATION, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, &attr);
+	mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, &attr);
+	mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, &attr);
+	mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, &attr);
 
 	//wait
 	
@@ -126,7 +127,6 @@ int main(int argc, char** argv) {
 	mq_close(mboxPalletStore);
 
 	// Deleting sems
-	sem_destroy(&SemStock);
 	sem_destroy(&SemSocket);
 	sem_destroy(&SemSyncImpPalette);
 	sem_destroy(&SemSyncBoxImp);
@@ -138,20 +138,10 @@ int main(int argc, char** argv) {
 
 static void handler_alert(int n)
 {
-//	#ifdef DBG
-//	static bool s = FALSE;
-//	s = !s;
-//	if (!s)
-//	{
-//		mq_send(mboxControl, "R", 2, 5);
-//		return;
-//	}
-//	printf("Alert\n");
-//	#endif
 	SET(Box, TRUE);
 	SET(Palette, TRUE);
 	SET(Imp, TRUE);
 	SET(Valve, TRUE);
-	mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
+	INIT_LOGGER();
 	LOG(EMERGENCY_STOP_OCCURED);
 }

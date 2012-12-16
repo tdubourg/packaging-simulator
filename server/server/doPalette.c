@@ -40,6 +40,10 @@ void *doPalette(void *p)
 		CHECK_WAIT_BOOL(Palette);
 		CHECK_FOR_APP_END_AND_STOP("Palette");
 		
+#ifdef TEST_PALETTE_QUEUE_ERROR
+		usleep(100 * 1000 * 1000);
+#endif
+		
 		bool missingPalette = TRUE;
 #ifdef SIMU_MODE
 		missingPalette = simu_missing_palette();
@@ -48,7 +52,7 @@ void *doPalette(void *p)
 		if(missingPalette) {
 			//* Closing the valve
 			SET(Valve, TRUE);
-			DBG("doPalette", "Main", "Closing valve.");
+			DBGPRINT("doPalette", "Main", "Closing valve.");
 			LOG("doPalette: Missing palette, ERROR.");
 			SET(Palette, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
 				
@@ -63,17 +67,17 @@ void *doPalette(void *p)
 		//@TODO Here check that there actually is a palette (sensor simulation)
 		// and in case of error : ERR_MSG()...
 		while (PrintPaletteQueueValue <= 0) { /* We're paused */
-			DBG("doPalette", "Main", "Queue is empty. Nothing to do.");
+			DBGPRINT("doPalette", "Main", "Queue is empty. Nothing to do.");
 			LOG("doPalette: Queue is empty. Nothing to do.");
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
-		DBG("doPalette", "Main", "New box added in palette");
+		DBGPRINT("doPalette", "Main", "New box added in palette");
 		LOG("doPalette: New box added in current palette");
 		--PrintPaletteQueueValue;
 		currentPaletteBoxesNumber = (currentPaletteBoxesNumber + 1) % BOXES_BY_PALETTE;
 		if (!currentPaletteBoxesNumber)
 		{
-			DBG("doPalette", "Main", "The palette is full. Pushing it to the warehouse");
+			DBGPRINT("doPalette", "Main", "The palette is full. Pushing it to the warehouse");
 			LOG("doPalette: The palette is full. Pushing it to the warehouse");
 			sem_post(&SemWarehouse);
 		}

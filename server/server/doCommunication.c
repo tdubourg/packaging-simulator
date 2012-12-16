@@ -82,7 +82,7 @@ void *doPush(void *p) {
 			}
 
 			if (bytes_read == -1) {
-				perror("[CommunicationThread] Failed to recieve from LogThread");
+				perror("[CommunicationThread] Failed to receive from LogThread");
 			} else {
 				strcat(logsBuffer, "\r\n");
 				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
@@ -173,7 +173,7 @@ void *doCommunication(void *p) {
 
 				/*When client restart production after a failure*/
 			} else if (strcmp(buffer, RESTART_CMD) == 0) {
-				mq_send(mboxControl, SOLVE, sizeof (SOLVE), MSG_HIGH_PRIORITY);
+				mq_send(mboxControl, SOLVE_MESSAGE, sizeof (SOLVE_MESSAGE), MSG_HIGH_PRIORITY);
 			} else {
 				/*Pointer used in strtok_r function*/
 				char * saveptr1;
