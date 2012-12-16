@@ -318,13 +318,16 @@ public class ParametersFrame extends javax.swing.JFrame {
 			lot = (String) lotComboBox.getSelectedItem();
 			qte = Integer.parseInt(this.qteTextField.getText());
 
-			//envoi au serveur des infos de paramétrage
-			threadCmd.sendParameters(lot, rebus, box, pal, qte);
-
-			//ouverture de la fenêtre de suivi                    
+			//* Open the window on production progress monitoring
 			this.managementFrame.setParameters(lot, qte, pal);
 			this.setVisible(false);
 			this.managementFrame.setVisible(true);
+			
+			
+			//* Send the parameters to the server :
+			//* /!\ IMPORTANT NOTE /!\ Here we send the parameters AFTER having displayed the ManagementFrame, 
+			//* that way, it will receive potential errors after being visible and will thus hide properly
+			threadCmd.sendParameters(lot, rebus, box, pal, qte);
 		}
 
 	}//GEN-LAST:event_ValidateButtonActionPerformed

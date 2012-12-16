@@ -106,7 +106,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
          */
 	@Override
 	public void setVisible(boolean visibility) {
-		if (currentErrorState) {
+		if (currentErrorState) {//* If we currently are in an error state, then ignore any ask for being visible/keeps being hidden
 			visibility = false;
 		}
 		super.setVisible(visibility);
@@ -277,6 +277,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	@Override
 	public void onReceiveError(ThreadLog.ERROR error) {
 		String err = "";
+		this.currentErrorState = true;
 		
 		switch (error) {
 			case BOX:
@@ -301,9 +302,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.ep.setCommand(threadCmd);
 		this.ep.setMgFrame(this);
 		this.ep.getErrorNameLabel().setText(err);
-		this.currentErrorState = true;
-		this.setVisible(false);
+		//* WARNING /!\ These two following lines have to be in this order. If you ever put the second call before the first one
+		//* then when receiving an error at the very beginning of the logging, the ManagementFrame would not hide
 		this.ep.setVisible(true);
+		this.setVisible(false);
 	}
 	
         /**
