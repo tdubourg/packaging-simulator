@@ -9,6 +9,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Command class will take care of sending commands to the servers. All the
+ * comunication FROM the client TO the server is done by Command
+ */
 public class Command
 {
 

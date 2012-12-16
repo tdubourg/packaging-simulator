@@ -3,7 +3,11 @@ package IHM;
 import client.Command;
 import client.ThreadLog;
 import java.io.IOException;
+import javax.swing.JFrame;
 
+/**
+ * Welcomes the user, sets up things
+ */
 public class WelcomeFrame extends javax.swing.JFrame
 {
 

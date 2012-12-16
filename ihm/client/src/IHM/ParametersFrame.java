@@ -3,7 +3,12 @@ package IHM;
 import client.Command;
 import client.ThreadLog;
 import java.awt.Color;
+import javax.swing.JFrame;
 
+/**
+ * Will allow the user to enter the parameters for the next batch production
+ * (like number of boxes by pallet, number of pallets to produce, etc. ...)
+ */
 public class ParametersFrame extends javax.swing.JFrame
 {
 

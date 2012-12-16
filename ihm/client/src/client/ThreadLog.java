@@ -9,6 +9,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * ThreadLog class is a thread that will take care of receiving the logs pushed
+ * by the server and notify the GUI
+ */
 public class ThreadLog extends Thread
 {
 

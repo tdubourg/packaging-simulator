@@ -3,7 +3,12 @@ package IHM;
 import client.Command;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
+/**
+ * GameOverPopup is a window that will pop-up when the production of the current
+ * batch is over and allow the user to choose what to do now
+ */
 public class GameOverPopup extends javax.swing.JFrame
 {
 

@@ -4,7 +4,12 @@ import client.Command;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
+import javax.swing.JFrame
 
+/**
+ * ErrorPopup is a window that will pop-up when an error is notified to the
+ * ManagementFrame and allow the user to make a choice on what to do now
+ */
 public class ErrorPopup extends javax.swing.JFrame
 {
 
