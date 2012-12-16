@@ -138,16 +138,25 @@ public class NewCmdFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Close the frame after clicking on cancel button
+     * @param evt click on button "annuler"
+     */
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
         this.dispose();
     }//GEN-LAST:event_cancelButtonActionPerformed
 
+    /**
+     * Check if data is correct and send information to the socket after validation of new command
+     * @param evt click on button "valider"
+     */
     private void validationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validationButtonActionPerformed
         Boolean correct = true;
         Boolean dispo = true;
         int nbA;
         int nbB;
         
+        //if nothing is the TextField, puts 0 in it
         if ( aTextField.getText().isEmpty())
         {
             aTextField.setText("0");
@@ -158,6 +167,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
             bTextField.setText("0");
         }
                 
+        //checks if data is correct
         try 
         {
             nbA = Integer.parseInt(aTextField.getText());
@@ -180,6 +190,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
             bErrorLabel.setVisible(true);
         }
         
+        //if data correct
         if (correct == true)
         {
             nbA = Integer.parseInt(aTextField.getText());
@@ -188,7 +199,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
             int aWarehouse = management.getPalAWarehouse();
             int bWarehouse = management.getPalBWarehouse();
             
-            //vérification que les palettes demandées sont dipo
+            //checks if pallets are available in the warehouse
             if (nbA > aWarehouse)
             {
                 dispo=false;
@@ -201,26 +212,25 @@ public class NewCmdFrame extends javax.swing.JFrame {
                 bErrorLabel.setText("Disponibilité : " + bWarehouse);
                 bErrorLabel.setVisible(true);
             }
+            
+            //if available, send the data to server
             if (dispo == true)
             {
-                //envoie message au serveur pour décrémenter le stock
+                //send data to server
                 threadCmd.sendCommand(nbA, nbB);
 
-                //fermeture fenêtre
+                //close frame
                 this.dispose();
-
-                //ouverture fenêtre de confirmation
-                //TODO
             }
         }
     }//GEN-LAST:event_validationButtonActionPerformed
 
     private void aTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aTextFieldActionPerformed
-        // TODO add your handling code here:
+        // nothing to do
     }//GEN-LAST:event_aTextFieldActionPerformed
 
     private void bTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bTextFieldActionPerformed
-        // TODO add your handling code here:
+        // nothing to do
     }//GEN-LAST:event_bTextFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

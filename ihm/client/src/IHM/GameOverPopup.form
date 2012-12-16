@@ -25,7 +25,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel1" max="32767" attributes="0"/>
+                  <Component id="jLabel1" pref="339" max="32767" attributes="0"/>
                   <Component id="jB_NewProd" alignment="1" max="32767" attributes="0"/>
                   <Component id="jB_CommandOnlyMode" alignment="1" max="32767" attributes="0"/>
               </Group>
@@ -44,7 +44,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" pref="86" max="32767" attributes="0"/>
+              <Component id="jLabel1" pref="88" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jB_NewProd" min="-2" pref="54" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>

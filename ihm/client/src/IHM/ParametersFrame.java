@@ -229,17 +229,21 @@ public class ParametersFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 	private void rebusTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rebusTextFieldActionPerformed
-		// TODO add your handling code here:
+		// nothing to do
 	}//GEN-LAST:event_rebusTextFieldActionPerformed
 
 	private void boxTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boxTextFieldActionPerformed
-		// TODO add your handling code here:
+		// nothing to do
 	}//GEN-LAST:event_boxTextFieldActionPerformed
 
 	private void palTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_palTextFieldActionPerformed
-		// TODO add your handling code here:
+		// nothing to do
 	}//GEN-LAST:event_palTextFieldActionPerformed
 
+        /**
+         * saves the parameters of production if data is correct
+         * @param evt click on button "valider"
+         */
 	private void ValidateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ValidateButtonActionPerformed
 		Boolean correct = true;
 		rebusErrorLabel.setVisible(false);
@@ -252,6 +256,7 @@ public class ParametersFrame extends javax.swing.JFrame {
 		int qte;
 		String lot;
 
+                //check if data is correct
 		try {
                         rebus = Integer.parseInt(rebusTextField.getText());
                         if ( rebus <0 )
@@ -305,6 +310,7 @@ public class ParametersFrame extends javax.swing.JFrame {
 			qteErrorLabel.setVisible(true);
 		}
 
+                //if data is correct, send data to socket command
 		if (correct == true) {
 			rebus = Integer.parseInt(rebusTextField.getText());
 			box = Integer.parseInt(boxTextField.getText());
@@ -324,11 +330,11 @@ public class ParametersFrame extends javax.swing.JFrame {
 	}//GEN-LAST:event_ValidateButtonActionPerformed
 
     private void lotComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lotComboBoxActionPerformed
-		// TODO add your handling code here:
+		// nothing to do
     }//GEN-LAST:event_lotComboBoxActionPerformed
 
     private void qteTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_qteTextFieldActionPerformed
-		// TODO add your handling code here:
+		// nothing to do
     }//GEN-LAST:event_qteTextFieldActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton ValidateButton;
