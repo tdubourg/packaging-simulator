@@ -14,24 +14,23 @@
 #include <sys/stat.h>
 #include <mqueue.h>
 
+/* Location of log file */
 #define LOG_FILE_NAME "log.txt" 
 
-#define REFUSAL_RATE_FILE_NAME "refusalRate.txt"
-#define SIMU_BOX_FILE_NAME "missingBox.txt"
-#define SIMU_PRINT_FILE_NAME "printerError.txt"
-#define SIMU_PALETTE_FILE_NAME "missingPalette.txt"
-
+/***** Location of messages queues ********************************************/
 #define MBOXCOMMUNICATION "/MboxCommunication"
 #define MBOXCONTROL "/MboxControl"
 #define MBOXLOGS "/MboxLogs"
 #define MBOXPALLETSTORE "/MboxPalletStore"
+/******************************************************************************/
 
+/***** Boolean facilities *****************************************************/
 typedef unsigned char bool;
 typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define TRUE 1
 #define FALSE 0
-#define MAX_MSG_LEN 8192
+/******************************************************************************/
 
 #ifndef DBG
 #define DBG
@@ -40,22 +39,35 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 /* #define TEST_PALETTE_QUEUE_ERROR */
 #define SIMU_MODE
 
+/***** Debug helpers **********************************************************/
+
+/*** File used to generate an error **********************/
+#define REFUSAL_RATE_FILE_NAME "refusalRate.txt"
+#define SIMU_BOX_FILE_NAME "missingBox.txt"
+#define SIMU_PRINT_FILE_NAME "printerError.txt"
+#define SIMU_PALETTE_FILE_NAME "missingPalette.txt"
+/*********************************************************/
+
 #ifdef DBG
 #include "stdio.h"
 #define DBGPRINT(A, B, C); printf((A));printf("::");printf((B));printf("(): ");printf((C));printf("\n");
 #else
 #define DBGPRINT(A, B, C);  
 #endif
+/******************************************************************************/
 
-/* Kind of messages *********************************/
+/***** Messages ***************************************************************/
+/* Lenght of messages in message queues */
+#define MAX_MSG_LEN 8192
+/*** Kind of messages ************************************/
 /* The message is an error, it will block something */
 #define ERR 'E'
 /* The message is a solve, it will unlock something */
 #define SOLVE 'S'
 #define SOLVE_MESSAGE "S"
-/****************************************************/
+/*********************************************************/
 
-/* Subjects *****************************************/
+/*** Subjects ********************************************/
 #define BOX 'B'
 #define PALETTE 'P'
 #define PRINT 'A'
@@ -64,7 +76,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define PALETTE_QUEUE 'Q'
 /* Box rate */
 #define BOX_REFUSED_RATE 'R'
-/****************************************************/
+/*********************************************************/
 
 /* @TODO: Write a bit of documentation to explain what those constants actually stand for */
 #define ERR_LOG_PREFIX "ERROR "
@@ -73,7 +85,8 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR_PALETTE "EP"
 #define ERR_PRINT "EA"
 #define ERR_WAREHOUSE "EW"
-/* The following error is in the case the doPalette task queue is full and the doPrint one wants to push something to it */
+/* The following error is in the case the doPalette task queue is full and the
+   doPrint one wants to push something to it */
 #define ERR_PALETTE_QUEUE "EQ"
 /* In case the refused rate of the currently packaging box is higher than the limit: */
 #define ERR_BOX_REFUSED_RATE "ER"
@@ -90,30 +103,39 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define EMERGENCY_STOP_OCCURED "EMERGENCY_STOP_OCCURED"
 #define INIT_BATCH "INIT"
+/******************************************************************************/
 
+/***** Variables condition ****************************************************/
 /* Set a value (S: bool) to a variable condtion (V) */
-/* @TODO This is not clear at all, replace this macro by two macros : LOCK(V) and UNLOCK(V) */
-#define SET(V, S) pthread_mutex_lock(&Lock ## V);\
+#define SET(V, S); pthread_mutex_lock(&Lock ## V);\
        Lock ## V ## Value = S;\
        pthread_cond_signal(&Cond ## V);\
        pthread_mutex_unlock(&Lock ## V);
 
+/* Lock a variable condtion (V) */
+#define LOCK(V) SET(V, TRUE)
+/* Unlock a variable condtion (V) */
+#define UNLOCK(V) SET(V, FALSE)
+
 /* This macro basically checks that a "bool" Lock-type variable is FALSE
-   and if it is not, it waits until the variable becomes TRUE (need notification for that, so, use the SET() macro!) */
+   and if it is not, it waits until the variable becomes TRUE (need notification
+   for that, so, use the LOCK() macro!) */
 #define CHECK_WAIT_BOOL(V) pthread_mutex_lock(&Lock ## V);\
 		while(Lock ## V ## Value) {\
 			pthread_cond_wait(&Cond ## V, &Lock ## V);\
 		}\
 		pthread_mutex_unlock(&Lock ## V);
 
-/* Include a variable condition*/
+/* Include a variable condition */
 #define INCLUDE(V) extern pthread_mutex_t Lock ## V;\
 	extern pthread_cond_t Cond ## V;\
 	extern bool Lock ## V ## Value;
 
+/* Include a variable condition which is an integer */
 #define INCLUDE_INTEGER(V) extern pthread_mutex_t Lock ## V;\
 	extern pthread_cond_t Cond ## V;\
 	extern int V ## Value;
+/******************************************************************************/
 
 #define INIT_LOGGER(); mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
 #define INIT_CONTROL(); mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_NONBLOCK);

@@ -41,33 +41,33 @@ void *doControl(void *p) {
 				strcat(errMsg, ERR_LOG_PREFIX);
 				strcat(errMsg, msg+1 /* skip the first char of the char[] */);
 				LOG_ERR(errMsg);
-				SET(Valve, TRUE);
+				LOCK(Valve);
 				switch (msg[1])
 				{
 					/* Print */
 					case PRINT:
 						/* Block parts packager */
-						SET(Box, TRUE);
+						LOCK(Box);
 						break;
 					/* Palette maker : palette is not here */
 					case PALETTE:
 						/* Block print */
-						SET(Palette, TRUE);
+						LOCK(Palette);
 						break;
 					/* Palette maker : queue is full */
 					case PALETTE_QUEUE:
 						/* Block print */
-						SET(Imp, TRUE);
+						LOCK(Imp);
 						break;
 					/* Warehouse */
 					case WAREHOUSE:
 						/* Block palette maker */
-						SET(Palette, TRUE);
+						LOCK(Palette);
 						break;
 					/* Box maker : the refused rate is too high */
 					case BOX_REFUSED_RATE:
 						/* Block box maker */
-						SET(Box, TRUE);
+						LOCK(Box);
 						break;
 				}
 				free(errMsg);
@@ -76,14 +76,14 @@ void *doControl(void *p) {
 			/* Solving errors */
 			/* Relaunch all tasks (tasks that were not blocked will not see anything) */
 			case SOLVE:
-				SET(Box, FALSE);
-				SET(Palette, FALSE);
-				SET(Imp, FALSE);
-				SET(Valve, FALSE);
+				UNLOCK(Box);
+				UNLOCK(Palette);
+				UNLOCK(Imp);
+				UNLOCK(Valve);
 				break;
 			/* Stop app */
 			case 'Q':
-				SET(Valve, TRUE);
+				LOCK(Valve);
 				stopApplication();
 				/* Stopping this thread */
 				return;
@@ -188,10 +188,10 @@ static void parseInitMessage(char* buffer) {
 	CurrentProducedBoxes = 0;
 	CurrentBatchRefusedPartsNumber=0;
 	/* Starting production */
-	SET(Box, FALSE);
-	SET(Palette, FALSE);
-	SET(Imp, FALSE);
-	SET(Valve, FALSE);
+	UNLOCK(Box);
+	UNLOCK(Palette);
+	UNLOCK(Imp);
+	UNLOCK(Valve);
 }
 
 static void stopApplication() {
@@ -214,7 +214,7 @@ static void stopApplication() {
 	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
 	/* Waiting for simulation threads to end */
-	SET(Valve, FALSE);
+	UNLOCK(Valve);
 	sleep(1);
 	
 	/* Unlocking other tasks
@@ -222,14 +222,14 @@ static void stopApplication() {
 	sem_post(&SemWarehouse);
 	/* Pallet... */
 	sem_post(&SemSyncImpPalette);
-	SET(Palette, FALSE);
+	UNLOCK(Palette);
 	/* Printer... */
 	sem_post(&SemPushBoxImp);
-	SET(Imp, FALSE);
+	UNLOCK(Imp);
 	/* Parts packager... */
 	sem_post(&SemSyncBoxImp);
 	sem_post(&SemNewPart);
-	SET(Box, FALSE);
+	UNLOCK(Box);
 
 	/* Closing Log thread */
 	mq_send(mboxLogs, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);

@@ -70,11 +70,12 @@ int main(int argc, char** argv) {
 	signal(SIGINT, handler_alert);
 	
 	/* We block everything at the beginning in order to receive potential errors later and be able to send them to the client */
-	SET(Box, TRUE);
-	SET(Palette, TRUE);
-	SET(Imp, TRUE);
+	LOCK(Box);
+	LOCK(Palette);
+	LOCK(Imp);
 	/* The valve, though, has to be closed, at the start of the app */
 	SET(Valve, TRUE);
+	LOCK(Valve);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
 	sem_init(&SemPushBoxImp, 0, 0);
@@ -137,10 +138,10 @@ int main(int argc, char** argv) {
 
 static void handler_alert(int n)
 {
-	SET(Box, TRUE);
-	SET(Palette, TRUE);
-	SET(Imp, TRUE);
-	SET(Valve, TRUE);
+	LOCK(Box);
+	LOCK(Palette);
+	LOCK(Imp);
+	LOCK(Valve);
 	INIT_LOGGER();
 	LOG(EMERGENCY_STOP_OCCURED);
 }

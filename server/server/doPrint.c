@@ -43,10 +43,10 @@ void *doPrint(void *p) {
 #endif
 		if(printerError) {
 			/* Closing the valve */
-			SET(Valve, TRUE);
+			LOCK(Valve);
 			DBGPRINT("doPrint", "Main", "Closing valve.");
 			LOG("doPrint: Printer error, ERROR.");
-			SET(Imp, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+			LOCK(Imp);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 				
 			/* Sending error message */
 			ERR_MSG(ERR_PRINT);
@@ -59,7 +59,7 @@ void *doPrint(void *p) {
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue >= MAX_BOXES_QUEUE) { /* We're paused */
 			/* Error : The queue is full and we have to push a box to it */
-			SET(Imp, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+			LOCK(Imp);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 			/* Sending error message (priority 2) */
 			ERR_MSG(ERR_PALETTE_QUEUE);
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
