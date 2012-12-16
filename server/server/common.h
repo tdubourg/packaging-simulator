@@ -17,7 +17,7 @@
 #define MBOXPALLETSTORE "/MboxPalletStore"
 /******************************************************************************/
 
-
+/* Kind of command */
 typedef enum batch_type_e {
 	NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B
 } batch_type;
