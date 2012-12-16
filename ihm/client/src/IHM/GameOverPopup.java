@@ -149,6 +149,7 @@ public class GameOverPopup extends javax.swing.JFrame {
      */
     private void jB_CommandOnlyModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_CommandOnlyModeActionPerformed
         NewCmdFrame newCmdFrame = new NewCmdFrame(this.managementFrame, this.command);
+        newCmdFrame.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jB_CommandOnlyModeActionPerformed
 

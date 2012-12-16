@@ -36,6 +36,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         //production state
         Boolean onProduction = true;
         
+        //command frame
+        private NewCmdFrame newCmdFrame = null;
+        
 	private ParametersFrame paramsFrame;
         
         /**
@@ -231,6 +234,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
          */
     private void newCmdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCmdButtonActionPerformed
 		NewCmdFrame newCmd = new NewCmdFrame(this, this.threadCmd);
+                this.newCmdFrame = newCmd;
 		newCmd.setVisible(true);
     }//GEN-LAST:event_newCmdButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -272,7 +276,14 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 			} else {
 				this.lotProgressBar.setValue(nbCurrentBox);
 				this.currentPal.setText((palBWarehouse-previousPalBWarehouse) + "/" + nbPalB + " palettes");
-			}			
+			}
+                        
+                        //updates the data of the newCmdFrame
+                        if (newCmdFrame != null)
+                        {
+                            newCmdFrame.setPalAWarehouse(palAWarehouse);
+                            newCmdFrame.setPalBWarehouse(palBWarehouse);
+                        }
 		} else {
 			//it is a log, we add it in the TextArea
 			addLog(log);
