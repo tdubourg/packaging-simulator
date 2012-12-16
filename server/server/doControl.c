@@ -15,7 +15,7 @@ static void parseInitMessage(char* buffer);
  * Control thread
  */
 void *doControl(void *p) {
-	INCLUDE(Imp)
+	INCLUDE(Print)
 	INCLUDE(Palette)
 	INCLUDE(Valve)
 	INCLUDE(Box)
@@ -41,33 +41,33 @@ void *doControl(void *p) {
 				strcat(errMsg, ERR_LOG_PREFIX);
 				strcat(errMsg, msg+1 /* skip the first char of the char[] */);
 				LOG_ERR(errMsg);
-				SET(Valve, TRUE);
+				LOCK(Valve);
 				switch (msg[1])
 				{
 					/* Print */
 					case PRINT:
 						/* Block parts packager */
-						SET(Box, TRUE);
+						LOCK(Box);
 						break;
 					/* Palette maker : palette is not here */
 					case PALETTE:
 						/* Block print */
-						SET(Palette, TRUE);
+						LOCK(Palette);
 						break;
 					/* Palette maker : queue is full */
 					case PALETTE_QUEUE:
 						/* Block print */
-						SET(Imp, TRUE);
+						LOCK(Print);
 						break;
 					/* Warehouse */
 					case WAREHOUSE:
 						/* Block palette maker */
-						SET(Palette, TRUE);
+						LOCK(Palette);
 						break;
 					/* Box maker : the refused rate is too high */
 					case BOX_REFUSED_RATE:
 						/* Block box maker */
-						SET(Box, TRUE);
+						LOCK(Box);
 						break;
 				}
 				free(errMsg);
@@ -76,14 +76,14 @@ void *doControl(void *p) {
 			/* Solving errors */
 			/* Relaunch all tasks (tasks that were not blocked will not see anything) */
 			case SOLVE:
-				SET(Box, FALSE);
-				SET(Palette, FALSE);
-				SET(Imp, FALSE);
-				SET(Valve, FALSE);
+				UNLOCK(Box);
+				UNLOCK(Palette);
+				UNLOCK(Print);
+				UNLOCK(Valve);
 				break;
 			/* Stop app */
 			case 'Q':
-				SET(Valve, TRUE);
+				LOCK(Valve);
 				stopApplication();
 				/* Stopping this thread */
 				return;
@@ -107,7 +107,7 @@ static void parseInitMessage(char* buffer) {
 	extern int CurrentProducedBoxes;
 	extern int CurrentBatchRefusedPartsNumber;
 
-	INCLUDE(Imp)
+	INCLUDE(Print)
 	INCLUDE(Palette)
 	INCLUDE(Valve)
 	INCLUDE(Box)
@@ -188,22 +188,22 @@ static void parseInitMessage(char* buffer) {
 	CurrentProducedBoxes = 0;
 	CurrentBatchRefusedPartsNumber=0;
 	/* Starting production */
-	SET(Box, FALSE);
-	SET(Palette, FALSE);
-	SET(Imp, FALSE);
-	SET(Valve, FALSE);
+	UNLOCK(Box);
+	UNLOCK(Palette);
+	UNLOCK(Print);
+	UNLOCK(Valve);
 }
 
 static void stopApplication() {
 	/* Stopping simulation threads */
 	extern bool needToStop;
 	INCLUDE(Box);
-	INCLUDE(Imp);
+	INCLUDE(Print);
 	INCLUDE(Palette);
 	INCLUDE(Valve);
-	extern sem_t SemSyncBoxImp;
-	extern sem_t SemPushBoxImp;
-	extern sem_t SemSyncImpPalette;
+	extern sem_t SemSyncBoxPrint;
+	extern sem_t SemPushBoxPrint;
+	extern sem_t SemSyncPrintPalette;
 	extern sem_t SemNewPart;
 	extern sem_t SemWarehouse;
 	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_NONBLOCK);
@@ -214,22 +214,22 @@ static void stopApplication() {
 	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
 	/* Waiting for simulation threads to end */
-	SET(Valve, FALSE);
+	UNLOCK(Valve);
 	sleep(1);
 	
 	/* Unlocking other tasks
 	   Warehouse... */
 	sem_post(&SemWarehouse);
 	/* Pallet... */
-	sem_post(&SemSyncImpPalette);
-	SET(Palette, FALSE);
+	sem_post(&SemSyncPrintPalette);
+	UNLOCK(Palette);
 	/* Printer... */
-	sem_post(&SemPushBoxImp);
-	SET(Imp, FALSE);
+	sem_post(&SemPushBoxPrint);
+	UNLOCK(Print);
 	/* Parts packager... */
-	sem_post(&SemSyncBoxImp);
+	sem_post(&SemSyncBoxPrint);
 	sem_post(&SemNewPart);
-	SET(Box, FALSE);
+	UNLOCK(Box);
 
 	/* Closing Log thread */
 	mq_send(mboxLogs, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);

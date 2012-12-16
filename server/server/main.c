@@ -4,15 +4,15 @@
 #include <mqueue.h>
 #include "common.h"
 
-sem_t SemSyncBoxImp;
-sem_t SemPushBoxImp;
-sem_t SemSyncImpPalette;
+sem_t SemSyncBoxPrint;
+sem_t SemPushBoxPrint;
+sem_t SemSyncPrintPalette;
 sem_t SemSocket;
 sem_t SemNewPart;
 sem_t SemWarehouse;
 
 pthread_mutex_t LockBox = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t LockImp = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t LockPrint = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockPalette = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockValve = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t LockPrintPaletteQueue = PTHREAD_MUTEX_INITIALIZER;
@@ -21,11 +21,11 @@ pthread_mutex_t LockWarehouseStorageData = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t CondValve = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondBox = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondPalette = PTHREAD_COND_INITIALIZER;
-pthread_cond_t CondImp = PTHREAD_COND_INITIALIZER;
+pthread_cond_t CondPrint = PTHREAD_COND_INITIALIZER;
 pthread_cond_t CondPrintPaletteQueue = PTHREAD_COND_INITIALIZER;
 
 bool LockBoxValue;
-bool LockImpValue;
+bool LockPrintValue;
 bool LockPaletteValue;
 bool LockValveValue;
 int PrintPaletteQueueValue = 0;
@@ -70,15 +70,16 @@ int main(int argc, char** argv) {
 	signal(SIGINT, handler_alert);
 	
 	/* We block everything at the beginning in order to receive potential errors later and be able to send them to the client */
-	SET(Box, TRUE);
-	SET(Palette, TRUE);
-	SET(Imp, TRUE);
+	LOCK(Box);
+	LOCK(Palette);
+	LOCK(Print);
 	/* The valve, though, has to be closed, at the start of the app */
 	SET(Valve, TRUE);
+	LOCK(Valve);
 
-	sem_init(&SemSyncBoxImp, 0, 1);
-	sem_init(&SemPushBoxImp, 0, 0);
-	sem_init(&SemSyncImpPalette, 0, 1);
+	sem_init(&SemSyncBoxPrint, 0, 1);
+	sem_init(&SemPushBoxPrint, 0, 0);
+	sem_init(&SemSyncPrintPalette, 0, 1);
 	sem_init(&SemSocket, 0, 1);
 
 
@@ -128,8 +129,8 @@ int main(int argc, char** argv) {
 
 	/* Deleting sems */
 	sem_destroy(&SemSocket);
-	sem_destroy(&SemSyncImpPalette);
-	sem_destroy(&SemSyncBoxImp);
+	sem_destroy(&SemSyncPrintPalette);
+	sem_destroy(&SemSyncBoxPrint);
 
 
 	return (EXIT_SUCCESS);
@@ -137,10 +138,10 @@ int main(int argc, char** argv) {
 
 static void handler_alert(int n)
 {
-	SET(Box, TRUE);
-	SET(Palette, TRUE);
-	SET(Imp, TRUE);
-	SET(Valve, TRUE);
+	LOCK(Box);
+	LOCK(Palette);
+	LOCK(Print);
+	LOCK(Valve);
 	INIT_LOGGER();
 	LOG(EMERGENCY_STOP_OCCURED);
 }

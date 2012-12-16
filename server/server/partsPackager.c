@@ -64,8 +64,8 @@ void* partsPackager(void*a) {
 	extern int CurrentProducedBoxes;
 	extern int CurrentBatchRefusedPartsNumber;
 	extern int BOXES_BY_PALETTE;
-	extern sem_t SemSyncBoxImp;
-	extern sem_t SemPushBoxImp;
+	extern sem_t SemSyncBoxPrint;
+	extern sem_t SemPushBoxPrint;
 	extern sem_t SemNewPart;
 	int refusedPartsCount = 0;/* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX) */
 	int currentBoxPartsNumber = 0;
@@ -87,10 +87,10 @@ void* partsPackager(void*a) {
 		
 		if(boxIsMissing) {
 			/* Closing the valve */
-			SET(Valve, TRUE);
+			LOCK(Valve);
 			DBGPRINT("partsPackager", "Main", "Closing valve.");
 			LOG("partsPackager: Missing box, ERROR.");
-			SET(Box, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+			LOCK(Box);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 			
 			/* Sending error message */
 			ERR_MSG(ERR_BOX);
@@ -125,12 +125,12 @@ void* partsPackager(void*a) {
 				if ((CurrentProducedBoxes / BOXES_BY_PALETTE) >= CurrentBatchProdMax)
 				{
 					/* The current batch is over, so close the valve */
-					SET(Valve, TRUE);
+					LOCK(Valve);
 					LOG(PRODUCTION_IS_OVER_MSG);
 				}
 				/* **** "READY TO GO TO PRINTER" SEMAPHORE CHECK */
-				sem_wait(&SemSyncBoxImp);
-				sem_post(&SemPushBoxImp);
+				sem_wait(&SemSyncBoxPrint);
+				sem_post(&SemPushBoxPrint);
 			}
 		} else {
 			DBGPRINT("partsPackager", "Main", "New REFUSED part.");
@@ -142,10 +142,10 @@ void* partsPackager(void*a) {
 			{
 				/* Closing the valve */
 				refusedPartsCount = 0; /* Resetting the counter, so that when the error is marked as "solved" we don't go back into error mode */
-				SET(Valve, TRUE);
+				LOCK(Valve);
 				DBGPRINT("partsPackager", "Main", "Closing valve.");
 				LOG("partsPackager: Refused rate is too high, ERROR.");
-				SET(Box, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+				LOCK(Box);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 				
 				/* Sending error message */
 				ERR_MSG(ERR_BOX_REFUSED_RATE);
