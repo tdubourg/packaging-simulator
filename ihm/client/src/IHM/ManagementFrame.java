@@ -22,9 +22,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	//warehouse disponibility 
 	int palAWarehouse;
 	int palBWarehouse;
-	// number of pallets to produce
+	// number of pallets and box to produce
 	int nbPalA;
 	int nbPalB;
+        int nbBox;
 	//current situation
 	int nbCurrentBox;
 	int nbCurrentBin;
@@ -42,11 +43,18 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	public int getPalBWarehouse() {
 		return palBWarehouse;
 	}
+
+        public int getNbBox() {
+                return nbBox;
+        }
+        
+        
 	
-	public void setParameters(String lot, int qte) {
-		lotProgressBar.setMaximum(qte);
+	public void setParameters(String lot, int qte, int box) {
+		lotProgressBar.setMaximum(qte*box);
 		lotProgressBar.setValue(0);
 		this.currentLot = lot;
+                this.nbBox = box;
 		lotProgressBar.setStringPainted(true);
 		this.descriptionLabel.setText("État de fabrication du lot" + lot);
 		//initialization of data
@@ -243,10 +251,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 			
 			this.palAWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			if (currentLot.equalsIgnoreCase("A")) {
-				this.lotProgressBar.setValue(palAWarehouse);
+				this.lotProgressBar.setValue(palAWarehouse*getNbBox());
 				this.currentPal.setText(palAWarehouse + "/" + nbPalA);
 			} else {
-				this.lotProgressBar.setValue(palBWarehouse);
+				this.lotProgressBar.setValue(palBWarehouse*getNbBox());
 				this.currentPal.setText(palBWarehouse + "/" + nbPalB);
 			}			
 		} else {
