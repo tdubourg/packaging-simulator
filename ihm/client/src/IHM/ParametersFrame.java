@@ -41,6 +41,7 @@ public class ParametersFrame extends javax.swing.JFrame {
 		this.threadCmd = threadCmd;
 		this.threadLog = threadLog;
 		this.managementFrame = new ManagementFrame(this.threadCmd, this.threadLog);
+		this.managementFrame.setParamsFrame(this);
 	}
 
 	/**

@@ -16,10 +16,10 @@ import javax.swing.JFrame;
  */
 public class GameOverPopup extends javax.swing.JFrame {
 
-	private ManagementFrame mgFrame;
+	private ParametersFrame paramsFrame;
 
-	public void setMgFrame(ManagementFrame j) {
-		this.mgFrame = j;
+	public void setParamsFrame(ParametersFrame j) {
+		this.paramsFrame = j;
 	}
 
 	/**
@@ -71,6 +71,7 @@ public class GameOverPopup extends javax.swing.JFrame {
         jB_NewProd = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jB_Shutdown = new javax.swing.JButton();
+        jB_CommandOnlyMode = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,6 +92,13 @@ public class GameOverPopup extends javax.swing.JFrame {
             }
         });
 
+        jB_CommandOnlyMode.setText("Passer en mode \"Commandes uniquement\"");
+        jB_CommandOnlyMode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jB_CommandOnlyModeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,13 +106,14 @@ public class GameOverPopup extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
-                    .addComponent(jB_NewProd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jB_NewProd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jB_CommandOnlyMode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(jB_Shutdown, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                    .addComponent(jB_Shutdown, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         layout.setVerticalGroup(
@@ -114,7 +123,9 @@ public class GameOverPopup extends javax.swing.JFrame {
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jB_NewProd, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(142, 142, 142))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jB_CommandOnlyMode, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76))
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addContainerGap(236, Short.MAX_VALUE)
@@ -132,8 +143,7 @@ public class GameOverPopup extends javax.swing.JFrame {
 	}
 	
     private void jB_NewProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_NewProdActionPerformed
-		this.mgFrame.setCurrentErrorState(false);
-		this.mgFrame.show();
+		this.paramsFrame.show();
 		this.hide();
     }//GEN-LAST:event_jB_NewProdActionPerformed
 
@@ -146,6 +156,10 @@ public class GameOverPopup extends javax.swing.JFrame {
 		}
 		System.exit(0);//* Shutdown the client app
     }//GEN-LAST:event_jB_ShutdownActionPerformed
+
+    private void jB_CommandOnlyModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_CommandOnlyModeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jB_CommandOnlyModeActionPerformed
 
 	/**
 	 * @param
@@ -187,6 +201,7 @@ public class GameOverPopup extends javax.swing.JFrame {
 		});
 	}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jB_CommandOnlyMode;
     private javax.swing.JButton jB_NewProd;
     private javax.swing.JButton jB_Shutdown;
     private javax.swing.JLabel jLabel1;

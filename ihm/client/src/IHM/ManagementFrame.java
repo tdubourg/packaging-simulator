@@ -29,6 +29,11 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	int nbCurrentBox;
 	int nbCurrentBin;
 	String currentLot;
+	private ParametersFrame paramsFrame;
+	
+	public void setParamsFrame(ParametersFrame p) {
+		this.paramsFrame = p;
+	}
 	
 	public int getPalAWarehouse() {
 		return palAWarehouse;
@@ -290,7 +295,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	public void onGameOver() {
 		this.hide();
 		this.goPopup.setCommand(threadCmd);
-		this.goPopup.setMgFrame(this);
+		this.goPopup.setParamsFrame(this.paramsFrame);
 		this.goPopup.show();
 	}
 }
