@@ -93,6 +93,10 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define RESTART_AFTER_EMERGENCY_STOP "R"
 
+/* Special logs that will be parse by the network client */
+#define PRODUCTION_IS_OVER_MSG "GAME OVER"
+#define EMERGENCY_STOP_MSG "EMERGENCY_STOP_OCCURED"
+
 #define MSG_HIGH_PRIORITY 3 /* for errors */
 #define MSG_MEDIUM_PRIORITY 2 /* for normal message such as logs */
 #define MSG_LOW_PRIORITY 1 /* for stop message */
