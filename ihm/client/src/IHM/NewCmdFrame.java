@@ -293,8 +293,8 @@ public class NewCmdFrame extends javax.swing.JFrame {
                     stateLabel.setText("Commande validée. Pour pouvez en saisir une nouvelle.");
                     aWarehouse -= nbA;
                     bWarehouse -= nbB;
-                    productsALabel.setText(""+ aWarehouse);
-                    productsBLabel.setText(""+ bWarehouse);
+                    productsALabel.setText("Produits A : "+ aWarehouse);
+                    productsBLabel.setText("Produits B : "+ bWarehouse);
                 }               
             }
         }
