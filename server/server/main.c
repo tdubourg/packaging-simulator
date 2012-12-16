@@ -46,7 +46,7 @@ int MAX_BOXES_QUEUE = 10;
 bool needToStop = FALSE;/* @TODO rename this variable (global should start with a capital letter, and a better name might be useful as well) */
 static mqd_t mboxControl;
 
-#include "partsPackager.h"
+#include "doBox.h"
 #include "doCommunication.h"
 #include "doControl.h"
 #include "doLog.h"
@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 	pthread_create(&tWarehouse, NULL, doWarehouse, NULL);
 	pthread_create(&tPalette, NULL, doPalette, NULL);
 	pthread_create(&tPrint, NULL, doPrint, NULL);
-	pthread_create(&tBox, NULL, partsPackager, NULL);
+	pthread_create(&tBox, NULL, doBox, NULL);
 	pthread_create(&tCommunication, NULL, doCommunication, NULL);
 #ifdef SIMU_MODE
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);

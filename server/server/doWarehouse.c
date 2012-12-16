@@ -3,6 +3,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define LOG_MSG "doWarehouse: Stored at storageId= %d"
+#define SIZE (sizeof(LOG_MSG) + (sizeof(int) * sizeof(int)))
+
 void *doWarehouse(void *p)
 {
 	/* **** INIT */
@@ -12,6 +15,7 @@ void *doWarehouse(void *p)
 	extern batch_type CurrentBatchType;
 	extern int AStock, BStock;
 	extern pthread_mutex_t LockWarehouseStorageData;
+	char logMessage[SIZE];
 
 	int storageId = -1;
 
@@ -34,13 +38,9 @@ void *doWarehouse(void *p)
 
 		pthread_mutex_unlock(&LockWarehouseStorageData);
 
-#define LOG_MSG "doWarehouse: Stored at storageId= %d"
-		char* logMessage = (char*)malloc(sizeof(LOG_MSG) + 5);
+		memset(logMessage, 0, SIZE);
 		sprintf(logMessage, LOG_MSG, storageId);
 		LOG(logMessage);
 		DBGPRINT("doWarehouse", "Main", "End");
-		free(logMessage);
-#undef LOG_MSG
-		
-	}	
+	}
 }
