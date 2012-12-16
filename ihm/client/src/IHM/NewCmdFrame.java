@@ -148,6 +148,16 @@ public class NewCmdFrame extends javax.swing.JFrame {
         int nbA;
         int nbB;
         
+        if ( aTextField.getText().isEmpty())
+        {
+            aTextField.setText("0");
+        }
+        
+        if ( bTextField.getText().isEmpty())
+        {
+            bTextField.setText("0");
+        }
+                
         try 
         {
             nbA = Integer.parseInt(aTextField.getText());

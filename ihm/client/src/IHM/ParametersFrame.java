@@ -245,6 +245,11 @@ public class ParametersFrame extends javax.swing.JFrame {
                 try 
                 {
                     rebus = Integer.parseInt(rebusTextField.getText());
+                    if ( rebus <0 )
+                    {
+                        correct = false;
+                        rebusErrorLabel.setVisible(true);
+                    }
                 }
                 catch (NumberFormatException e)
                 {
@@ -255,6 +260,11 @@ public class ParametersFrame extends javax.swing.JFrame {
                 try 
                 {
                     box = Integer.parseInt(boxTextField.getText());
+                    if ( box <0 )
+                    {
+                        correct = false;
+                        boxErrorLabel.setVisible(true);
+                    }
                 }
                 catch (NumberFormatException e)
                 {
@@ -265,6 +275,11 @@ public class ParametersFrame extends javax.swing.JFrame {
                 try 
                 {
                     pal = Integer.parseInt(this.palTextField.getText());
+                    if ( pal <0 )
+                    {
+                        correct = false;
+                        palErrorLabel.setVisible(true);
+                    }
                 }
                 catch (NumberFormatException e)
                 {
@@ -275,6 +290,11 @@ public class ParametersFrame extends javax.swing.JFrame {
                 try 
                 {
                     qte = Integer.parseInt(this.qteTextField.getText());
+                    if (qte < 0)
+                    {
+                        correct = false;
+                        qteErrorLabel.setVisible(true);
+                    }
                 }
                 catch (NumberFormatException e)
                 {
