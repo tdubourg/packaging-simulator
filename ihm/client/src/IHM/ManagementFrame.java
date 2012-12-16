@@ -122,7 +122,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		//stock initialisation
 		this.palAWarehouse = 0;
 		this.palBWarehouse = 0;
-		//* Init related frames:
+		// Init related frames:
 		this.goPopup = new GameOverPopup(this, this.threadCmd);
 		this.goPopup.setCommand(threadCmd);
 		this.newCmdFrame = new NewCmdFrame(this, this.threadCmd);
@@ -138,7 +138,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
          */
 	@Override
 	public void setVisible(boolean visibility) {
-		if (currentErrorState) {//* If we currently are in an error state, then ignore any ask for being visible/keeps being hidden
+		if (currentErrorState) {// If we currently are in an error state, then ignore any ask for being visible/keeps being hidden
 			visibility = false;
 		}
 		super.setVisible(visibility);
@@ -342,8 +342,8 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.ep.setCommand(threadCmd);
 		this.ep.setMgFrame(this);
 		this.ep.getErrorNameLabel().setText(err);
-		//* WARNING /!\ These two following lines have to be in this order. If you ever put the second call before the first one
-		//* then when receiving an error at the very beginning of the logging, the ManagementFrame would not hide
+		// WARNING /!\ These two following lines have to be in this order. If you ever put the second call before the first one
+		// then when receiving an error at the very beginning of the logging, the ManagementFrame would not hide
 		this.ep.setVisible(true);
 		this.setVisible(false);
 	}

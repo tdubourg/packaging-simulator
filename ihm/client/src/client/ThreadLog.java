@@ -73,7 +73,7 @@ public class ThreadLog extends Thread {
          */
 	@Override
 	public void run() {
-		//* Listening on socket
+		// Listening on socket
 		BufferedReader in;
 		boolean openedSocket = true;
 		while (openedSocket) {

@@ -216,7 +216,7 @@ static void stopApplication() {
 
 	/* Waiting for simulation threads to end */
 	UNLOCK(Valve);
-	sleep(1);
+	usleep(300 * 1000); //* 0.3s > 0.2s (interval between each part)
 	
 	/* Unlocking other tasks
 	   Warehouse... */
@@ -231,9 +231,6 @@ static void stopApplication() {
 	sem_post(&SemSyncBoxPrint);
 	sem_post(&SemNewPart);
 	UNLOCK(Box);
-
-	/* Closing Log thread */
-	mq_send(mboxLogs, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
 	/* Note : No need to terminate doCommunication as it terminates by itself on shutdown order. */
 	
