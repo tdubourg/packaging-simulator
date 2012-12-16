@@ -36,14 +36,14 @@ public class ThreadLog extends Thread {
 	public enum ERROR {
 		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED, EMERGENCY_STOP
 	};
-        
+		
 	private WeakReference<LogReceiver> listener;
 
-        /**
-         * constructor of thread
-         * creates the command socket
-         * @throws IOException 
-         */
+		/**
+		 * constructor of thread
+		 * creates the command socket
+		 * @throws IOException 
+		 */
 	public ThreadLog() throws IOException {
 		serverAddress = InetAddress.getLocalHost();
 		serverPort = 30035;
@@ -51,10 +51,10 @@ public class ThreadLog extends Thread {
 		socketCommand = new Socket(serverAddress, serverPort);
 	}
 
-        /**
-         * sets the log receiver
-         * @param listener listener
-         */
+		/**
+		 * sets the log receiver
+		 * @param listener listener
+		 */
 	public void setLogReceiver(LogReceiver listener) {
 		this.listener = new WeakReference<>(listener);
 	}
@@ -68,9 +68,11 @@ public class ThreadLog extends Thread {
 		public void onGameOver();
 	}
 
-        /**
-         * the action of the thread
-         */
+	/**
+	 * Listens on the socket, for new logs pushed from the server
+	 * Pushes the logs towards the logReceiver
+	 * If errors are detected in the log, raises errors
+	 */
 	@Override
 	public void run() {
 		// Listening on socket
