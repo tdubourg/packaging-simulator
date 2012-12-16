@@ -1,10 +1,7 @@
 package IHM;
 
-import client.Client;
 import client.Command;
 import client.ThreadLog;
-import javax.swing.JFrame;
-import javax.swing.JProgressBar;
 
 public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.LogReceiver
 {

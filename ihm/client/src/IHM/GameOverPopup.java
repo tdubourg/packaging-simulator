@@ -3,7 +3,6 @@ package IHM;
 import client.Command;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 
 public class GameOverPopup extends javax.swing.JFrame
 {

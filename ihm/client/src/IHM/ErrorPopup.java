@@ -3,7 +3,6 @@ package IHM;
 import client.Command;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class ErrorPopup extends javax.swing.JFrame

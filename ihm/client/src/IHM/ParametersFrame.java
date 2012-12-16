@@ -1,6 +1,5 @@
 package IHM;
 
-import client.Client;
 import client.Command;
 import client.ThreadLog;
 import java.awt.Color;

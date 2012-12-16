@@ -3,8 +3,6 @@ package IHM;
 import client.Command;
 import client.ThreadLog;
 import java.io.IOException;
-import java.net.ConnectException;
-import javax.swing.JProgressBar;
 
 public class WelcomeFrame extends javax.swing.JFrame
 {
