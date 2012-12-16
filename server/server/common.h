@@ -85,12 +85,12 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR_PALETTE "EP" 
 /* Error message notifying that the printer is empty*/
 #define ERR_PRINT "EA" 
-/* Error that should'nt happen*/
+/* Error that shouldn't happen : the Warehouse is full */
 #define ERR_WAREHOUSE "EW" 
 /* The following error is in the case the doPalette task queue is full and the
-   doPrint one wants to push something to it */
+ * doPrint one wants to push something to it */
 #define ERR_PALETTE_QUEUE "EQ"
-/* In case the refused rate of the currently packaging box is higher than the limit: */
+/* In case the refused rate of the currently packaging box is higher than the limit */
 #define ERR_BOX_REFUSED_RATE "ER" 
 
 /* Message sent to the client to notify the end of a batch*/
@@ -127,7 +127,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define UNLOCK(V) SET(V, FALSE)
 
 /* This macro basically checks that a "bool" Lock-type variable is FALSE
-   and if it is not, it waits until the variable becomes TRUE (need notification
+ * and if it is not, it waits until the variable becomes TRUE (need notification
    for that, so, use the LOCK() macro!) */
 #define CHECK_WAIT_BOOL(V) pthread_mutex_lock(&Lock ## V);\
 		while(Lock ## V ## Value) {\
@@ -164,7 +164,8 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 				perror("Error while sending the message to the Control Thread");\
 			}
 
-/* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return) */
+/* Checks for end of the app and returns if end is reached.
+ * This macro is to be launched within the main function of a thread (return) */
 #define CHECK_FOR_APP_END_AND_STOP(V); if (TRUE == needToStop)\
 				{\
 					DBGPRINT(V, "Main", "Ending current task");\
