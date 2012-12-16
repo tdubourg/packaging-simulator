@@ -10,7 +10,6 @@
   This thread also format logs to add time in the begining of each log before writting them in a log file*/
 void *doLog(void *p) {
 
-	/* TODO : define message priority and message format to send to communication Thread. */
 	/* INIT *******************************************************************/
 	char buffer[MAX_MSG_LEN + 1];
 	int bytes_read;
