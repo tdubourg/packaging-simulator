@@ -13,7 +13,7 @@ import java.awt.Color;
  */
 public class NewCmdFrame extends javax.swing.JFrame {
     ManagementFrame management;
-    Command threadCmd;
+    private Command threadCmd;
     
     /**
      * Creates new form NewCmdFrame
@@ -25,6 +25,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
         bErrorLabel.setForeground(Color.red);
         bErrorLabel.setVisible(false);
         this.management = management;
+		this.threadCmd = threadCmd;
     }
 
     /**
