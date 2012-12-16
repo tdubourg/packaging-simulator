@@ -92,6 +92,9 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR_PALETTE_QUEUE "EQ"
 /* In case the refused rate of the currently packaging box is higher than the limit: */
 #define ERR_BOX_REFUSED_RATE "ER" 
+
+/* Message sent to the client to notify the end of a batch*/
+#define PRODUCTION_IS_OVER_MSG "GAME OVER"
 /* Message sent from the client to restart the production after an emergency stop*/
 #define RESTART_AFTER_EMERGENCY_STOP "R" 
 
@@ -108,6 +111,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define STOP_APP "QUIT" 
 /* Message sent from the client to initiate a new batch */
 #define INIT_BATCH "INIT" 
+
 /******************************************************************************/
 
 /***** Variables condition ****************************************************/
@@ -144,19 +148,19 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define INIT_LOGGER(); mqd_t mboxLogger = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
 #define INIT_CONTROL(); mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_NONBLOCK);
-#define LOG(M); if (mq_send(mboxLogger, M, MAX_MSG_LEN, MSG_MEDIUM_PRIORITY)) {\
+#define LOG(M); if (mq_send(mboxLogger, M, sizeof(M), MSG_MEDIUM_PRIORITY)) {\
 					perror("Error while pushing a new log message");\
 				}
 
-#define LOG_ERR(M); if (mq_send(mboxLogger, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
+#define LOG_ERR(M); if (mq_send(mboxLogger, M, sizeof(M), MSG_HIGH_PRIORITY)) {\
 					perror("Error while pushing an error log message");\
 				}
 
-#define ERR_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_HIGH_PRIORITY)) {\
+#define ERR_MSG(M) if(mq_send(mboxControl, M, sizeof(M), MSG_HIGH_PRIORITY)) {\
 				perror("Error while sending the error to the Control Thread");\
 			}
 
-#define CONTROL_MSG(M) if(mq_send(mboxControl, M, MAX_MSG_LEN, MSG_MEDIUM_PRIORITY)) {\
+#define CONTROL_MSG(M) if(mq_send(mboxControl, M, sizeof(M), MSG_MEDIUM_PRIORITY)) {\
 				perror("Error while sending the message to the Control Thread");\
 			}
 

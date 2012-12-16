@@ -38,7 +38,7 @@ void *doControl(void *p) {
 				/* Stop the valve on error */
 				LOCK(Valve);
 				/* Then log the error such a way that the network client can parse it easily (prefix + error) */
-				memset(errMsg, 0, MAX_MSG_LEN)
+				memset(errMsg, 0, MAX_MSG_LEN);
 				strcat(errMsg, ERR_LOG_PREFIX);
 				strcat(errMsg, msg+1 /* skip the first char of the char[] */);
 				/* Error msg is now ready to be logged */ 
