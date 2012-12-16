@@ -59,8 +59,12 @@ static mqd_t mboxControl;
 #include "time.h"
 #endif
 
+ /* To stop everything in case of emergency */
 static void handler_alert(int);
 
+/* Main function
+ * Initializes and destroys all the resources
+ */
 int main(int argc, char** argv) {
 	pthread_t tBox, tCommunication, tControl, tLog, tPalette, tPrint, tWarehouse;
 	mqd_t mboxCommunication, mboxLogs, mboxPalletStore;
@@ -81,7 +85,6 @@ int main(int argc, char** argv) {
 	sem_init(&SemPushBoxPrint, 0, 0);
 	sem_init(&SemSyncPrintPalette, 0, 1);
 	sem_init(&SemSocket, 0, 1);
-
 
 	sem_init(&SemNewPart, 0, 0);
 
@@ -132,10 +135,10 @@ int main(int argc, char** argv) {
 	sem_destroy(&SemSyncPrintPalette);
 	sem_destroy(&SemSyncBoxPrint);
 
-
 	return (EXIT_SUCCESS);
 }
 
+ /* To stop everything in case of emergency */
 static void handler_alert(int n)
 {
 	LOCK(Box);
