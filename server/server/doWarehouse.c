@@ -6,6 +6,9 @@
 #define LOG_MSG "doWarehouse: Stored at storageId= %d"
 #define SIZE (sizeof(LOG_MSG) + (sizeof(int) * sizeof(int)))
 
+/* Main function
+ * Stores the palette into the warehouse and updates the stock data
+ */
 void *doWarehouse(void *p)
 {
 	/* **** INIT */
@@ -24,7 +27,7 @@ void *doWarehouse(void *p)
 		DBGPRINT("doWarehouse", "Main", "is unlocked.");
 		sem_wait(&SemWarehouse);
 		CHECK_FOR_APP_END_AND_STOP("Warehouse");
-		DBGPRINT("doWarehouse", "Main", "New palette to store somwhere");
+		DBGPRINT("doWarehouse", "Main", "New palette to store somewhere");
 		LOG("doWarehouse: New palette to store somewhere");
 		storageId++;
 
