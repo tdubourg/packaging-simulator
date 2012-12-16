@@ -77,29 +77,37 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 /* Box rate */
 #define BOX_REFUSED_RATE 'R'
 /*********************************************************/
-
-/* @TODO: Write a bit of documentation to explain what those constants actually stand for */
-#define ERR_LOG_PREFIX "ERROR "
-#define ERR_BOX "EB"
-/* No palette */
-#define ERR_PALETTE "EP"
-#define ERR_PRINT "EA"
-#define ERR_WAREHOUSE "EW"
+/* Error prefix for all error message sent to the client*/
+#define ERR_LOG_PREFIX "ERROR " 
+/* Error notifying that there is no box to stock the new piece*/
+#define ERR_BOX "EB" 
+/* Error notifying that there is no pallet to stock the new box*/
+#define ERR_PALETTE "EP" 
+/* Error message notifying that the printer is empty*/
+#define ERR_PRINT "EA" 
+/* Error that should'nt happen*/
+#define ERR_WAREHOUSE "EW" 
 /* The following error is in the case the doPalette task queue is full and the
    doPrint one wants to push something to it */
 #define ERR_PALETTE_QUEUE "EQ"
 /* In case the refused rate of the currently packaging box is higher than the limit: */
-#define ERR_BOX_REFUSED_RATE "ER"
+#define ERR_BOX_REFUSED_RATE "ER" 
+/* Message sent from the client to restart the production after an emergency stop*/
+#define RESTART_AFTER_EMERGENCY_STOP "R" 
 
-#define RESTART_AFTER_EMERGENCY_STOP "R"
+/* Message queue priority for errors */
+#define MSG_HIGH_PRIORITY 3 
+/* Message queue priority for normal message such as logs */
+#define MSG_MEDIUM_PRIORITY 2 
+ /* Message queue priority for stop message */
+#define MSG_LOW_PRIORITY 1
 
-#define MSG_HIGH_PRIORITY 3 /* for errors */
-#define MSG_MEDIUM_PRIORITY 2 /* for normal message such as logs */
-#define MSG_LOW_PRIORITY 1 /* for stop message */
-
-#define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
-#define STOP_APP "QUIT"
-#define INIT_BATCH "INIT"
+/* message to send to every message queue to terminate application */
+#define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE" 
+/* Message sent from the client to terminate application */
+#define STOP_APP "QUIT" 
+/* Message sent from the client to initiate a new batch */
+#define INIT_BATCH "INIT" 
 /******************************************************************************/
 
 /***** Variables condition ****************************************************/
