@@ -301,6 +301,8 @@ public class NewCmdFrame extends javax.swing.JFrame {
                     bWarehouse -= nbB;
                     productsALabel.setText("Produits A : "+ aWarehouse);
                     productsBLabel.setText("Produits B : "+ bWarehouse);
+                    aErrorLabel.setVisible(false);
+                    bErrorLabel.setVisible(false);
                 }               
             }
         }
