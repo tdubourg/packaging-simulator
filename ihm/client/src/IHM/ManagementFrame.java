@@ -65,6 +65,14 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         public Boolean getOnProduction() {
             return onProduction;
         }
+
+        /**
+         * Sets the onProduction property
+         * @param onProduction true if production, false if not.
+         */
+        public void setOnProduction(Boolean onProduction) {
+            this.onProduction = onProduction;
+        } 
         
         /**
          * gets the number of pallets B in warehouse
