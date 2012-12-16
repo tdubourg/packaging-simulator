@@ -31,7 +31,7 @@ void *doPalette(void *p)
 	INIT_CONTROL();
 	INIT_CHECK_FOR_APP_END();
 	extern int BOXES_BY_PALETTE;
-	extern sem_t SemSyncImpPalette;
+	extern sem_t SemSyncPrintPalette;
 	extern sem_t SemWarehouse;
 	int currentPaletteBoxesNumber = 0;
 	
@@ -62,7 +62,7 @@ void *doPalette(void *p)
 			continue;
 		}
 
-		sem_wait(&SemSyncImpPalette);
+		sem_wait(&SemSyncPrintPalette);
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue <= 0) { /* We're paused */
 			DBGPRINT("doPalette", "Main", "Queue is empty. Nothing to do.");
@@ -82,6 +82,6 @@ void *doPalette(void *p)
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
 		/* "Sending" the palette to the doWarehouse task */
-		sem_post(&SemSyncImpPalette);
+		sem_post(&SemSyncPrintPalette);
 	}
 }

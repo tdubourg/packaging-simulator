@@ -64,8 +64,8 @@ void* partsPackager(void*a) {
 	extern int CurrentProducedBoxes;
 	extern int CurrentBatchRefusedPartsNumber;
 	extern int BOXES_BY_PALETTE;
-	extern sem_t SemSyncBoxImp;
-	extern sem_t SemPushBoxImp;
+	extern sem_t SemSyncBoxPrint;
+	extern sem_t SemPushBoxPrint;
 	extern sem_t SemNewPart;
 	int refusedPartsCount = 0;/* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX) */
 	int currentBoxPartsNumber = 0;
@@ -129,8 +129,8 @@ void* partsPackager(void*a) {
 					LOG(PRODUCTION_IS_OVER_MSG);
 				}
 				/* **** "READY TO GO TO PRINTER" SEMAPHORE CHECK */
-				sem_wait(&SemSyncBoxImp);
-				sem_post(&SemPushBoxImp);
+				sem_wait(&SemSyncBoxPrint);
+				sem_post(&SemPushBoxPrint);
 			}
 		} else {
 			DBGPRINT("partsPackager", "Main", "New REFUSED part.");

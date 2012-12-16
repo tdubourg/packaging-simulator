@@ -15,7 +15,7 @@ static void parseInitMessage(char* buffer);
  * Control thread
  */
 void *doControl(void *p) {
-	INCLUDE(Imp)
+	INCLUDE(Print)
 	INCLUDE(Palette)
 	INCLUDE(Valve)
 	INCLUDE(Box)
@@ -57,7 +57,7 @@ void *doControl(void *p) {
 					/* Palette maker : queue is full */
 					case PALETTE_QUEUE:
 						/* Block print */
-						LOCK(Imp);
+						LOCK(Print);
 						break;
 					/* Warehouse */
 					case WAREHOUSE:
@@ -78,7 +78,7 @@ void *doControl(void *p) {
 			case SOLVE:
 				UNLOCK(Box);
 				UNLOCK(Palette);
-				UNLOCK(Imp);
+				UNLOCK(Print);
 				UNLOCK(Valve);
 				break;
 			/* Stop app */
@@ -107,7 +107,7 @@ static void parseInitMessage(char* buffer) {
 	extern int CurrentProducedBoxes;
 	extern int CurrentBatchRefusedPartsNumber;
 
-	INCLUDE(Imp)
+	INCLUDE(Print)
 	INCLUDE(Palette)
 	INCLUDE(Valve)
 	INCLUDE(Box)
@@ -190,7 +190,7 @@ static void parseInitMessage(char* buffer) {
 	/* Starting production */
 	UNLOCK(Box);
 	UNLOCK(Palette);
-	UNLOCK(Imp);
+	UNLOCK(Print);
 	UNLOCK(Valve);
 }
 
@@ -198,12 +198,12 @@ static void stopApplication() {
 	/* Stopping simulation threads */
 	extern bool needToStop;
 	INCLUDE(Box);
-	INCLUDE(Imp);
+	INCLUDE(Print);
 	INCLUDE(Palette);
 	INCLUDE(Valve);
-	extern sem_t SemSyncBoxImp;
-	extern sem_t SemPushBoxImp;
-	extern sem_t SemSyncImpPalette;
+	extern sem_t SemSyncBoxPrint;
+	extern sem_t SemPushBoxPrint;
+	extern sem_t SemSyncPrintPalette;
 	extern sem_t SemNewPart;
 	extern sem_t SemWarehouse;
 	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_NONBLOCK);
@@ -221,13 +221,13 @@ static void stopApplication() {
 	   Warehouse... */
 	sem_post(&SemWarehouse);
 	/* Pallet... */
-	sem_post(&SemSyncImpPalette);
+	sem_post(&SemSyncPrintPalette);
 	UNLOCK(Palette);
 	/* Printer... */
-	sem_post(&SemPushBoxImp);
-	UNLOCK(Imp);
+	sem_post(&SemPushBoxPrint);
+	UNLOCK(Print);
 	/* Parts packager... */
-	sem_post(&SemSyncBoxImp);
+	sem_post(&SemSyncBoxPrint);
 	sem_post(&SemNewPart);
 	UNLOCK(Box);
 
