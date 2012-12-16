@@ -25,7 +25,6 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	// number of pallets and box to produce
 	int nbPalA;
 	int nbPalB;
-        int nbBox;
 	//current situation
 	int nbCurrentBox;
 	int nbCurrentBin;
@@ -48,9 +47,8 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		return palBWarehouse;
 	}
         	
-	public void setParameters(String lot, int qte, int box) {
+	public void setParameters(String lot, int qte, int pal) {
 		this.currentLot = lot;
-                this.nbBox = box;
 		this.descriptionLabel.setText("État de fabrication du lot" + currentLot);
 		//initialization of data
 		if (currentLot.equalsIgnoreCase("A")) {
@@ -60,7 +58,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		}
                 
                 //progress bar
-                lotProgressBar.setMaximum(qte*box);
+                lotProgressBar.setMaximum(qte*pal);
 		lotProgressBar.setValue(0);
                 lotProgressBar.setStringPainted(true);
                 
