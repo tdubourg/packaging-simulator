@@ -364,6 +364,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	@Override
 	public void onGameOver() {
 		this.setVisible(false);
+		this.newCmdFrame.setVisible(false);
 		this.goPopup.setVisible(true);
 	}
 }
