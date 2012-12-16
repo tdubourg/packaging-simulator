@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  *
- * @author pierre
+ * @author H4102
  */
 public class Client {
 	

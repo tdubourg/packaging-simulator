@@ -9,7 +9,7 @@ import java.awt.Color;
 
 /**
  *
- * @author Elodie
+ * @author H4102
  */
 public class NewCmdFrame extends javax.swing.JFrame {
 	ManagementFrame management;

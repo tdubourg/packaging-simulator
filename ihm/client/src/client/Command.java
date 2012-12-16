@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Elodie
+ * @author H4102
  */
 public class Command {
 	

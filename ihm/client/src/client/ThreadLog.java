@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Elodie
+ * @author H4102
  */
 public class ThreadLog extends Thread {
 
@@ -37,13 +37,13 @@ public class ThreadLog extends Thread {
 		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED, EMERGENCY_STOP
 	};
 		
-	private WeakReference<LogReceiver> listener;
+	private WeakReference<LogReceiver> logListener;
 
-		/**
-		 * constructor of thread
-		 * creates the command socket
-		 * @throws IOException 
-		 */
+	/**
+	 * constructor of thread
+	 * creates the command socket
+	 * @throws IOException 
+	 */
 	public ThreadLog() throws IOException {
 		serverAddress = InetAddress.getLocalHost();
 		serverPort = 30035;
@@ -51,12 +51,12 @@ public class ThreadLog extends Thread {
 		socketCommand = new Socket(serverAddress, serverPort);
 	}
 
-		/**
-		 * sets the log receiver
-		 * @param listener listener
-		 */
-	public void setLogReceiver(LogReceiver listener) {
-		this.listener = new WeakReference<>(listener);
+	/**
+	 * sets the log receiver
+	 * @param logListener logListener
+	 */
+	public void setLogReceiver(LogReceiver logListener) {
+		this.logListener = new WeakReference<>(logListener);
 	}
 
 	public interface LogReceiver {
@@ -83,38 +83,38 @@ public class ThreadLog extends Thread {
 				in = new BufferedReader(new InputStreamReader(socketCommand.getInputStream()));
 				while (in.ready()) {
 					String message_distant = in.readLine();
-					if (listener != null && listener.get() != null) {
+					if (logListener != null && logListener.get() != null) {
 						switch (message_distant) {
 							case ERROR_BOX: {
-								listener.get().onReceiveError(ERROR.BOX);
+								logListener.get().onReceiveError(ERROR.BOX);
 								break;
 							}
 							case ERROR_PALETTE: {
-								listener.get().onReceiveError(ERROR.PALETTE);
+								logListener.get().onReceiveError(ERROR.PALETTE);
 								break;
 							}
 							case ERROR_PALETTE_QUEUE: {
-								listener.get().onReceiveError(ERROR.PALETTE_QUEUE);
+								logListener.get().onReceiveError(ERROR.PALETTE_QUEUE);
 								break;
 							}
 							case ERROR_PRINT: {
-								listener.get().onReceiveError(ERROR.PRINT);
+								logListener.get().onReceiveError(ERROR.PRINT);
 								break;
 							}
 							case ERROR_BOX_REFUSED: {
-								listener.get().onReceiveError(ERROR.BOX_REFUSED);
+								logListener.get().onReceiveError(ERROR.BOX_REFUSED);
 								break;
 							}
 							case ERROR_GAME_OVER: {
-								listener.get().onGameOver();
+								logListener.get().onGameOver();
 								break;
 							}
 							case ERROR_EMERGENCY_STOP: {
-								listener.get().onReceiveError(ERROR.EMERGENCY_STOP);
+								logListener.get().onReceiveError(ERROR.EMERGENCY_STOP);
 								break;
 							}
 							default: {
-								listener.get().onReveiveLog(message_distant);
+								logListener.get().onReveiveLog(message_distant);
 								break;
 							}
 						}
