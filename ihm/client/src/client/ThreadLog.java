@@ -30,7 +30,6 @@ public class ThreadLog extends Thread
 
 		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED, EMERGENCY_STOP
 	};
-		
 	private WeakReference<LogReceiver> logReceiver;
 
 	/**
@@ -48,9 +47,11 @@ public class ThreadLog extends Thread
 
 	/**
 	 * sets the log receiver
+	 *
 	 * @param logReceiver logReceiver
 	 */
-	public void setLogReceiver(LogReceiver logReceiver) {
+	public void setLogReceiver(LogReceiver logReceiver)
+	{
 		this.logReceiver = new WeakReference<>(logReceiver);
 	}
 
@@ -83,37 +84,47 @@ public class ThreadLog extends Thread
 				while (in.ready())
 				{
 					String message_distant = in.readLine();
-					if (logReceiver != null && logReceiver.get() != null) {
-						switch (message_distant) {
-							case ERROR_BOX: {
+					if (logReceiver != null && logReceiver.get() != null)
+					{
+						switch (message_distant)
+						{
+							case ERROR_BOX:
+							{
 								logReceiver.get().onReceiveError(ERROR.BOX);
 								break;
 							}
-							case ERROR_PALETTE: {
+							case ERROR_PALETTE:
+							{
 								logReceiver.get().onReceiveError(ERROR.PALETTE);
 								break;
 							}
-							case ERROR_PALETTE_QUEUE: {
+							case ERROR_PALETTE_QUEUE:
+							{
 								logReceiver.get().onReceiveError(ERROR.PALETTE_QUEUE);
 								break;
 							}
-							case ERROR_PRINT: {
+							case ERROR_PRINT:
+							{
 								logReceiver.get().onReceiveError(ERROR.PRINT);
 								break;
 							}
-							case ERROR_BOX_REFUSED: {
+							case ERROR_BOX_REFUSED:
+							{
 								logReceiver.get().onReceiveError(ERROR.BOX_REFUSED);
 								break;
 							}
-							case ERROR_GAME_OVER: {
+							case ERROR_GAME_OVER:
+							{
 								logReceiver.get().onGameOver();
 								break;
 							}
-							case ERROR_EMERGENCY_STOP: {
+							case ERROR_EMERGENCY_STOP:
+							{
 								logReceiver.get().onReceiveError(ERROR.EMERGENCY_STOP);
 								break;
 							}
-							default: {
+							default:
+							{
 								logReceiver.get().onReveiveLog(message_distant);
 								break;
 							}
