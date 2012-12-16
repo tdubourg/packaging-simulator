@@ -207,9 +207,9 @@ static void stopApplication() {
 	extern sem_t SemSyncImpPalette;
 	extern sem_t SemNewPart;
 	extern sem_t SemWarehouse;
-	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR);
-	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
-	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
+	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_NONBLOCK);
+	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
+	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR | O_NONBLOCK);
 	needToStop = TRUE;
 
 	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
