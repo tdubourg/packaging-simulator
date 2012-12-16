@@ -15,6 +15,27 @@ public class NewCmdFrame extends javax.swing.JFrame {
     ManagementFrame management;
     private Command threadCmd;
     
+    int palAWarehouse;
+    int palBWarehouse;
+
+    /**
+     * Sets the number of pallets A available
+     * @param palAWarehouse number of pallets available
+     */
+    public void setPalAWarehouse(int palAWarehouse) {
+        this.palAWarehouse = palAWarehouse;
+        this.productsALabel.setText("Produits A : "+ palAWarehouse);
+    }
+
+    /**
+     * Sets the number of pallets B available
+     * @param palBWarehouse number of pallets available
+     */
+    public void setPalBWarehouse(int palBWarehouse) {
+        this.palBWarehouse = palBWarehouse;
+        this.productsBLabel.setText("Produits B : "+ palBWarehouse);
+    }   
+    
     /**
      * Creates new form NewCmdFrame
      */
