@@ -4,21 +4,7 @@
 #include <errno.h>
 
 #ifdef SIMU_MODE
-
-static bool simu_missing_palette() {
-	bool missingPalette = TRUE;
-	FILE * fileMissingPalette = fopen(SIMU_PALETTE_FILE_NAME, "rb");
-
-	if (fileMissingPalette == NULL) { /* If the file is not found, it means that the palette is there */
-		if(errno == ENOENT) {
-			missingPalette = FALSE;
-		}
-	} else {
-		fclose(fileMissingPalette);
-	}
-	return missingPalette;
-}
-
+static bool simu_missing_palette();
 #endif
 
 void *doPalette(void *p)
@@ -85,3 +71,19 @@ void *doPalette(void *p)
 		sem_post(&SemSyncPrintPalette);
 	}
 }
+
+#ifdef SIMU_MODE
+static bool simu_missing_palette() {
+	bool missingPalette = TRUE;
+	FILE * fileMissingPalette = fopen(SIMU_PALETTE_FILE_NAME, "rb");
+
+	if (fileMissingPalette == NULL) { /* If the file is not found, it means that the palette is there */
+		if(errno == ENOENT) {
+			missingPalette = FALSE;
+		}
+	} else {
+		fclose(fileMissingPalette);
+	}
+	return missingPalette;
+}
+#endif
