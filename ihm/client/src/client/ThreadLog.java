@@ -11,10 +11,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author H4102
- */
 public class ThreadLog extends Thread {
 
 	InetAddress serverAddress;

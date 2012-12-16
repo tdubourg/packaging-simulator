@@ -3,19 +3,13 @@ package client;
 
 import IHM.WelcomeFrame;
 import java.io.IOException;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
- *
- * @author H4102
- */
 public class Client {
 	
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) throws IOException {
-		//System.out.println("Hello World !!!");
 		WelcomeFrame frame = new WelcomeFrame();
 		frame.setVisible(true);
 	}

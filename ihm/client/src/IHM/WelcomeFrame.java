@@ -7,11 +7,6 @@ import java.io.IOException;
 import java.net.ConnectException;
 import javax.swing.JProgressBar;
 
-/**
- *
- * @author
- * Elodie
- */
 public class WelcomeFrame extends javax.swing.JFrame {
 
 	/**
