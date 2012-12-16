@@ -8,39 +8,39 @@
 
 void *doLog(void *p) {
 
-	//TODO : define message priority and message format to send to communication Thread.
+	/* TODO : define message priority and message format to send to communication Thread. */
 
 	char buffer[MAX_MSG_LEN + 1];
 	int bytes_read;
 	time_t temps;
 	struct tm date;
 
-	//opening mbox
+	/* Opening mbox */
 	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR);
 
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR | O_NONBLOCK);
 
 	for(;;) {
-		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); //@TODO add comment/documentation for this line
+		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); /* @TODO add comment/documentation for this line */
 		if (bytes_read == -1) {
 			perror("doLog: Failed to receive");
 		} else {
 			if (!strcmp(buffer, STOP_MESSAGE_QUEUE)) {
 				DBGPRINT("doLog", "Main", "Receiving stop message");
-				return; //* Ending the thread
+				return; /* Ending the thread */
 			} else {
 
 				printf("[LogThread] Data: %s %d\n", buffer, bytes_read);
-				//debug
+				/* Debug */
 
-				// retrieving curent time to insert it into formated logs.
+				/* Retrieving curent time to insert it into formatted logs. */
 				time(&temps);
 				date = *localtime(&temps);
 
-				//TODO : keep file and close it once thread end is handled
+				/* TODO : keep file and close it once thread end is handled */
 				FILE *f = fopen(LOG_FILE_NAME, "a+");
 
-				//writting in logg file
+				/* Writing in log file */
 				fprintf(f, "[%02d/%02d/%d|%02d:%02d:%02d] %s\n",
 						date.tm_mday + 1,
 						date.tm_mon + 1,
@@ -52,11 +52,11 @@ void *doLog(void *p) {
 
 				fclose(f);
 
-				//sending the log message to communication thread using the dedicated message queue.
-				mq_send(mboxCom, buffer, bytes_read, MSG_MEDIUM_PRIORITY); //@TODO add comment/documentation for this line, especially the use of bytes_read in a *_send() call
+				/* Sending the log message to communication thread using the dedicated message queue. */
+				mq_send(mboxCom, buffer, bytes_read, MSG_MEDIUM_PRIORITY); /* @TODO add comment/documentation for this line, especially the use of bytes_read in a *_send() call */
 
-				// clearing buffer
-				memset(buffer, 0, bytes_read + 1); //@TODO comment this line
+				/* Clearing buffer */
+				memset(buffer, 0, bytes_read + 1); /* @TODO comment this line */
 			}
 		}
 	}

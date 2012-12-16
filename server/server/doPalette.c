@@ -9,7 +9,7 @@ static bool simu_missing_palette() {
 	bool missingPalette = TRUE;
 	FILE * fileMissingPalette = fopen(SIMU_PALETTE_FILE_NAME, "rb");
 
-	if (fileMissingPalette == NULL) { // If the file is not found, it means that the palette is here
+	if (fileMissingPalette == NULL) { /* If the file is not found, it means that the palette is there */
 		if(errno == ENOENT) {
 			missingPalette = FALSE;
 		}
@@ -23,7 +23,7 @@ static bool simu_missing_palette() {
 
 void *doPalette(void *p)
 {
-	//**** INIT
+	/* **** INIT */
 	INCLUDE(Palette)
 	INCLUDE(Valve)
 	INCLUDE_INTEGER(PrintPaletteQueue)
@@ -35,7 +35,7 @@ void *doPalette(void *p)
 	extern sem_t SemWarehouse;
 	int currentPaletteBoxesNumber = 0;
 	
-	//***** MAIN LOOP
+	/* ***** MAIN LOOP */
 	for(;;) {
 		CHECK_WAIT_BOOL(Palette);
 		CHECK_FOR_APP_END_AND_STOP("Palette");
@@ -50,15 +50,15 @@ void *doPalette(void *p)
 #endif
 		
 		if(missingPalette) {
-			//* Closing the valve
+			/* Closing the valve */
 			SET(Valve, TRUE);
 			DBGPRINT("doPalette", "Main", "Closing valve.");
 			LOG("doPalette: Missing palette, ERROR.");
-			SET(Palette, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+			SET(Palette, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 				
-			// Sending error message
+			/* Sending error message */
 			ERR_MSG(ERR_PALETTE);
-			// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
+			/* Going back to the beginning of the loop and standing still until the doControl thread says otherwise */
 			continue;
 		}
 
@@ -81,7 +81,7 @@ void *doPalette(void *p)
 		}
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
-		//* "Sending" the palette to the doWarehouse task
+		/* "Sending" the palette to the doWarehouse task */
 		sem_post(&SemSyncImpPalette);
 	}
 }

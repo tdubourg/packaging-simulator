@@ -36,8 +36,8 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #ifndef DBG
 #define DBG
 #endif
-// Uncomment to get a palette queue error
-// #define TEST_PALETTE_QUEUE_ERROR
+/* Uncomment to get a palette queue error */
+/* #define TEST_PALETTE_QUEUE_ERROR */
 #define SIMU_MODE
 
 #ifdef DBG
@@ -66,7 +66,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define BOX_REFUSED_RATE 'R'
 /****************************************************/
 
-//@TODO: Write a bit of documentation to explain what those constants actually stand for
+/* @TODO: Write a bit of documentation to explain what those constants actually stand for */
 #define ERR_LOG_PREFIX "ERROR "
 #define ERR_BOX "EB"
 /* No palette */
@@ -81,9 +81,9 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define RESTART_AFTER_EMERGENCY_STOP "R"
 
-#define MSG_HIGH_PRIORITY 3 //for errors
-#define MSG_MEDIUM_PRIORITY 2 // for normal message such as logs
-#define MSG_LOW_PRIORITY 1 // for stop message
+#define MSG_HIGH_PRIORITY 3 /* for errors */
+#define MSG_MEDIUM_PRIORITY 2 /* for normal message such as logs */
+#define MSG_LOW_PRIORITY 1 /* for stop message */
 
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 #define STOP_APP "QUIT"
@@ -92,14 +92,14 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define INIT_BATCH "INIT"
 
 /* Set a value (S: bool) to a variable condtion (V) */
-//* @TODO This is not clear at all, replace this macro by two macros : LOCK(V) and UNLOCK(V)
+/* @TODO This is not clear at all, replace this macro by two macros : LOCK(V) and UNLOCK(V) */
 #define SET(V, S) pthread_mutex_lock(&Lock ## V);\
        Lock ## V ## Value = S;\
        pthread_cond_signal(&Cond ## V);\
        pthread_mutex_unlock(&Lock ## V);
 
-//* This macro basically checks that a "bool" Lock-type variable is FALSE
-//* and if it is not, it waits until the variable becomes TRUE (need notification for that, so, use the SET() macro!)
+/* This macro basically checks that a "bool" Lock-type variable is FALSE
+   and if it is not, it waits until the variable becomes TRUE (need notification for that, so, use the SET() macro!) */
 #define CHECK_WAIT_BOOL(V) pthread_mutex_lock(&Lock ## V);\
 		while(Lock ## V ## Value) {\
 			pthread_cond_wait(&Cond ## V, &Lock ## V);\
@@ -133,7 +133,7 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 				perror("Error while sending the message to the Control Thread");\
 			}
 
-//* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return)
+/* Checks for end of the app and returns if end is reached. This macro is to be launched within the main function of a thread (return) */
 #define CHECK_FOR_APP_END_AND_STOP(V); if (TRUE == needToStop)\
 				{\
 					DBGPRINT(V, "Main", "Ending current task");\

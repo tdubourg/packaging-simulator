@@ -312,6 +312,14 @@ public class ParametersFrame extends javax.swing.JFrame {
 
                 //if data is correct, send data to socket command
 		if (correct == true) {
+            //* The input is correct, so that means we can hide all the errors labels :
+            rebusErrorLabel.setVisible(false);
+            rebusErrorLabelLessOrEqualTo.setVisible(false);
+            boxErrorLabel.setVisible(false);
+            palErrorLabel.setVisible(false);
+            qteErrorLabel.setVisible(false);
+
+            //* The input is correct so thoses lines should not throw any exception
 			rebus = Integer.parseInt(rebusTextField.getText());
 			box = Integer.parseInt(boxTextField.getText());
 			pal = Integer.parseInt(this.palTextField.getText());

@@ -10,7 +10,7 @@ static bool simu_printer_error() {
 	bool printerError = TRUE;
 	FILE * filePrinterError = fopen(SIMU_PRINT_FILE_NAME, "rb");
 
-	if (filePrinterError == NULL) { // If the file is not found, it means that the printer works correctly
+	if (filePrinterError == NULL) { /* If the file is not found, it means that the printer works correctly */
 		if(errno == ENOENT) {
 			printerError = FALSE;
 		}
@@ -42,25 +42,25 @@ void *doPrint(void *p) {
 		printerError = simu_printer_error();
 #endif
 		if(printerError) {
-			//* Closing the valve
+			/* Closing the valve */
 			SET(Valve, TRUE);
 			DBGPRINT("doPrint", "Main", "Closing valve.");
 			LOG("doPrint: Printer error, ERROR.");
-			SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+			SET(Imp, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 				
-			// Sending error message
+			/* Sending error message */
 			ERR_MSG(ERR_PRINT);
-			// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
+			/* Going back to the beginning of the loop and standing still until the doControl thread says otherwise */
 			continue;
 		}
-		//* Waiting for a box to come from the parts packager
+		/* Waiting for a box to come from the parts packager */
 		sem_wait(&SemPushBoxImp);
 		
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue >= MAX_BOXES_QUEUE) { /* We're paused */
-			//* Error : The queue is full and we have to push a box to it
-			SET(Imp, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
-			// Sending error message (priority 2)
+			/* Error : The queue is full and we have to push a box to it */
+			SET(Imp, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+			/* Sending error message (priority 2) */
 			ERR_MSG(ERR_PALETTE_QUEUE);
 			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
 		}
