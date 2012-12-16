@@ -3,7 +3,7 @@ package client;
 
 import IHM.WelcomeFrame;
 import java.io.IOException;
-
+/** Main class, network client application. To be used together with the packaging-simulator server */
 public class Client {
 	
 	/**
