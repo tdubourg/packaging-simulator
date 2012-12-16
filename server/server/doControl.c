@@ -21,7 +21,7 @@ void *doControl(void *p) {
 	INCLUDE(Box)
 	INIT_LOGGER();
 
-	char msg[MAX_MSG_LEN + 1];
+	char msg[MAX_MSG_LEN + 1], errMsg[MAX_MSG_LEN];
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
 	for (;;)
@@ -38,11 +38,10 @@ void *doControl(void *p) {
 				/* Stop the valve on error */
 				LOCK(Valve);
 				/* Then log the error such a way that the network client can parse it easily (prefix + error) */
-				char* errMsg = (char*)malloc(strlen(ERR_LOG_PREFIX) + 2);
-				errMsg[0] = '\0';
+				memset(errMsg, 0, MAX_MSG_LEN)
 				strcat(errMsg, ERR_LOG_PREFIX);
 				strcat(errMsg, msg+1 /* skip the first char of the char[] */);
-				/* Error msg is now ready to be logged : (memory freeing is done after the switch) */ 
+				/* Error msg is now ready to be logged */ 
 				LOG_ERR(errMsg);
 
 				switch (msg[1])
@@ -73,8 +72,6 @@ void *doControl(void *p) {
 						LOCK(Box);
 						break;
 				}
-				/* Release error message dynamically allocated memory */
-				free(errMsg);
 			}
 				break;
 			/* Solving errors */
