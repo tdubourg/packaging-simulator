@@ -19,11 +19,11 @@
 #define RESTART_CMD "RESTART\r\n"
 #define CMD_MSG_PREFIXE "CMD"
 
-void error(const char *msg) {
+static void error(const char *msg) {
 	perror(msg);
 }
 
-void *doPush(void *p) {
+static void *doPush(void *p) {
 
 	extern int AStock, BStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber;
 	extern pthread_mutex_t LockWarehouseStorageData;
