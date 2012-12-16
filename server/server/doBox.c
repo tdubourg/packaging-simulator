@@ -1,54 +1,14 @@
 #include "semaphore.h"
 #include "stdio.h"
 #include "errno.h"
+#include "time.h"
 
 #include "common.h"
 #include "doBox.h"
 
-/* @TODO : Move that to another place, later */
-
 #ifdef SIMU_MODE
-#include "time.h"
-
-static bool simu_refusal() {
-	
-	static bool init = FALSE;
-	int rate;
-	
-	if(!init) {
-		init = TRUE;
-		srand(1024);
-	}
-	FILE * fileRefusalRate = fopen(REFUSAL_RATE_FILE_NAME, "rb");
-	if (fileRefusalRate == NULL) { /* By default, refusal rate = 30% */
-		rate = 30;
-	} else {
-		char read[4];
-		fgets(read, sizeof(read), fileRefusalRate);
-		fclose(fileRefusalRate);
-		rate = atoi(read) % 100;
-	}
-#ifdef DBG
-	printf("Refusal rate : %d\n", rate);
-#endif
-	/* "rate" probability to fail, 100-"rate" to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal())) */
-	return (rand() % 100) < rate;
-}
-
-static bool simu_missing_box() {
-	bool missing = TRUE;
-	FILE * fileMissingBox = fopen(SIMU_BOX_FILE_NAME, "rb");
-
-	if (fileMissingBox == NULL) { /* If the file is not found, it means that the box is there */
-		if(errno == ENOENT) {
-			missing = FALSE;
-		}
-	} else {
-		fclose(fileMissingBox);
-	}
-	return missing;
-}
-
+static bool simu_refusal();
+static bool simu_missing_box();
 #endif
 
 void* doBox(void*a) {
@@ -154,3 +114,44 @@ void* doBox(void*a) {
 	}
 	/* **** END / CLEANING */
 }
+
+#ifdef SIMU_MODE
+static bool simu_refusal() {
+	
+	static bool init = FALSE;
+	int rate;
+	
+	if(!init) {
+		init = TRUE;
+		srand(1024);
+	}
+	FILE * fileRefusalRate = fopen(REFUSAL_RATE_FILE_NAME, "rb");
+	if (fileRefusalRate == NULL) { /* By default, refusal rate = 30% */
+		rate = 30;
+	} else {
+		char read[4];
+		fgets(read, sizeof(read), fileRefusalRate);
+		fclose(fileRefusalRate);
+		rate = atoi(read) % 100;
+	}
+#ifdef DBG
+	printf("Refusal rate : %d\n", rate);
+#endif
+	/* "rate" probability to fail, 100-"rate" to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal())) */
+	return (rand() % 100) < rate;
+}
+
+static bool simu_missing_box() {
+	bool missing = TRUE;
+	FILE * fileMissingBox = fopen(SIMU_BOX_FILE_NAME, "rb");
+
+	if (fileMissingBox == NULL) { /* If the file is not found, it means that the box is there */
+		if(errno == ENOENT) {
+			missing = FALSE;
+		}
+	} else {
+		fclose(fileMissingBox);
+	}
+	return missing;
+}
+#endif
