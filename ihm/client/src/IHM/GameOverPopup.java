@@ -6,11 +6,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 
-/**
- *
- * @author
- * Theo
- */
 public class GameOverPopup extends javax.swing.JFrame {
 
 	private ParametersFrame paramsFrame;

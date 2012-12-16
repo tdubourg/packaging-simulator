@@ -6,11 +6,6 @@ import client.Command;
 import client.ThreadLog;
 import java.awt.Color;
 
-/**
- *
- * @author
- * Elodie
- */
 public class ParametersFrame extends javax.swing.JFrame {
 
 	Command threadCmd;

@@ -10,10 +10,6 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author H4102
- */
 public class Command {
 	
 	final static String INIT_MSG_PREFIX = "INIT";

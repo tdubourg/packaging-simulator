@@ -4,10 +4,6 @@ package IHM;
 import client.Command;
 import java.awt.Color;
 
-/**
- *
- * @author H4102
- */
 public class NewCmdFrame extends javax.swing.JFrame {
 	ManagementFrame management;
 	private Command threadCmd;

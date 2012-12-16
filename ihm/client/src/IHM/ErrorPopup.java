@@ -7,13 +7,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
-/**
- *
- * @author
- * Theo
- */
 public class ErrorPopup extends javax.swing.JFrame {
-
 	
 	/**
 	 * Creates new form ErrorPopup

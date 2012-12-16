@@ -1,10 +1,3 @@
-/* 
- * File:   common.h
- * Author: black
- *
- * Created on December 1, 2012, 1:14 PM
- */
-
 #ifndef COMMON_H
 #define	COMMON_H
 
