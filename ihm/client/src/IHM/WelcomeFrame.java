@@ -6,7 +6,7 @@ import client.ThreadLog;
 import java.io.IOException;
 import java.net.ConnectException;
 import javax.swing.JProgressBar;
-
+/** Welcomes the user, sets up things */
 public class WelcomeFrame extends javax.swing.JFrame {
 
 	/**

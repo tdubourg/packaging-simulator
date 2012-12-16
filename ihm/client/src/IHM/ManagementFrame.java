@@ -6,7 +6,10 @@ import client.Command;
 import client.ThreadLog;
 import javax.swing.JFrame;
 import javax.swing.JProgressBar;
-
+/** ManagementFrame displays the current progression of the production on the serveur together with the logs sent by the server.
+ * It serves as the LogReceiver for the ThreadLog and launches the GameOverPopup and ErrorPopup when needed.
+ * This is the central JFrame, we will go from here to newCmdFrame, GameOverPopup, ErrorPopup...
+ */
 public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.LogReceiver {
 	
 	Command threadCmd;

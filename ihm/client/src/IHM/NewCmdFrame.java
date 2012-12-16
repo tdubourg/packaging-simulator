@@ -3,7 +3,7 @@ package IHM;
 
 import client.Command;
 import java.awt.Color;
-
+/** This class allows the user to make a new order to the server : I want X pallets of type A and Y of type B... */
 public class NewCmdFrame extends javax.swing.JFrame {
 	ManagementFrame management;
 	private Command threadCmd;
