@@ -90,7 +90,6 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 #define ERR_PALETTE_QUEUE "EQ"
 /* In case the refused rate of the currently packaging box is higher than the limit: */
 #define ERR_BOX_REFUSED_RATE "ER"
-#define PRODUCTION_IS_OVER_MSG "GAME OVER"
 
 #define RESTART_AFTER_EMERGENCY_STOP "R"
 
@@ -100,8 +99,6 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 
 #define STOP_MESSAGE_QUEUE "STOP_MESSAGE_QUEUE"
 #define STOP_APP "QUIT"
-
-#define EMERGENCY_STOP_OCCURED "EMERGENCY_STOP_OCCURED"
 #define INIT_BATCH "INIT"
 /******************************************************************************/
 

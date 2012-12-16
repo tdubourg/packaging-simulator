@@ -26,13 +26,11 @@ void *doCommunication(void *p) {
 
 	extern int AStock, BStock;
 	extern pthread_mutex_t LockWarehouseStorageData;
-
-	/*Starting the pushing thread*/
 	pthread_t tPush;
+	INIT_CONTROL();
+	
+	/*Starting the pushing thread*/
 	pthread_create(&tPush, NULL, doPush, NULL);
-
-	/*Set the letter box with the controler*/
-	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 	
 	/*Set the letterBox with push thread*/
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
@@ -82,14 +80,14 @@ void *doCommunication(void *p) {
 
 				/*When client want to shutdown the server*/
 			} else if (strcmp(buffer, SHUTDOWN_CMD) == 0) {
-				mq_send(mboxControl, STOP_APP, sizeof (STOP_APP), MSG_HIGH_PRIORITY);
+				ERR_MSG(STOP_APP)
 				close(newsockfd);
 				close(sockfd);
 				return;
 
 				/*When client restart production after a failure*/
 			} else if (strcmp(buffer, RESTART_CMD) == 0) {
-				mq_send(mboxControl, SOLVE_MESSAGE, sizeof (SOLVE_MESSAGE), MSG_HIGH_PRIORITY);
+				ERR_MSG(SOLVE_MESSAGE)
 			} else {
 				/*Pointer used in strtok_r function*/
 				char * saveptr1;
@@ -116,7 +114,7 @@ void *doCommunication(void *p) {
 					/*If it's not one of the cases above, the message is sent to
 					 *the controler*/
 				} else {
-					mq_send(mboxControl, buffer, sizeof (buffer), MSG_HIGH_PRIORITY);
+					ERR_MSG(buffer)
 				}
 			}
 
