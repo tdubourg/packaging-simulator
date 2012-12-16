@@ -5,9 +5,13 @@
 #include <errno.h>
 
 #ifdef SIMU_MODE
+/* To see if there is a problem with the printer by looking for the file printerError.txt */
 static bool simu_printer_error();
 #endif
 
+/* Main function
+ * Prints a label on the box and then adds it to the palette queue 
+ */
 void *doPrint(void *p) {
 	INCLUDE(Print)
 	INCLUDE(Valve)
@@ -61,6 +65,7 @@ void *doPrint(void *p) {
 }
 
 #ifdef SIMU_MODE
+/* To see if there is a problem with the printer by looking for the file printerError.txt */
 static bool simu_printer_error() {
 	bool printerError = TRUE;
 	FILE * filePrinterError = fopen(SIMU_PRINT_FILE_NAME, "rb");
