@@ -143,5 +143,5 @@ static void handler_alert(int n)
 	LOCK(Print);
 	LOCK(Valve);
 	INIT_LOGGER();
-	LOG(EMERGENCY_STOP_OCCURED);
+	LOG("EMERGENCY_STOP_OCCURED");
 }

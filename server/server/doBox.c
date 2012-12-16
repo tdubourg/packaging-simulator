@@ -86,7 +86,7 @@ void* doBox(void*a) {
 				{
 					/* The current batch is over, so close the valve */
 					LOCK(Valve);
-					LOG(PRODUCTION_IS_OVER_MSG);
+					LOG("GAME OVER");
 				}
 				/* **** "READY TO GO TO PRINTER" SEMAPHORE CHECK */
 				sem_wait(&SemSyncBoxPrint);
