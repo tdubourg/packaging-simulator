@@ -4,9 +4,13 @@
 #include <errno.h>
 
 #ifdef SIMU_MODE
+/* To see if the current palette is missing by looking for the file missingPalette.txt */
 static bool simu_missing_palette();
 #endif
 
+/* Main function
+ * Fills the palette with boxes and then transmits it to the warehouse
+ */
 void *doPalette(void *p)
 {
 	/* **** INIT */
@@ -73,6 +77,7 @@ void *doPalette(void *p)
 }
 
 #ifdef SIMU_MODE
+/* To see if the current palette is missing by looking for the file missingPalette.txt */
 static bool simu_missing_palette() {
 	bool missingPalette = TRUE;
 	FILE * fileMissingPalette = fopen(SIMU_PALETTE_FILE_NAME, "rb");
