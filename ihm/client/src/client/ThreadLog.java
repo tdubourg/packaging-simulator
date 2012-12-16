@@ -30,7 +30,8 @@ public class ThreadLog extends Thread
 
 		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED, EMERGENCY_STOP
 	};
-	private WeakReference<LogReceiver> logListener;
+		
+	private WeakReference<LogReceiver> logReceiver;
 
 	/**
 	 * constructor of thread creates the command socket
@@ -47,12 +48,10 @@ public class ThreadLog extends Thread
 
 	/**
 	 * sets the log receiver
-	 *
-	 * @param logListener logListener
+	 * @param logReceiver logReceiver
 	 */
-	public void setLogReceiver(LogReceiver logListener)
-	{
-		this.logListener = new WeakReference<>(logListener);
+	public void setLogReceiver(LogReceiver logReceiver) {
+		this.logReceiver = new WeakReference<>(logReceiver);
 	}
 
 	public interface LogReceiver
@@ -84,48 +83,38 @@ public class ThreadLog extends Thread
 				while (in.ready())
 				{
 					String message_distant = in.readLine();
-					if (logListener != null && logListener.get() != null)
-					{
-						switch (message_distant)
-						{
-							case ERROR_BOX:
-							{
-								logListener.get().onReceiveError(ERROR.BOX);
+					if (logReceiver != null && logReceiver.get() != null) {
+						switch (message_distant) {
+							case ERROR_BOX: {
+								logReceiver.get().onReceiveError(ERROR.BOX);
 								break;
 							}
-							case ERROR_PALETTE:
-							{
-								logListener.get().onReceiveError(ERROR.PALETTE);
+							case ERROR_PALETTE: {
+								logReceiver.get().onReceiveError(ERROR.PALETTE);
 								break;
 							}
-							case ERROR_PALETTE_QUEUE:
-							{
-								logListener.get().onReceiveError(ERROR.PALETTE_QUEUE);
+							case ERROR_PALETTE_QUEUE: {
+								logReceiver.get().onReceiveError(ERROR.PALETTE_QUEUE);
 								break;
 							}
-							case ERROR_PRINT:
-							{
-								logListener.get().onReceiveError(ERROR.PRINT);
+							case ERROR_PRINT: {
+								logReceiver.get().onReceiveError(ERROR.PRINT);
 								break;
 							}
-							case ERROR_BOX_REFUSED:
-							{
-								logListener.get().onReceiveError(ERROR.BOX_REFUSED);
+							case ERROR_BOX_REFUSED: {
+								logReceiver.get().onReceiveError(ERROR.BOX_REFUSED);
 								break;
 							}
-							case ERROR_GAME_OVER:
-							{
-								logListener.get().onGameOver();
+							case ERROR_GAME_OVER: {
+								logReceiver.get().onGameOver();
 								break;
 							}
-							case ERROR_EMERGENCY_STOP:
-							{
-								logListener.get().onReceiveError(ERROR.EMERGENCY_STOP);
+							case ERROR_EMERGENCY_STOP: {
+								logReceiver.get().onReceiveError(ERROR.EMERGENCY_STOP);
 								break;
 							}
-							default:
-							{
-								logListener.get().onReveiveLog(message_distant);
+							default: {
+								logReceiver.get().onReveiveLog(message_distant);
 								break;
 							}
 						}
