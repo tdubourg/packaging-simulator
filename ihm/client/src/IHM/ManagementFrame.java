@@ -48,6 +48,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
          */
 	public void setParamsFrame(ParametersFrame p) {
 		this.paramsFrame = p;
+		this.goPopup.setParamsFrame(this.paramsFrame);
 	}
 	
         /**
@@ -118,9 +119,16 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.threadLog = threadLog;
 		threadLog.setLogReceiver(this);
 		this.logTextArea.setEditable(false);
-                //stock initialisation
-                this.palAWarehouse = 0;
-                this.palBWarehouse = 0;
+		//stock initialisation
+		this.palAWarehouse = 0;
+		this.palBWarehouse = 0;
+		//* Init related frames:
+		this.goPopup = new GameOverPopup(this, this.threadCmd);
+		this.goPopup.setCommand(threadCmd);
+		this.newCmdFrame = new NewCmdFrame(this, this.threadCmd);
+		this.newCmdFrame.setGoPopup(goPopup);
+		this.goPopup.setCmdFrame(newCmdFrame);
+
 	}
 	boolean currentErrorState = false;
 	
@@ -238,14 +246,14 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+	
         /**
          * Opens the frame for new command
          * @param evt click on "nouvelle commande" button
          */
     private void newCmdButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newCmdButtonActionPerformed
-		NewCmdFrame newCmd = new NewCmdFrame(this, this.threadCmd);
-                this.newCmdFrame = newCmd;
-		newCmd.setVisible(true);
+
+		newCmdFrame.setVisible(true);
     }//GEN-LAST:event_newCmdButtonActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel currentBin;
@@ -348,7 +356,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.currentErrorState = errorState;
 	}
         
-	GameOverPopup goPopup = new GameOverPopup(this, this.threadCmd);
+	GameOverPopup goPopup = null;
 	
         /**
          * Method after GameOver signal received in the log socket
@@ -356,8 +364,6 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	@Override
 	public void onGameOver() {
 		this.setVisible(false);
-		this.goPopup.setCommand(threadCmd);
-		this.goPopup.setParamsFrame(this.paramsFrame);
 		this.goPopup.setVisible(true);
 	}
 }

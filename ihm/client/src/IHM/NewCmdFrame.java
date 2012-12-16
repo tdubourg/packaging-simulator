@@ -52,7 +52,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
         
         if (management.getOnProduction() == false)
         {
-            cancelButton.setText("Retour");
+            backButton.setText("Retour");
         }
     }
 
@@ -69,7 +69,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
         aLabel = new javax.swing.JLabel();
         bLabel = new javax.swing.JLabel();
         validationButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
+        backButton = new javax.swing.JButton();
         aErrorLabel = new javax.swing.JLabel();
         bErrorLabel = new javax.swing.JLabel();
         aTextField = new javax.swing.JTextField();
@@ -97,10 +97,10 @@ public class NewCmdFrame extends javax.swing.JFrame {
             }
         });
 
-        cancelButton.setText("Annuler");
-        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+        backButton.setText("Retour");
+        backButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cancelButtonActionPerformed(evt);
+                backButtonActionPerformed(evt);
             }
         });
 
@@ -155,7 +155,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(validationButton)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(cancelButton))
+                                                .addComponent(backButton))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addComponent(bTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -190,7 +190,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(validationButton)
-                            .addComponent(cancelButton))))
+                            .addComponent(backButton))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(stateLabel)
                 .addGap(20, 20, 20))
@@ -199,22 +199,33 @@ public class NewCmdFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+	private void clearTextFields() {
+		aTextField.setText("");
+		bTextField.setText("");
+	}
+	
+	GameOverPopup goPopup;
+	
+	public void setGoPopup(GameOverPopup p) {
+		goPopup = p;
+	}
+	
     /**
      * Close the frame after clicking on cancel button
      * @param evt click on button "annuler"
      */
-    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        if (management.getOnProduction() == true)
+    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
+        clearTextFields();
+		if (management.getOnProduction() == true)
         {
-            this.dispose();
+            this.management.setVisible(true);
         }
         else
         {
-            this.dispose();
-            GameOverPopup gameOver = new GameOverPopup(management, threadCmd);
-            gameOver.setVisible(false);
+            this.goPopup.setVisible(true);
         }
-    }//GEN-LAST:event_cancelButtonActionPerformed
+		this.setVisible(false);
+    }//GEN-LAST:event_backButtonActionPerformed
 
     /**
      * Check if data is correct and send information to the socket after validation of new command
@@ -222,7 +233,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
      */
     private void validationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_validationButtonActionPerformed
         Boolean correct = true;
-        Boolean dispo = true;
+        Boolean available = true;
         int nbA;
         int nbB;
         
@@ -263,44 +274,46 @@ public class NewCmdFrame extends javax.swing.JFrame {
         //if data correct
         if (correct == true)
         {
-            nbA = Integer.parseInt(aTextField.getText());
+			nbA = Integer.parseInt(aTextField.getText());
             nbB = Integer.parseInt(bTextField.getText());
-
-            int aWarehouse = management.getPalAWarehouse();
-            int bWarehouse = management.getPalBWarehouse();
             
             //checks if pallets are available in the warehouse
-            if (nbA > aWarehouse)
+            if (nbA > palAWarehouse)
             {
-                dispo=false;
-                aErrorLabel.setText("Disponibilité : " + aWarehouse);
+                available=false;
+                aErrorLabel.setText("Disponibilité : " + palAWarehouse);
                 aErrorLabel.setVisible(true);
-            }
-            if (nbB > bWarehouse)
+            } else {
+				aErrorLabel.setVisible(false);
+			}
+            if (nbB > palBWarehouse)
             {
-                dispo=false;
-                bErrorLabel.setText("Disponibilité : " + bWarehouse);
+                available=false;
+                bErrorLabel.setText("Disponibilité : " + palBWarehouse);
                 bErrorLabel.setVisible(true);
-            }
+            } else {
+				bErrorLabel.setVisible(false);
+			}
             
             //if available, send the data to server
-            if (dispo == true)
+            if (available == true)
             {
+				//* Clear text fields
+                clearTextFields();
+
                 //send data to server
                 threadCmd.sendCommand(nbA, nbB);
 
                 //close frame
                 if (management.getOnProduction() == true)
                 {
-                    this.dispose();
-                } else {
-                    aTextField.setText("");
-                    bTextField.setText("");
-                    stateLabel.setText("Commande validée. Pour pouvez en saisir une nouvelle.");
-                    aWarehouse -= nbA;
-                    bWarehouse -= nbB;
-                    productsALabel.setText("Produits A : "+ aWarehouse);
-                    productsBLabel.setText("Produits B : "+ bWarehouse);
+                    this.setVisible(false);
+                } else {	
+                    //* Refersh labels
+					setPalAWarehouse(palAWarehouse - nbA);
+                    setPalBWarehouse(palBWarehouse - nbB);
+					//* Display confirmation :
+					stateLabel.setText("Commande validée. Pour pouvez en saisir une nouvelle.");
                 }               
             }
         }
@@ -321,7 +334,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
     private javax.swing.JLabel bErrorLabel;
     private javax.swing.JLabel bLabel;
     private javax.swing.JTextField bTextField;
-    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton backButton;
     private javax.swing.JLabel currentWarehouseLabel;
     private javax.swing.JLabel descriptionLabel;
     private javax.swing.JLabel productsALabel;

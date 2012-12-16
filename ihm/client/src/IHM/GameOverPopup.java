@@ -125,8 +125,8 @@ public class GameOverPopup extends javax.swing.JFrame {
          * @param evt click on button "nouveau lot"
          */
     private void jB_NewProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_NewProdActionPerformed
-		this.paramsFrame.show();
-		this.hide();
+		this.paramsFrame.setVisible(true);
+		this.setVisible(false);
     }//GEN-LAST:event_jB_NewProdActionPerformed
 
     /**
@@ -143,15 +143,20 @@ public class GameOverPopup extends javax.swing.JFrame {
 		System.exit(0);//* Shutdown the client app
     }//GEN-LAST:event_jB_ShutdownActionPerformed
 
+	private NewCmdFrame cmdFrame;
+	
+	public void setCmdFrame(NewCmdFrame f) {
+		cmdFrame = f;
+	}
+	
     /**
      * Action when click on button commands only
      * @param evt click on button commands only
      */
     private void jB_CommandOnlyModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_CommandOnlyModeActionPerformed
-        NewCmdFrame newCmdFrame = new NewCmdFrame(this.managementFrame, this.command);
-        newCmdFrame.setVisible(true);
+        this.cmdFrame.setVisible(true);
         this.managementFrame.setOnProduction(false);
-        this.dispose();
+        this.setVisible(false);
     }//GEN-LAST:event_jB_CommandOnlyModeActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
