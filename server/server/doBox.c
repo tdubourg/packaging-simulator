@@ -7,17 +7,10 @@
 #include "doBox.h"
 
 #ifdef SIMU_MODE
-
-/* To get the refusal rate by reading the file refusalRate.txt */
 static bool simu_refusal();
-
-/* To see if the current box is missing by looking for the file missingBox.txt */
 static bool simu_missing_box();
 #endif
 
-/* Main function
- * Fills the box with accepted parts and then transmits it to the printer
- */
 void* doBox(void*a) {
 	/* **** INIT */
 	INCLUDE(Box)
@@ -93,7 +86,7 @@ void* doBox(void*a) {
 				{
 					/* The current batch is over, so close the valve */
 					LOCK(Valve);
-					LOG("GAME OVER");
+					LOG(PRODUCTION_IS_OVER_MSG);
 				}
 				/* **** "READY TO GO TO PRINTER" SEMAPHORE CHECK */
 				sem_wait(&SemSyncBoxPrint);
@@ -123,7 +116,6 @@ void* doBox(void*a) {
 }
 
 #ifdef SIMU_MODE
-/* To get the refusal rate by reading the file refusalRate.txt */
 static bool simu_refusal() {
 	
 	static bool init = FALSE;
@@ -149,7 +141,6 @@ static bool simu_refusal() {
 	return (rand() % 100) < rate;
 }
 
-/* To see if the current box is missing by looking for the file missingBox.txt */
 static bool simu_missing_box() {
 	bool missing = TRUE;
 	FILE * fileMissingBox = fopen(SIMU_BOX_FILE_NAME, "rb");
