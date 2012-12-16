@@ -125,6 +125,7 @@ public class GameOverPopup extends javax.swing.JFrame {
          * @param evt click on button "nouveau lot"
          */
     private void jB_NewProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_NewProdActionPerformed
+		this.managementFrame.setOnProduction(true);
 		this.paramsFrame.setVisible(true);
 		this.setVisible(false);
     }//GEN-LAST:event_jB_NewProdActionPerformed

@@ -216,9 +216,10 @@ public class NewCmdFrame extends javax.swing.JFrame {
      */
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         clearTextFields();
+		stateLabel.setVisible(false);
 		if (management.getOnProduction() == true)
         {
-            this.management.setVisible(true);
+			this.management.setVisible(true);
         }
         else
         {
@@ -314,6 +315,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
                     setPalBWarehouse(palBWarehouse - nbB);
 					//* Display confirmation :
 					stateLabel.setText("Commande validée. Pour pouvez en saisir une nouvelle.");
+					stateLabel.setVisible(true);
                 }               
             }
         }
