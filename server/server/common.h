@@ -93,8 +93,12 @@ typedef enum batch_type_e {NO_BATCH, BATCH_TYPE_A, BATCH_TYPE_B} batch_type;
 /* In case the refused rate of the currently packaging box is higher than the limit: */
 #define ERR_BOX_REFUSED_RATE "ER" 
 
-/* Message sent to the client to notify the end of a batch*/
+/* Message sent to the client to notify the end of a batch, this is a special LOG MESSAGE that will be parsed by the client */
 #define PRODUCTION_IS_OVER_MSG "GAME OVER"
+
+/* Special logs that will be parse by the network client to detecte emergency stop */
+#define EMERGENCY_STOP_MSG "EMERGENCY_STOP_OCCURED"
+
 /* Message sent from the client to restart the production after an emergency stop*/
 #define RESTART_AFTER_EMERGENCY_STOP "R" 
 
