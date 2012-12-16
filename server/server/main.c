@@ -100,7 +100,7 @@ int main(int argc, char** argv) {
 	pthread_create(&tWarehouse, NULL, doWarehouse, NULL);
 	pthread_create(&tPalette, NULL, doPalette, NULL);
 	pthread_create(&tPrint, NULL, doPrint, NULL);
-	pthread_create(&tBox, NULL, partsPackager, NULL);
+	pthread_create(&tBox, NULL, doBox, NULL);
 	pthread_create(&tCommunication, NULL, doCommunication, NULL);
 #ifdef SIMU_MODE
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);

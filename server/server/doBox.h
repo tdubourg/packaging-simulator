@@ -5,19 +5,11 @@
  * Created on December 1, 2012, 3:45 PM
  */
 
-#ifndef PARTSPACKAGER_H
-#define	PARTSPACKAGER_H
+#ifndef DOBOX_H
+#define	DOBOX_H
 
-#ifdef	__cplusplus
-extern "C" {
-#endif
-
-	void *partsPackager(void*);
+void *doBox(void*);
 
 
-#ifdef	__cplusplus
-}
-#endif
-
-#endif	/* PARTSPACKAGER_H */
+#endif	/* DOBOX_H */
 
