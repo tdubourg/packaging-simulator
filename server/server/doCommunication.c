@@ -23,16 +23,19 @@
 static void error(const char *msg);
 static void *doPush(void *p);
 
+/*
+ * Command from the client thread
+ */
 void *doCommunication(void *p) {
 
 	extern int AStock, BStock;
 	extern pthread_mutex_t LockWarehouseStorageData;
 	pthread_t tPush;
 	INIT_CONTROL();
-	
+
 	/*Starting the pushing thread*/
 	pthread_create(&tPush, NULL, doPush, NULL);
-	
+
 	/*Set the letterBox with push thread*/
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
@@ -127,10 +130,16 @@ void *doCommunication(void *p) {
 	return 0;
 }
 
+/*
+ * Send the error on the standard output
+ */
 static void error(const char *msg) {
 	perror(msg);
 }
 
+/*
+ * Log sent to the client thread
+ */
 static void *doPush(void *p) {
 
 	extern int AStock, BStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber;
@@ -178,12 +187,14 @@ static void *doPush(void *p) {
 
 			int bytes_read = mq_receive(mboxCom, logsBuffer, MAX_MSG_LEN, NULL);
 
+			/*Check if the thread has to shutdown*/
 			if (strcmp(logsBuffer, STOP_MESSAGE_QUEUE) == 0) {
 				close(newsockfd);
 				close(sockfd);
 				return 0;
 			}
-			
+
+			/*Check if there is a disconnection request from the client*/
 			if (strcmp(logsBuffer, DISCONNECT_CMD) == 0) {
 				close(newsockfd);
 				break;
@@ -191,17 +202,21 @@ static void *doPush(void *p) {
 
 			if (bytes_read == -1) {
 				perror("[CommunicationThread] Failed to receive from LogThread");
+
+				/*Send the logs*/
 			} else {
 				strcat(logsBuffer, "\r\n");
 				n = write(newsockfd, logsBuffer, strlen(logsBuffer));
 				if (n < 0)
 					error("ERROR writing to socket");
 
+				/*Got the stock state*/
 				pthread_mutex_lock(&LockWarehouseStorageData);
 				sentAStock = AStock;
 				sentBStock = BStock;
 				pthread_mutex_unlock(&LockWarehouseStorageData);
 
+				/*Send the stock state*/
 				bzero(stockBuffer, sizeof (stockBuffer));
 				sprintf(stockBuffer, "%s-%d-%d-%d-%d\r\n", STATE_MSG_PREFIX, sentAStock, sentBStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber);
 
