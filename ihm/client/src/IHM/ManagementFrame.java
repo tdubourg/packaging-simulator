@@ -294,6 +294,9 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 			case PRINT:
 				err = "L'imprimante.";
 				break;
+			case EMERGENCY_STOP:
+				err = "Le bouton d'arrêt d'urgence a été pressé.";
+				break;
 		}
 		this.ep.setCommand(threadCmd);
 		this.ep.setMgFrame(this);

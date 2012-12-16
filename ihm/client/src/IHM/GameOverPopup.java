@@ -135,7 +135,7 @@ public class GameOverPopup extends javax.swing.JFrame {
     private void jB_ShutdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_ShutdownActionPerformed
 		this.command.sendShutdown();
 		try {
-			Thread.sleep(10 * 1000);//* Wait for server to shutdown...
+			Thread.sleep(1 * 1000);//* Wait for server to shutdown...
 		} catch (InterruptedException ex) {
 			Logger.getLogger(ErrorPopup.class.getName()).log(Level.SEVERE, null, ex);
 		}

@@ -31,9 +31,10 @@ public class ThreadLog extends Thread {
 	private final static String ERROR_PALETTE_QUEUE = "ERROR Q";
 	private final static String ERROR_BOX_REFUSED = "ERROR R";
 	private final static String ERROR_GAME_OVER = "GAME OVER";
-
+	private final static String ERROR_EMERGENCY_STOP = "EMERGENCY_STOP_OCCURED";
+	
 	public enum ERROR {
-		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED
+		BOX, PALETTE, PRINT, PALETTE_QUEUE, BOX_REFUSED, EMERGENCY_STOP
 	};
         
 	private WeakReference<LogReceiver> listener;
@@ -104,6 +105,10 @@ public class ThreadLog extends Thread {
 							}
 							case ERROR_GAME_OVER: {
 								listener.get().onGameOver();
+								break;
+							}
+							case ERROR_EMERGENCY_STOP: {
+								listener.get().onReceiveError(ERROR.EMERGENCY_STOP);
 								break;
 							}
 							default: {
