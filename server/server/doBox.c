@@ -19,7 +19,7 @@ static bool simu_missing_box();
  * Fills the box with accepted parts and then transmits it to the printer
  */
 void* doBox(void*a) {
-	/* **** INIT */
+	/* INIT *******************************************************************/
 	INCLUDE(Box)
 	INCLUDE(Valve)
 	INIT_LOGGER();
@@ -41,7 +41,7 @@ void* doBox(void*a) {
 	printf("%d\n", (int) getpid());
 #endif
 
-	/* **** MAIN LOOP */
+	/* MAIN LOOP **************************************************************/
 	for (;;) {
 		CHECK_WAIT_BOOL(Box);
 		CHECK_FOR_APP_END_AND_STOP("Box");
@@ -57,16 +57,20 @@ void* doBox(void*a) {
 			LOCK(Valve);
 			DBGPRINT("doBox", "Main", "Closing valve.");
 			LOG("doBox: Missing box, ERROR.");
-			LOCK(Box);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+			LOCK(Box);/* Forbidding ourself to do another loop before the green
+					   * light has been set by the doControl thread */
 			
 			/* Sending error message */
 			ERR_MSG(ERR_BOX);
-			/* Going back to the beginning of the loop and standing still until the doControl thread says otherwise */
+			/* Going back to the beginning of the loop and standing still until
+			 * the doControl thread says otherwise */
 			continue;
 		}
 		
-		/* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
-		   This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT) */
+		/* At the end of the loop (and thus at its beginning, the other way
+		 * around), we are basically just waiting for a new part
+		 * This part will come as a unlocking the sempahore SemSimuNewPart
+		 * (supposed to be an IT) */
 		sem_wait(&SemNewPart);
 
 		bool refused = TRUE;
@@ -93,7 +97,9 @@ void* doBox(void*a) {
 				{
 					/* The current batch is over, so close the valve */
 					LOCK(Valve);
-					/* And send a log so that the client is able to know that the production of the current batch is over  (important call, not to be deleted or changed) */
+					/* And send a log so that the client is able to know that
+					 * the production of the current batch is over
+					 * (important call, not to be deleted or changed) */
 					LOG(PRODUCTION_IS_OVER_MSG);
 				}
 				/* **** "READY TO GO TO PRINTER" SEMAPHORE CHECK */
@@ -109,18 +115,20 @@ void* doBox(void*a) {
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 			{
 				/* Closing the valve */
-				refusedPartsCount = 0; /* Resetting the counter, so that when the error is marked as "solved" we don't go back into error mode */
+				refusedPartsCount = 0; /* Resetting the counter, so that when
+									    * the error is marked as "solved" we
+									    * don't go back into error mode */
 				LOCK(Valve);
 				DBGPRINT("doBox", "Main", "Closing valve.");
 				LOG("doBox: Refused rate is too high, ERROR.");
-				LOCK(Box);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+				LOCK(Box);/* Forbidding ourself to do another loop before the
+						   * green light has been set by the doControl thread */
 				
 				/* Sending error message */
 				ERR_MSG(ERR_BOX_REFUSED_RATE);
 			}
 		}
 	}
-	/* **** END / CLEANING */
 }
 
 #ifdef SIMU_MODE
@@ -147,7 +155,8 @@ static bool simu_refusal() {
 #ifdef DBG
 	printf("Refusal rate : %d\n", rate);
 #endif
-	/* "rate" probability to fail, 100-"rate" to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal())) */
+	/* "rate" probability to fail, 100-"rate" to succeed (if result = TRUE, then
+	 * the part is REFUSED (as the function is simu_refusal())) */
 	return (rand() % 100) < rate;
 }
 

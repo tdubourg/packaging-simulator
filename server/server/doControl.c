@@ -15,6 +15,7 @@ static void stopApplication();
  * Control thread
  */
 void *doControl(void *p) {
+	/* INIT *******************************************************************/
 	INCLUDE(Print)
 	INCLUDE(Palette)
 	INCLUDE(Valve)
@@ -24,6 +25,7 @@ void *doControl(void *p) {
 	char msg[MAX_MSG_LEN + 1], errMsg[MAX_MSG_LEN];
 	mqd_t mboxControl = mq_open(MBOXCONTROL, O_RDWR);
 
+	/* MAIN LOOP **************************************************************/
 	for (;;)
 	{
 		/* Wait for a command */

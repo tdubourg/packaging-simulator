@@ -11,7 +11,7 @@
  */
 void *doWarehouse(void *p)
 {
-	/* **** INIT */
+	/* INIT *******************************************************************/
 	INIT_LOGGER();
 	INIT_CHECK_FOR_APP_END();
 	extern sem_t SemWarehouse;
@@ -22,7 +22,7 @@ void *doWarehouse(void *p)
 
 	int storageId = -1;
 
-	/* ***** MAIN LOOP */
+	/* MAIN LOOP **************************************************************/
 	for(;;) {
 		DBGPRINT("doWarehouse", "Main", "is unlocked.");
 		sem_wait(&SemWarehouse);

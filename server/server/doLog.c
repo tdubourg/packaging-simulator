@@ -6,10 +6,12 @@
 #include <time.h>
 #include <string.h>
 
+/* this theard read messages from log message queue, then send them to communication thread using a message queue.
+  This thread also format logs to add time in the begining of each log before writting them in a log file*/
 void *doLog(void *p) {
 
 	/* TODO : define message priority and message format to send to communication Thread. */
-
+	/* INIT *******************************************************************/
 	char buffer[MAX_MSG_LEN + 1];
 	int bytes_read;
 	time_t temps;
@@ -20,6 +22,7 @@ void *doLog(void *p) {
 
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR | O_NONBLOCK);
 
+	/* MAIN LOOP **************************************************************/
 	for(;;) {
 		bytes_read = mq_receive(mboxLogs, buffer, MAX_MSG_LEN, NULL); /* @TODO add comment/documentation for this line */
 		if (bytes_read == -1) {
@@ -37,7 +40,6 @@ void *doLog(void *p) {
 				time(&temps);
 				date = *localtime(&temps);
 
-				/* TODO : keep file and close it once thread end is handled */
 				FILE *f = fopen(LOG_FILE_NAME, "a+");
 
 				/* Writing in log file */
