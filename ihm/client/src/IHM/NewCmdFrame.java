@@ -212,7 +212,7 @@ public class NewCmdFrame extends javax.swing.JFrame {
         {
             this.dispose();
             GameOverPopup gameOver = new GameOverPopup(management, threadCmd);
-            gameOver.setVisible(false);
+            gameOver.setVisible(true);
         }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
