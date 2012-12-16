@@ -26,6 +26,13 @@ public class NewCmdFrame extends javax.swing.JFrame {
         bErrorLabel.setVisible(false);
         this.management = management;
 		this.threadCmd = threadCmd;
+        productsALabel.setText("Produits A : "+ management.getPalAWarehouse());
+        productsBLabel.setText("Produits B : "+ management.getPalBWarehouse());
+        
+        if (management.getOnProduction() == false)
+        {
+            cancelButton.setVisible(false);
+        }
     }
 
     /**
@@ -46,6 +53,10 @@ public class NewCmdFrame extends javax.swing.JFrame {
         bErrorLabel = new javax.swing.JLabel();
         aTextField = new javax.swing.JTextField();
         bTextField = new javax.swing.JTextField();
+        currentWarehouseLabel = new javax.swing.JLabel();
+        productsALabel = new javax.swing.JLabel();
+        productsBLabel = new javax.swing.JLabel();
+        stateLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Nouvelle commande");
@@ -88,52 +99,80 @@ public class NewCmdFrame extends javax.swing.JFrame {
             }
         });
 
+        currentWarehouseLabel.setText("Etat actuel du stock :");
+
+        productsALabel.setText("Produits A");
+
+        productsBLabel.setText("Produits B");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(descriptionLabel, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(aLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(aTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(aErrorLabel))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(bLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
-                        .addComponent(bErrorLabel))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(stateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(validationButton)
-                        .addGap(18, 18, 18)
-                        .addComponent(cancelButton)))
-                .addContainerGap(105, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(currentWarehouseLabel)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(aLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(aTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(aErrorLabel))
+                                    .addComponent(productsBLabel)
+                                    .addComponent(productsALabel)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(bLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(validationButton)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(cancelButton))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(bTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(bErrorLabel))))))
+                            .addComponent(descriptionLabel))
+                        .addGap(0, 139, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(descriptionLabel)
+                .addGap(6, 6, 6)
+                .addComponent(currentWarehouseLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(productsALabel)
+                .addGap(11, 11, 11)
+                .addComponent(productsBLabel)
                 .addGap(18, 18, 18)
+                .addComponent(descriptionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(aLabel)
+                    .addComponent(aTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(aErrorLabel)
-                    .addComponent(aTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(aLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(bLabel)
-                    .addComponent(bErrorLabel)
-                    .addComponent(bTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(validationButton)
-                    .addComponent(cancelButton))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(bErrorLabel))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(validationButton)
+                            .addComponent(cancelButton))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(stateLabel)
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -144,7 +183,10 @@ public class NewCmdFrame extends javax.swing.JFrame {
      * @param evt click on button "annuler"
      */
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
-        this.dispose();
+        if (management.getOnProduction() == true)
+        {
+            this.dispose();
+        }
     }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
@@ -221,7 +263,18 @@ public class NewCmdFrame extends javax.swing.JFrame {
                 threadCmd.sendCommand(nbA, nbB);
 
                 //close frame
-                this.dispose();
+                if (management.getOnProduction() == true)
+                {
+                    this.dispose();
+                } else {
+                    aTextField.setText("");
+                    bTextField.setText("");
+                    stateLabel.setText("Commande validée. Pour pouvez en saisir une nouvelle.");
+                    aWarehouse -= nbA;
+                    bWarehouse -= nbB;
+                    productsALabel.setText(""+ aWarehouse);
+                    productsBLabel.setText(""+ bWarehouse);
+                }               
             }
         }
     }//GEN-LAST:event_validationButtonActionPerformed
@@ -242,7 +295,11 @@ public class NewCmdFrame extends javax.swing.JFrame {
     private javax.swing.JLabel bLabel;
     private javax.swing.JTextField bTextField;
     private javax.swing.JButton cancelButton;
+    private javax.swing.JLabel currentWarehouseLabel;
     private javax.swing.JLabel descriptionLabel;
+    private javax.swing.JLabel productsALabel;
+    private javax.swing.JLabel productsBLabel;
+    private javax.swing.JLabel stateLabel;
     private javax.swing.JButton validationButton;
     // End of variables declaration//GEN-END:variables
 }

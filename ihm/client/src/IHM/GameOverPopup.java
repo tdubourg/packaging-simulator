@@ -17,7 +17,8 @@ import javax.swing.JFrame;
 public class GameOverPopup extends javax.swing.JFrame {
 
 	private ParametersFrame paramsFrame;
-
+        private ManagementFrame managementFrame;
+        private Command command;
         /**
          * Sets the frame's parameters
          * @param j parameters
@@ -29,8 +30,10 @@ public class GameOverPopup extends javax.swing.JFrame {
 	/**
 	 * Creates new form GameOverPopup
 	 */
-	public GameOverPopup() {
+	public GameOverPopup(ManagementFrame managementFrame, Command command) {
 		initComponents();
+                this.managementFrame = managementFrame;
+                this.command = command;
 	}
 
 	/**
@@ -109,8 +112,6 @@ public class GameOverPopup extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-	private Command command;
-
         /**
          * Sets the command
          * @param c command
@@ -142,44 +143,15 @@ public class GameOverPopup extends javax.swing.JFrame {
 		System.exit(0);//* Shutdown the client app
     }//GEN-LAST:event_jB_ShutdownActionPerformed
 
+    /**
+     * Action when click on button commands only
+     * @param evt click on button commands only
+     */
     private void jB_CommandOnlyModeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_CommandOnlyModeActionPerformed
-        // TODO add your handling code here:
+        NewCmdFrame newCmdFrame = new NewCmdFrame(this.managementFrame, this.command);
+        this.dispose();
     }//GEN-LAST:event_jB_CommandOnlyModeActionPerformed
 
-	/**
-	 * @param args the command line arguments
-	 */
-	public static void main(String args[]) {
-		/* Set the Nimbus look and feel */
-		//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-		 * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-		 */
-		try {
-			for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-				if ("Nimbus".equals(info.getName())) {
-					javax.swing.UIManager.setLookAndFeel(info.getClassName());
-					break;
-				}
-			}
-		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(GameOverPopup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(GameOverPopup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(GameOverPopup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(GameOverPopup.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-		}
-		//</editor-fold>
-
-		/* Create and display the form */
-		java.awt.EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				new GameOverPopup().setVisible(true);
-			}
-		});
-	}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jB_CommandOnlyMode;
     private javax.swing.JButton jB_NewProd;

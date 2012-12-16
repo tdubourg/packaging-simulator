@@ -29,10 +29,10 @@ bool LockImpValue;
 bool LockPaletteValue;
 bool LockValveValue;
 int PrintPaletteQueueValue = 0;
-int AStock = 0, BStock = 0; //* globals for storing the current stock of A/B palettes (integer = number of palette of A or B that we currently have in stock)
+int AStock = 0, BStock = 0; /* globals for storing the current stock of A/B palettes (integer = number of palettes of A or B that we currently have in stock) */
 
 batch_type CurrentBatchType;
-int CurrentBatchProdMax = 100;//* number of palettes we have to produce for the current batch
+int CurrentBatchProdMax = 100;/* number of palettes we have to produce for the current batch */
 int CurrentProducedBoxes = 0;
 int CurrentBatchRefusedPartsNumber = 0;
 
@@ -43,7 +43,7 @@ int MAX_REFUSED_PARTS_BY_BOX = 42;
 int MAX_BOXES_QUEUE = 10;
 
 
-bool needToStop = FALSE;//@TODO rename this variable (global should start with a capital letter, and a better name might be useful as well)
+bool needToStop = FALSE;/* @TODO rename this variable (global should start with a capital letter, and a better name might be useful as well) */
 static mqd_t mboxControl;
 
 #include "partsPackager.h"
@@ -69,11 +69,11 @@ int main(int argc, char** argv) {
 	#endif
 	signal(SIGINT, handler_alert);
 	
-	//* We block everything at the beginning in order to receive potential errors later and be able to send them to the client
+	/* We block everything at the beginning in order to receive potential errors later and be able to send them to the client */
 	SET(Box, TRUE);
 	SET(Palette, TRUE);
 	SET(Imp, TRUE);
-	//* Te valve, though, has to be closed, at the start of the app
+	/* The valve, though, has to be closed, at the start of the app */
 	SET(Valve, TRUE);
 
 	sem_init(&SemSyncBoxImp, 0, 1);
@@ -84,15 +84,15 @@ int main(int argc, char** argv) {
 
 	sem_init(&SemNewPart, 0, 0);
 
-	// Open message queues
-	// struct mq_attr attr;
-	// attr.mq_maxmsg = 1000;
+	/* Open message queues */
+	/* struct mq_attr attr;
+	   attr.mq_maxmsg = 1000; */
 	mboxCommunication = mq_open(MBOXCOMMUNICATION, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 	mboxControl = mq_open(MBOXCONTROL, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 	mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 	mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_CREAT, S_IRWXU | S_IRWXG, NULL);
 
-	//wait
+	/* Wait */
 	
 	pthread_create(&tLog, NULL, doLog, NULL);
 	pthread_create(&tControl, NULL, doControl, NULL);
@@ -105,10 +105,10 @@ int main(int argc, char** argv) {
 	pthread_create(&tSimuNewPart, NULL, newpart, NULL);
 #endif
 	
-	//char* msg = "INIT-A-3-40-8-1";
-	//mq_send(mboxControl,msg,strlen(msg),MSG_HIGH_PRIORITY);
+	/* char* msg = "INIT-A-3-40-8-1";
+	   mq_send(mboxControl,msg,strlen(msg),MSG_HIGH_PRIORITY); */
 	
-	// Wait for end of threads
+	/* Wait for end of threads */
 	pthread_join(tCommunication, NULL);
 	pthread_join(tBox, NULL);
 	pthread_join(tPrint, NULL);
@@ -120,13 +120,13 @@ int main(int argc, char** argv) {
 	pthread_join(tSimuNewPart, NULL);
 #endif
 
-	// Deleting message queue
+	/* Deleting message queue */
 	mq_close(mboxCommunication);
 	mq_close(mboxControl);
 	mq_close(mboxLogs);
 	mq_close(mboxPalletStore);
 
-	// Deleting sems
+	/* Deleting sems */
 	sem_destroy(&SemSocket);
 	sem_destroy(&SemSyncImpPalette);
 	sem_destroy(&SemSyncBoxImp);
@@ -134,7 +134,6 @@ int main(int argc, char** argv) {
 
 	return (EXIT_SUCCESS);
 }
-
 
 static void handler_alert(int n)
 {

@@ -33,8 +33,11 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
         int previousPalAWarehouse;
         int previousPalBWarehouse;
         
+        //production state
+        Boolean onProduction = true;
+        
 	private ParametersFrame paramsFrame;
-	
+        
         /**
          * Sets frame's parameters
          * @param p parameters
@@ -50,7 +53,15 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 	public int getPalAWarehouse() {
 		return palAWarehouse;
 	}
-	
+
+        /**
+         * Gets the production status
+         * @return true if production is active, false if not.
+         */
+        public Boolean getOnProduction() {
+            return onProduction;
+        }
+        
         /**
          * gets the number of pallets B in warehouse
          * @return number of pallets B in warehouse
@@ -257,10 +268,10 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 			this.palAWarehouse = Integer.parseInt(log.substring(log.lastIndexOf("-") + 1));
 			if (currentLot.equalsIgnoreCase("A")) {
 				this.lotProgressBar.setValue(nbCurrentBox);
-				this.currentPal.setText((palAWarehouse-previousPalAWarehouse) + "/" + nbPalA);
+				this.currentPal.setText((palAWarehouse-previousPalAWarehouse) + "/" + nbPalA + " palettes");
 			} else {
 				this.lotProgressBar.setValue(nbCurrentBox);
-				this.currentPal.setText((palBWarehouse-previousPalBWarehouse) + "/" + nbPalB);
+				this.currentPal.setText((palBWarehouse-previousPalBWarehouse) + "/" + nbPalB + " palettes");
 			}			
 		} else {
 			//it is a log, we add it in the TextArea
@@ -316,7 +327,7 @@ public class ManagementFrame extends javax.swing.JFrame implements ThreadLog.Log
 		this.currentErrorState = errorState;
 	}
         
-	GameOverPopup goPopup = new GameOverPopup();
+	GameOverPopup goPopup = new GameOverPopup(this, this.threadCmd);
 	
         /**
          * Method after GameOver signal received in the log socket

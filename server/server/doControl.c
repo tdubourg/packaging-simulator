@@ -85,7 +85,7 @@ void *doControl(void *p) {
 			case 'Q':
 				SET(Valve, TRUE);
 				stopApplication();
-				//stopping this thread;
+				/* Stopping this thread */
 				return;
 			case 'I':
 				parseInitMessage(msg);
@@ -114,20 +114,20 @@ static void parseInitMessage(char* buffer) {
 	INIT_LOGGER();
 
 	
-	// reading init
+	/* Reading init */
 	token = strtok_r(buffer, "-", &saveptr1);
 	if (token == NULL || strcmp(token, INIT_BATCH)) {
-//		errorMsg = "Bad batch initialisation message : ";
-//		strcat(errorMsg, buffer);
+		/* errorMsg = "Bad batch initialisation message : ";
+		strcat(errorMsg, buffer); */
 		LOG("Bad batch initialisation message : message not starting with INIT");
 		return;
 	}
 
-	//reading batch type
+	/* Reading batch type */
 	token = strtok_r(NULL, "-", &saveptr1);
 	if (token == NULL || (strcmp(token, "A") && strcmp(token, "B"))) {
-//		errorMsg = "Bad batch initialisation message : ";
-//		strcat(errorMsg, buffer);
+		/* errorMsg = "Bad batch initialisation message : ";
+		strcat(errorMsg, buffer); */
 		LOG("Bad batch initialisation message : batch type isn't \"a\" or \"b\"");
 		return;
 	}
@@ -138,65 +138,64 @@ static void parseInitMessage(char* buffer) {
 		batchType = BATCH_TYPE_B;
 	}
 
-	// reading refused part
+	/* Reading refused part */
 	token = strtok_r(NULL, "-", &saveptr1);
 	if (token == NULL && (nbRefusedPart = atoi(token))!=0) {
-//		errorMsg = "Bad batch initialisation message : ";
-//		strcat(errorMsg, buffer);
+		/* errorMsg = "Bad batch initialisation message : ";
+		strcat(errorMsg, buffer); */
 		LOG("Bad batch initialisation message : missing/malformated refused part number");
 		return;
 	}
 	nbRefusedPart = atoi(token);
 
-	// reading part by box
+	/* Reading part by box */
 	token = strtok_r(NULL, "-", &saveptr1);
 	if (token == NULL) {
-//		errorMsg = "Bad batch initialisation message : ";
-//		strcat(errorMsg, buffer);
+		/* errorMsg = "Bad batch initialisation message : ";
+		strcat(errorMsg, buffer); */
 		LOG("Bad batch initialisation message");
 		return;
 	}
 	partByBox = atoi(token);
 
-	// reading box by pallet
+	/* Reading box by pallet */
 	token = strtok_r(NULL, "-", &saveptr1);
 	if (token == NULL) {
-//		errorMsg = "Bad batch initialisation message : ";
-//		strcat(errorMsg, buffer);
+		/* errorMsg = "Bad batch initialisation message : ";
+		strcat(errorMsg, buffer); */
 		LOG("Bad batch initialisation message");
 		return;
 	}
 	boxByPallet = atoi(token);
 
-	// reading number of pallet
+	/* Reading number of pallets */
 	token = strtok_r(NULL, "-", &saveptr1);
 	if (token == NULL) {
-//		errorMsg = "Bad batch initialisation message : ";
-//		strcat(errorMsg, buffer);
+		/* errorMsg = "Bad batch initialisation message : ";
+		strcat(errorMsg, buffer); */
 		LOG("Bad batch initialisation message");
 		return;
 	}
 	nbPallet = atoi(token);
 
-	// if parsing was successfull we initialise batch
+	/* If parsing was successful, we initialize batch */
 	CurrentBatchType = batchType;
 	CurrentBatchProdMax = nbPallet;
 	PARTS_BY_BOX = partByBox;
 	BOXES_BY_PALETTE = boxByPallet;
 	MAX_REFUSED_PARTS_BY_BOX = nbRefusedPart;
-	//initializing compters
+	/* Initializing compters */
 	CurrentProducedBoxes = 0;
 	CurrentBatchRefusedPartsNumber=0;
-	// starting production
+	/* Starting production */
 	SET(Box, FALSE);
 	SET(Palette, FALSE);
 	SET(Imp, FALSE);
 	SET(Valve, FALSE);
-
 }
 
 static void stopApplication() {
-	// stopping simulation threads
+	/* Stopping simulation threads */
 	extern bool needToStop;
 	INCLUDE(Box);
 	INCLUDE(Imp);
@@ -214,28 +213,28 @@ static void stopApplication() {
 
 	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
-	// waiting for simulation threads to end
+	/* Waiting for simulation threads to end */
 	SET(Valve, FALSE);
 	sleep(1);
 	
-	// Unlocking other tasks
-	//* Warehouse...
+	/* Unlocking other tasks
+	   Warehouse... */
 	sem_post(&SemWarehouse);
-	//* Pallet...
+	/* Pallet... */
 	sem_post(&SemSyncImpPalette);
 	SET(Palette, FALSE);
-	//* Printer...
+	/* Printer... */
 	sem_post(&SemPushBoxImp);
 	SET(Imp, FALSE);
-	//* Parts packager...
+	/* Parts packager... */
 	sem_post(&SemSyncBoxImp);
 	sem_post(&SemNewPart);
 	SET(Box, FALSE);
 
-	// closing Log thread;
+	/* Closing Log thread */
 	mq_send(mboxLogs, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
-	//* Note : No need to terminate doCommunication as it terminates by itself on shutdown order.
+	/* Note : No need to terminate doCommunication as it terminates by itself on shutdown order. */
 	
 	
 }
