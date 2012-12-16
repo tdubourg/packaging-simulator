@@ -119,6 +119,8 @@ int main(int argc, char** argv) {
 	pthread_join(tPalette, NULL);
 	pthread_join(tWarehouse, NULL);
 	pthread_join(tControl, NULL);
+	//* Once all the tasks have completed, we can stop the logs: 
+	mq_send(mboxLogs, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 	pthread_join(tLog, NULL);
 #ifdef SIMU_MODE
 	pthread_join(tSimuNewPart, NULL);
