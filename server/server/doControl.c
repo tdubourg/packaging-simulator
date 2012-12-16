@@ -199,7 +199,7 @@ static void parseInitMessage(char* buffer) {
 
 static void stopApplication() {
 	/* Stopping simulation threads */
-	extern bool needToStop;
+	extern bool NeedToStop;
 	INCLUDE(Box);
 	INCLUDE(Print);
 	INCLUDE(Palette);
@@ -212,7 +212,7 @@ static void stopApplication() {
 	mqd_t mboxPalletStore = mq_open(MBOXPALLETSTORE, O_RDWR | O_NONBLOCK);
 	mqd_t mboxLogs = mq_open(MBOXLOGS, O_RDWR | O_NONBLOCK);
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR | O_NONBLOCK);
-	needToStop = TRUE;
+	NeedToStop = TRUE;
 
 	mq_send(mboxPalletStore, STOP_MESSAGE_QUEUE, sizeof (STOP_MESSAGE_QUEUE), MSG_LOW_PRIORITY);
 
