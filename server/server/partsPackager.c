@@ -5,7 +5,7 @@
 #include "common.h"
 #include "partsPackager.h"
 
-//* @TODO : Move that to another place, later
+/* @TODO : Move that to another place, later */
 
 #ifdef SIMU_MODE
 #include "time.h"
@@ -20,7 +20,7 @@ static bool simu_refusal() {
 		srand(1024);
 	}
 	FILE * fileRefusalRate = fopen(REFUSAL_RATE_FILE_NAME, "rb");
-	if (fileRefusalRate == NULL) { // By default, refusal rate = 30
+	if (fileRefusalRate == NULL) { /* By default, refusal rate = 30% */
 		rate = 30;
 	} else {
 		char read[4];
@@ -31,7 +31,7 @@ static bool simu_refusal() {
 #ifdef DBG
 	printf("Refusal rate : %d\n", rate);
 #endif
-	//* "rate" probability to fail, 100-"rate" to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal()))
+	/* "rate" probability to fail, 100-"rate" to succeed (if result = TRUE, then the part is REFUSED (as the function is simu_refusal())) */
 	return (rand() % 100) < rate;
 }
 
@@ -39,7 +39,7 @@ static bool simu_missing_box() {
 	bool missing = TRUE;
 	FILE * fileMissingBox = fopen(SIMU_BOX_FILE_NAME, "rb");
 
-	if (fileMissingBox == NULL) { // If the file is not found, it means that the box is here
+	if (fileMissingBox == NULL) { /* If the file is not found, it means that the box is there */
 		if(errno == ENOENT) {
 			missing = FALSE;
 		}
@@ -52,7 +52,7 @@ static bool simu_missing_box() {
 #endif
 
 void* partsPackager(void*a) {
-	//**** INIT
+	/* **** INIT */
 	INCLUDE(Box)
 	INCLUDE(Valve)
 	INIT_LOGGER();
@@ -67,14 +67,14 @@ void* partsPackager(void*a) {
 	extern sem_t SemSyncBoxImp;
 	extern sem_t SemPushBoxImp;
 	extern sem_t SemNewPart;
-	int refusedPartsCount = 0;//* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX)
+	int refusedPartsCount = 0;/* Number of parts that have been refused for the current box (not to be higher than MAX_REFUSED_PARTS_BY_BOX) */
 	int currentBoxPartsNumber = 0;
 
 #ifdef DBG
 	printf("%d\n", (int) getpid());
 #endif
 
-	//**** MAIN LOOP
+	/* **** MAIN LOOP */
 	for (;;) {
 		CHECK_WAIT_BOOL(Box);
 		CHECK_FOR_APP_END_AND_STOP("Box");
@@ -86,49 +86,49 @@ void* partsPackager(void*a) {
 #endif
 		
 		if(boxIsMissing) {
-			//* Closing the valve
+			/* Closing the valve */
 			SET(Valve, TRUE);
 			DBGPRINT("partsPackager", "Main", "Closing valve.");
 			LOG("partsPackager: Missing box, ERROR.");
-			SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+			SET(Box, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 			
-			// Sending error message
+			/* Sending error message */
 			ERR_MSG(ERR_BOX);
-			// Going back to the beginning of the loop and standing still until the doControl thread says otherwise
+			/* Going back to the beginning of the loop and standing still until the doControl thread says otherwise */
 			continue;
 		}
 		
-		//* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
-		//* This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT)
+		/* At the end of the loop (and thus at its beginning, the other way around), we are basically just waiting for a new part
+		   This part will come as a unlocking the sempahore SemSimuNewPart (supposed to be an IT) */
 		sem_wait(&SemNewPart);
 
 		bool refused = TRUE;
 #ifdef SIMU_MODE
 		refused = simu_refusal();
 #endif
-		if (!refused) //* Part is accepted
+		if (!refused) /* Part is accepted */
 		{
 			DBGPRINT("partsPackager", "Main", "New accepted part.");
 			LOG("partsPackager: New accepted part.");
-			//* There's a new part to put in that freaking box:
+			/* There's a new part to put in that freaking box: */
 			currentBoxPartsNumber = (currentBoxPartsNumber + 1) % PARTS_BY_BOX;
 			DBGPRINT("partsPackager", "Main", "currentBoxPartsNumber=");
 #ifdef DBG
 			printf("%d\n", currentBoxPartsNumber);
 #endif
 
-			if (!currentBoxPartsNumber) //* Is the box full?
+			if (!currentBoxPartsNumber) /* Is the box full? */
 			{
 				DBGPRINT("partsPackager", "Main", "The box is full");
-				refusedPartsCount = 0; //* Reset refused parts by box counter
+				refusedPartsCount = 0; /* Reset refused parts by box counter */
 				CurrentProducedBoxes++;
 				if ((CurrentProducedBoxes / BOXES_BY_PALETTE) >= CurrentBatchProdMax)
 				{
-					//* The current batch is over, so close the valve
+					/* The current batch is over, so close the valve */
 					SET(Valve, TRUE);
 					LOG(PRODUCTION_IS_OVER_MSG);
 				}
-				//**** "READY TO GO TO PRINTER" SEMAPHORE CHECK
+				/* **** "READY TO GO TO PRINTER" SEMAPHORE CHECK */
 				sem_wait(&SemSyncBoxImp);
 				sem_post(&SemPushBoxImp);
 			}
@@ -140,17 +140,17 @@ void* partsPackager(void*a) {
 			CurrentBatchRefusedPartsNumber++;
 			if (refusedPartsCount >= MAX_REFUSED_PARTS_BY_BOX)
 			{
-				//* Closing the valve
-				refusedPartsCount = 0; //*Resetting the counter, so that when the error is marked as "solved" we don't go back into error mode
+				/* Closing the valve */
+				refusedPartsCount = 0; /* Resetting the counter, so that when the error is marked as "solved" we don't go back into error mode */
 				SET(Valve, TRUE);
 				DBGPRINT("partsPackager", "Main", "Closing valve.");
 				LOG("partsPackager: Refused rate is too high, ERROR.");
-				SET(Box, TRUE);// Forbidding ourself to do another loop before the green light has been set by the doControl thread
+				SET(Box, TRUE);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
 				
-				// Sending error message
+				/* Sending error message */
 				ERR_MSG(ERR_BOX_REFUSED_RATE);
 			}
 		}
 	}
-	//**** END / CLEANING 
+	/* **** END / CLEANING */
 }
