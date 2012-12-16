@@ -13,7 +13,7 @@ static bool simu_missing_palette();
  */
 void *doPalette(void *p)
 {
-	/* **** INIT */
+	/* INIT *******************************************************************/
 	INCLUDE(Palette)
 	INCLUDE(Valve)
 	INCLUDE_INTEGER(PrintPaletteQueue)
@@ -25,7 +25,7 @@ void *doPalette(void *p)
 	extern sem_t SemWarehouse;
 	int currentPaletteBoxesNumber = 0;
 	
-	/* ***** MAIN LOOP */
+	/* MAIN LOOP **************************************************************/
 	for(;;) {
 		CHECK_WAIT_BOOL(Palette);
 		CHECK_FOR_APP_END_AND_STOP("Palette");

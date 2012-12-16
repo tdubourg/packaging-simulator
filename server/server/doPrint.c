@@ -13,6 +13,7 @@ static bool simu_printer_error();
  * Prints a label on the box and then adds it to the palette queue 
  */
 void *doPrint(void *p) {
+	/* INIT *******************************************************************/
 	INCLUDE(Print)
 	INCLUDE(Valve)
 	INCLUDE_INTEGER(PrintPaletteQueue)
@@ -22,6 +23,8 @@ void *doPrint(void *p) {
 	extern sem_t SemSyncBoxPrint;
 	extern sem_t SemPushBoxPrint;
 	extern int MAX_BOXES_QUEUE;
+	
+	/* MAIN LOOP **************************************************************/
 	for(;;) {
 		CHECK_WAIT_BOOL(Print);
 		CHECK_FOR_APP_END_AND_STOP("Print");
@@ -35,11 +38,13 @@ void *doPrint(void *p) {
 			LOCK(Valve);
 			DBGPRINT("doPrint", "Main", "Closing valve.");
 			LOG("doPrint: Printer error, ERROR.");
-			LOCK(Print);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+			LOCK(Print);/* Forbidding ourself to do another loop before the
+						 * green light has been set by the doControl thread */
 				
 			/* Sending error message */
 			ERR_MSG(ERR_PRINT);
-			/* Going back to the beginning of the loop and standing still until the doControl thread says otherwise */
+			/* Going back to the beginning of the loop and standing still until
+			 * the doControl thread says otherwise */
 			continue;
 		}
 		/* Waiting for a box to come from the parts packager */
@@ -48,10 +53,12 @@ void *doPrint(void *p) {
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue >= MAX_BOXES_QUEUE) { /* We're paused */
 			/* Error : The queue is full and we have to push a box to it */
-			LOCK(Print);/* Forbidding ourself to do another loop before the green light has been set by the doControl thread */
+			LOCK(Print);/* Forbidding ourself to do another loop before the
+						 * green light has been set by the doControl thread */
 			/* Sending error message (priority 2) */
 			ERR_MSG(ERR_PALETTE_QUEUE);
-			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue); /* Wait for play signal */
+			/* Wait for play signal */
+			pthread_cond_wait(&CondPrintPaletteQueue, &LockPrintPaletteQueue);
 		}
 		DBGPRINT("doPrint", "Main", "Printing");
 		LOG("doPrint: Printing.");

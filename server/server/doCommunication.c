@@ -27,7 +27,7 @@ static void *doPush(void *p);
  * Command from the client thread
  */
 void *doCommunication(void *p) {
-
+	/* INIT *******************************************************************/
 	extern int AStock, BStock;
 	extern pthread_mutex_t LockWarehouseStorageData;
 	pthread_t tPush;
@@ -61,7 +61,8 @@ void *doCommunication(void *p) {
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0)
 		error("ERROR on binding");
 
-	/*Waiting connection loop*/
+	/* MAIN LOOP **************************************************************/
+	/* Waiting connection loop */
 	for (;;) {
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
@@ -70,7 +71,7 @@ void *doCommunication(void *p) {
 		if (newsockfd < 0)
 			error("ERROR on accept");
 
-		/*Client communication loop*/
+		/* Client communication loop */
 		for (;;) {
 			bzero(buffer, 256);
 			n = read(newsockfd, buffer, 255);
@@ -96,14 +97,14 @@ void *doCommunication(void *p) {
 				/*Pointer used in strtok_r function*/
 				char * saveptr1;
 
-				/*Buffer used for strtok_r function, which is the actual copy
-				 *of the socket buffer.*/
+				/* Buffer used for strtok_r function, which is the actual copy
+				 * of the socket buffer. */
 				char tokenBuffer[256];
 				strcpy(tokenBuffer, buffer);
 
 				char * token = strtok_r(tokenBuffer, "-", &saveptr1);
 
-				/*If the message sent by the client is a stock command*/
+				/* If the message sent by the client is a stock command */
 				if (!strcmp(token, CMD_MSG_PREFIXE)) {
 					token = strtok_r(NULL, "-", &saveptr1);
 					int cmdA = atoi(token);
@@ -115,8 +116,8 @@ void *doCommunication(void *p) {
 					BStock = BStock - cmdB;
 					pthread_mutex_unlock(&LockWarehouseStorageData);
 
-					/*If it's not one of the cases above, the message is sent to
-					 *the controler*/
+					/* If it's not one of the cases above, the message is sent
+					 * to the controller */
 				} else {
 					ERR_MSG(buffer)
 				}
@@ -141,19 +142,19 @@ static void error(const char *msg) {
  * Log sent to the client thread
  */
 static void *doPush(void *p) {
-
+	/* INIT *******************************************************************/
 	extern int AStock, BStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber;
 	extern pthread_mutex_t LockWarehouseStorageData;
 
 	int sentAStock, sentBStock;
 	char stockBuffer[MAX_MSG_LEN + 1];
 
-	/*Set the log buffer*/
+	/* Set the log buffer */
 	char logsBuffer[MAX_MSG_LEN + 1];
-	/*Mise en place de la boite aux lettres*/
+	/* Init message queue */
 	mqd_t mboxCom = mq_open(MBOXCOMMUNICATION, O_RDWR);
 
-	/*set the sockets*/
+	/* Set the sockets */
 	int sockfd, newsockfd, portno;
 	socklen_t clilen;
 	struct sockaddr_in serv_addr, cli_addr;
@@ -173,7 +174,8 @@ static void *doPush(void *p) {
 	if (bind(sockfd, (struct sockaddr *) &serv_addr, sizeof (serv_addr)) < 0)
 		error("ERROR on binding");
 
-	/*Waiting connection loop*/
+	/* MAIN LOOP **************************************************************/
+	/* Waiting connection loop */
 	for (;;) {
 		listen(sockfd, 5);
 		clilen = sizeof (cli_addr);
@@ -182,7 +184,7 @@ static void *doPush(void *p) {
 		if (newsockfd < 0)
 			error("ERROR on accept");
 
-		/*Pushing loop whenever there is a log in the letterbox*/
+		/* Pushing loop whenever there is a log in the message queue */
 		for (;;) {
 
 			int bytes_read = mq_receive(mboxCom, logsBuffer, MAX_MSG_LEN, NULL);
@@ -218,7 +220,9 @@ static void *doPush(void *p) {
 
 				/*Send the stock state*/
 				bzero(stockBuffer, sizeof (stockBuffer));
-				sprintf(stockBuffer, "%s-%d-%d-%d-%d\r\n", STATE_MSG_PREFIX, sentAStock, sentBStock, CurrentProducedBoxes, CurrentBatchRefusedPartsNumber);
+				sprintf(stockBuffer, "%s-%d-%d-%d-%d\r\n", STATE_MSG_PREFIX,
+						sentAStock, sentBStock, CurrentProducedBoxes,
+						CurrentBatchRefusedPartsNumber);
 
 				n = write(newsockfd, stockBuffer, strlen(stockBuffer));
 				if (n < 0)
