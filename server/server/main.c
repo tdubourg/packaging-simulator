@@ -6,7 +6,7 @@
 
 sem_t SemSyncBoxPrint;
 sem_t SemPushBoxPrint;
-sem_t SemSyncPrintPalette;
+sem_t SemSyncPrintPalette;//* Useless semaphore, remove, don't remove ?
 sem_t SemSocket;
 sem_t SemNewPart;
 sem_t SemWarehouse;

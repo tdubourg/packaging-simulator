@@ -51,7 +51,7 @@ void *doPalette(void *p) {
 			continue;
 		}
 
-		sem_wait(&SemSyncPrintPalette);
+		sem_wait(&SemSyncPrintPalette);//* Useless call, remove, don't remove ?
 		pthread_mutex_lock(&LockPrintPaletteQueue);
 		while (PrintPaletteQueueValue <= 0) { /* We're paused */
 			DBGPRINT("doPalette", "Main", "Queue is empty. Nothing to do.");
@@ -65,12 +65,12 @@ void *doPalette(void *p) {
 		if (!currentPaletteBoxesNumber) {
 			DBGPRINT("doPalette", "Main", "The palette is full. Pushing it to the warehouse");
 			LOG("doPalette: The palette is full. Pushing it to the warehouse");
+			/* "Sending" the palette to the doWarehouse task */
 			sem_post(&SemWarehouse);
 		}
 		pthread_cond_signal(&CondPrintPaletteQueue);
 		pthread_mutex_unlock(&LockPrintPaletteQueue);
-		/* "Sending" the palette to the doWarehouse task */
-		sem_post(&SemSyncPrintPalette);
+		sem_post(&SemSyncPrintPalette);//* Useless call, remove, don't remove ?
 	}
 }
 
